@@ -1,0 +1,278 @@
+/* Capture Container */
+.capture-container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #eff6ff, #cffafe);
+}
+
+.capture-content {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.capture-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+/* Camera Section */
+.camera-section {
+  background: white;
+  border: 4px solid #1e3a8a;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.camera-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.camera-icon {
+  font-size: 1.75rem;
+}
+
+.camera-label {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  letter-spacing: 1px;
+}
+
+/* Camera View */
+.camera-view {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: #000;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  border: 2px solid #1e3a8a;
+}
+
+.video-stream {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.captured-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+/* Focus Frame */
+.focus-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: 60%;
+  pointer-events: none;
+}
+
+.corner {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 3px solid #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.corner.top-left {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 8px;
+}
+
+.corner.top-right {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+  border-top-right-radius: 8px;
+}
+
+.corner.bottom-left {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+  border-bottom-left-radius: 8px;
+}
+
+.corner.bottom-right {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: 8px;
+}
+
+/* Capture Button */
+.capture-button {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 700;
+  border: 6px solid white;
+  box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+  cursor: pointer;
+  margin: 0 auto;
+  display: block;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.capture-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 30px rgba(255, 107, 53, 0.6);
+}
+
+.capture-button:active {
+  transform: scale(0.95);
+}
+
+.retake-button {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+}
+
+.retake-button:hover {
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.6);
+}
+
+/* Processing Section */
+.processing-section {
+  margin-top: 2.5rem;
+}
+
+.processing-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.processing-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.process-btn {
+  background: white;
+  border: 3px solid #1e3a8a;
+  border-radius: 0.75rem;
+  padding: 1.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.process-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.cash-btn:hover {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-color: #f59e0b;
+}
+
+.document-btn:hover {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-color: #3b82f6;
+}
+
+.process-btn .btn-icon {
+  font-size: 2.5rem;
+}
+
+.process-btn .btn-text {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .capture-container {
+    padding: 1rem;
+  }
+
+  .capture-title {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .camera-section {
+    padding: 1rem;
+  }
+
+  .capture-button {
+    width: 100px;
+    height: 100px;
+    font-size: 1rem;
+  }
+
+  .processing-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .processing-title {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .capture-title {
+    font-size: 1.75rem;
+  }
+
+  .camera-header {
+    justify-content: center;
+  }
+
+  .capture-button {
+    width: 90px;
+    height: 90px;
+    font-size: 0.875rem;
+  }
+
+  .process-btn {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .process-btn .btn-icon {
+    font-size: 2rem;
+  }
+
+  .process-btn .btn-text {
+    font-size: 0.875rem;
+  }
+}
