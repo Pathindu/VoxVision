@@ -5,6 +5,12 @@
   position: sticky;
   top: 0;
   z-index: 1000;
+  transition: background 0.3s ease;
+}
+
+.navbar.dark-mode {
+  background: linear-gradient(to right, #1e3a8a, #0c4a6e);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 }
 
 .navbar-content {
@@ -14,6 +20,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
 }
 
 /* Logo - Left Side */
@@ -37,6 +49,11 @@
   font-size: 1.5rem;
   font-weight: 700;
   color: #1e3a8a;
+  transition: color 0.3s ease;
+}
+
+.navbar.dark-mode .navbar-logo-text {
+  color: #67e8f9;
 }
 
 /* Links - Right Side */
@@ -58,9 +75,17 @@
   white-space: nowrap;
 }
 
+.navbar.dark-mode .navbar-link {
+  color: #e0f2fe;
+}
+
 .navbar-link:hover {
   background-color: rgba(255, 255, 255, 0.25);
   transform: translateY(-2px);
+}
+
+.navbar.dark-mode .navbar-link:hover {
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 /* Mobile Menu Toggle */
@@ -72,6 +97,40 @@
   color: #1e3a8a;
   cursor: pointer;
   padding: 0.5rem;
+}
+
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border: 2px solid #1e3a8a;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+}
+
+.navbar.dark-mode .dark-mode-toggle {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  border-color: #fbbf24;
+  box-shadow: 0 4px 10px rgba(251, 191, 36, 0.3);
+}
+
+.dark-mode-toggle:hover {
+  transform: scale(1.1) rotate(10deg);
+  box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+}
+
+.navbar.dark-mode .dark-mode-toggle:hover {
+  box-shadow: 0 6px 15px rgba(251, 191, 36, 0.4);
+}
+
+.toggle-icon {
+  font-size: 1.5rem;
 }
 
 /* Responsive Design */
@@ -95,6 +154,10 @@
     padding: 1rem 1.5rem;
   }
 
+  .navbar-right {
+    gap: 1rem;
+  }
+
   .navbar-links {
     gap: 1rem;
   }
@@ -111,6 +174,15 @@
   .navbar-logo-text {
     font-size: 1.25rem;
   }
+
+  .dark-mode-toggle {
+    width: 45px;
+    height: 45px;
+  }
+
+  .toggle-icon {
+    font-size: 1.25rem;
+  }
 }
 
 @media (max-width: 640px) {
@@ -119,14 +191,29 @@
     gap: 1rem;
   }
 
+  .navbar-right {
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .navbar-links {
     flex-wrap: wrap;
     justify-content: center;
-    width: 100%;
+    width: calc(100% - 60px);
     gap: 0.75rem;
   }
 
   .navbar-link {
     font-size: 0.8125rem;
+  }
+
+  .dark-mode-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .toggle-icon {
+    font-size: 1.125rem;
   }
 }

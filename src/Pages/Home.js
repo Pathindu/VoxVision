@@ -4,7 +4,7 @@ import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import '../Components/Home.css';
 
-export default function Home() {
+export default function Home({ darkMode, toggleDarkMode }) {
   const [activeSection, setActiveSection] = useState('home');
   const navigate = useNavigate();
 
@@ -18,9 +18,9 @@ export default function Home() {
 
   return (
     <>
-    <div className="home-container">
+    <div className={`home-container ${darkMode ? 'dark-mode' : ''}`}>
       {/* Navigation */}
-      <Navbar />
+      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
       {/* Hero Section */}
       <section className="hero-section">
@@ -107,7 +107,7 @@ export default function Home() {
     </div>
 
 {/* Footer */}
-    <Footer/>
+    <Footer darkMode={darkMode} />
     </>
   );
 }

@@ -4,7 +4,7 @@ import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import '../Components/Upload.css';
 
-export default function Upload() {
+export default function Upload({ darkMode, toggleDarkMode }) {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
@@ -84,9 +84,9 @@ export default function Upload() {
   };
 
   return (
-    <div className="upload-page-wrapper">
-      {/* Navbar */}
-      <Navbar />
+      <div className={`upload-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+      {/* Navigation */}
+      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
       <div className="upload-container">
         <div className="upload-content">
@@ -165,7 +165,7 @@ export default function Upload() {
       </div>
 
       {/* Footer */}
-      <Footer />
+      <Footer darkMode={darkMode} />
     </div>
   );
 }

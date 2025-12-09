@@ -4,7 +4,7 @@ import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import '../Components/Result.css';
 
-export default function Result() {
+export default function Result({ darkMode, toggleDarkMode }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -83,8 +83,9 @@ export default function Result() {
   };
 
   return (
-    <div className="result-page-wrapper">
-      <Navbar />
+      <div className={`result-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+      {/* Navigation */}
+      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
       <div className="result-container">
         <div className="result-content">
@@ -142,7 +143,7 @@ export default function Result() {
         </div>
       </div>
 
-      <Footer />
+      <Footer darkMode={darkMode} />
     </div>
   );
 }

@@ -1,9 +1,9 @@
 import React from 'react';
 import '../Components/Footer.css';
 
-export default function Footer() {
+export default function Footer({ darkMode }) {
   return (
-    <footer className="footer">
+    <footer className={`footer ${darkMode ? 'dark-mode' : ''}`}>
       <div className="footer-content">
         <div className="footer-grid">
           {/* Contact Us Section */}

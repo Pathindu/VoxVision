@@ -4,7 +4,7 @@ import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import '../Components/LoginRegister.css';
 
-export default function LoginRegister() {
+export default function LoginRegister({ darkMode, toggleDarkMode }) {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     username: '',
@@ -67,12 +67,11 @@ export default function LoginRegister() {
   };
 
   return (
-    <>
-    {/* Navbar */}
-              <Navbar />
-    <div className="auth-container">
-        
-      <div className="auth-wrapper">
+    <div className={`auth-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+      {/* Navigation */}
+      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+
+      <div className="auth-container">
         <div className="auth-card">
           <h1 className="auth-title">
             {isLogin ? 'Welcome Back' : 'Create Your Account'}
@@ -197,10 +196,9 @@ export default function LoginRegister() {
           )}
         </div>
       </div>
-    </div>
 
-    {/* Footer */}
-    <Footer/>
-    </>
+      {/* Footer */}
+      <Footer darkMode={darkMode} />
+    </div>
   );
 }

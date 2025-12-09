@@ -4,7 +4,7 @@ import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import '../Components/Capture.css';
 
-export default function Capture() {
+export default function Capture({ darkMode, toggleDarkMode }) {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
   const videoRef = useRef(null);
@@ -91,9 +91,9 @@ export default function Capture() {
   }, []);
 
   return (
-    <div className="capture-page-wrapper">
-      {/* Navbar */}
-      <Navbar />
+      <div className={`capture-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+      {/* Navigation */}
+      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
       <div className="capture-container">
         <div className="capture-content">
@@ -161,7 +161,7 @@ export default function Capture() {
       </div>
 
       {/* Footer */}
-      <Footer />
+      <Footer darkMode={darkMode} />
     </div>
   );
 }

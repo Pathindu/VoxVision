@@ -9,13 +9,85 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .App {
   min-height: 100vh;
+  transition: background-color 0.3s ease;
 }
 
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+}
+
+/* Dark Mode Global Styles */
+body.dark-mode {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+.App.dark-mode {
+  background-color: #0f172a;
+}
+
+/* Dark mode for common elements */
+.dark-mode .home-container,
+.dark-mode .upload-page-wrapper,
+.dark-mode .capture-page-wrapper,
+.dark-mode .result-page-wrapper {
+  background: linear-gradient(to bottom right, #1e293b, #0f172a);
+}
+
+.dark-mode .hero-section,
+.dark-mode .upload-container,
+.dark-mode .capture-container,
+.dark-mode .result-container {
+  background: linear-gradient(to bottom right, #1e293b, #0f172a);
+}
+
+.dark-mode .hero-title,
+.dark-mode .upload-title,
+.dark-mode .capture-title,
+.dark-mode .result-page-title,
+.dark-mode .features-title,
+.dark-mode .processing-title,
+.dark-mode .audio-title {
+  color: #67e8f9;
+}
+
+.dark-mode .description-box,
+.dark-mode .feature-card,
+.dark-mode .upload-area,
+.dark-mode .camera-section,
+.dark-mode .result-box {
+  background: linear-gradient(135deg, #1e3a8a, #0c4a6e);
+  border-color: #67e8f9;
+}
+
+.dark-mode .description-text,
+.dark-mode .hero-subtitle,
+.dark-mode .feature-title,
+.dark-mode .feature-description,
+.dark-mode .result-text {
+  color: #e0f2fe;
+}
+
+.dark-mode .highlight {
+  color: #67e8f9;
+}
+
+.dark-mode .features-section {
+  background: linear-gradient(to bottom right, #0f172a, #1e293b);
+}
+
+.dark-mode .camera-label,
+.dark-mode .form-label,
+.dark-mode .audio-label {
+  color: #67e8f9;
+}
+
+.dark-mode .upload-text h2 {
+  color: #67e8f9;
 }

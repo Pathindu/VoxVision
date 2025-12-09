@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Components/Navbar.css';
 
-export default function Navbar() {
+export default function Navbar({ darkMode, toggleDarkMode }) {
   const navigate = useNavigate();
 
   const handleNavigation = (path) => {
@@ -17,7 +17,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${darkMode ? 'dark-mode' : ''}`}>
       <div className="navbar-content">
         <div className="navbar-logo" onClick={() => handleNavigation('home')}>
           <span className="navbar-logo-icon">💡</span>
@@ -62,6 +62,12 @@ export default function Navbar() {
             </a>
           </li>
         </ul>
+
+        {/* Dark Mode Toggle Button */}
+          <button className="dark-mode-toggle" onClick={toggleDarkMode}>
+            <span className="toggle-icon">{darkMode ? '☀️' : '🌙'}</span>
+          </button>
+          
       </div>
     </nav>
   );
