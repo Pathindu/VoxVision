@@ -10,6 +10,8 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
       navigate('/');
     } else if (path === 'login') {
       navigate('/login');
+    } else if (path === 'contact') {
+      navigate('/contact');
     } else {
       // Handle other navigation items
       alert(`Navigating to ${path}`);
@@ -24,50 +26,51 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
           <span className="navbar-logo-text">Logo & Name</span>
         </div>
         
-        <ul className="navbar-links">
-          <li>
-            <a 
-              href="#home" 
-              onClick={(e) => { e.preventDefault(); handleNavigation('home'); }}
-              className="navbar-link"
-            >
-              Home
-            </a>
-          </li>
-          <li>
-            <a 
-              href="#about" 
-              onClick={(e) => { e.preventDefault(); handleNavigation('about'); }}
-              className="navbar-link"
-            >
-              About us
-            </a>
-          </li>
-          <li>
-            <a 
-              href="#contact" 
-              onClick={(e) => { e.preventDefault(); handleNavigation('contact'); }}
-              className="navbar-link"
-            >
-              Contact us
-            </a>
-          </li>
-          <li>
-            <a 
-              href="#login" 
-              onClick={(e) => { e.preventDefault(); handleNavigation('login'); }}
-              className="navbar-link"
-            >
-              Login/Register
-            </a>
-          </li>
-        </ul>
+        <div className="navbar-right">
+          <ul className="navbar-links">
+            <li>
+              <a 
+                href="#home" 
+                onClick={(e) => { e.preventDefault(); handleNavigation('home'); }}
+                className="navbar-link"
+              >
+                Home
+              </a>
+            </li>
+            <li>
+              <a 
+                href="#about" 
+                onClick={(e) => { e.preventDefault(); handleNavigation('about'); }}
+                className="navbar-link"
+              >
+                About us
+              </a>
+            </li>
+            <li>
+              <a 
+                href="#contact" 
+                onClick={(e) => { e.preventDefault(); handleNavigation('contact'); }}
+                className="navbar-link"
+              >
+                Contact us
+              </a>
+            </li>
+            <li>
+              <a 
+                href="#login" 
+                onClick={(e) => { e.preventDefault(); handleNavigation('login'); }}
+                className="navbar-link"
+              >
+                Login/Register
+              </a>
+            </li>
+          </ul>
 
-        {/* Dark Mode Toggle Button */}
+          {/* Dark Mode Toggle Button */}
           <button className="dark-mode-toggle" onClick={toggleDarkMode}>
             <span className="toggle-icon">{darkMode ? '☀️' : '🌙'}</span>
           </button>
-          
+        </div>
       </div>
     </nav>
   );

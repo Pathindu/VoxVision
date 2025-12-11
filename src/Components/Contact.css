@@ -1,0 +1,366 @@
+/* Contact Page Wrapper */
+.contact-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to bottom right, #f0f9ff, #e0f2fe);
+  transition: background 0.3s ease;
+}
+
+.contact-page-wrapper.dark-mode {
+  background: linear-gradient(to bottom right, #1e293b, #0f172a);
+}
+
+/* Contact Container */
+.contact-container {
+  flex: 1;
+  padding: 3rem 2rem;
+}
+
+.contact-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+.contact-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.contact-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 1rem;
+  transition: color 0.3s ease;
+}
+
+.contact-page-wrapper.dark-mode .contact-title {
+  color: #67e8f9;
+}
+
+.contact-subtitle {
+  font-size: 1.25rem;
+  color: #475569;
+  transition: color 0.3s ease;
+}
+
+.contact-page-wrapper.dark-mode .contact-subtitle {
+  color: #cbd5e1;
+}
+
+/* Contact Info Section */
+.contact-info-section {
+  margin-bottom: 5rem;
+}
+
+.contact-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.info-card {
+  background: white;
+  padding: 2.5rem 2rem;
+  border-radius: 1.5rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 3px solid #e0f2fe;
+}
+
+.contact-page-wrapper.dark-mode .info-card {
+  background: linear-gradient(135deg, #1e3a8a, #0c4a6e);
+  border-color: #67e8f9;
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.info-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.info-card h3 {
+  font-size: 1.5rem;
+  color: #1e3a8a;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.contact-page-wrapper.dark-mode .info-card h3 {
+  color: #67e8f9;
+}
+
+.info-card p {
+  font-size: 1.125rem;
+  color: #475569;
+  transition: color 0.3s ease;
+}
+
+.contact-page-wrapper.dark-mode .info-card p {
+  color: #cbd5e1;
+}
+
+/* Team Section */
+.team-section {
+  margin-bottom: 5rem;
+}
+
+.team-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  text-align: center;
+  margin-bottom: 1rem;
+  transition: color 0.3s ease;
+}
+
+.contact-page-wrapper.dark-mode .team-title {
+  color: #67e8f9;
+}
+
+.team-description {
+  font-size: 1.125rem;
+  color: #475569;
+  text-align: center;
+  margin-bottom: 3rem;
+  transition: color 0.3s ease;
+}
+
+.contact-page-wrapper.dark-mode .team-description {
+  color: #cbd5e1;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
+}
+
+/* Team Card with Flip Effect */
+.team-card {
+  perspective: 1000px;
+  height: 400px;
+}
+
+.team-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.team-card:hover .team-card-inner {
+  transform: rotateY(180deg);
+}
+
+.team-card-front,
+.team-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+/* Front of Card */
+.team-card-front {
+  background: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border: 3px solid #e0f2fe;
+  transition: all 0.3s ease;
+}
+
+.contact-page-wrapper.dark-mode .team-card-front {
+  background: linear-gradient(135deg, #1e3a8a, #0c4a6e);
+  border-color: #67e8f9;
+}
+
+.member-photo-wrapper {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.member-photo {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid #3b82f6;
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+}
+
+.contact-page-wrapper.dark-mode .member-photo {
+  border-color: #67e8f9;
+}
+
+.linkedin-badge {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 40px;
+  height: 40px;
+  background: #0077b5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 119, 181, 0.4);
+  border: 3px solid white;
+}
+
+.linkedin-icon {
+  color: white;
+  font-weight: 700;
+  font-size: 1.25rem;
+  font-family: Arial, sans-serif;
+}
+
+.member-info {
+  text-align: center;
+}
+
+.member-name {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.contact-page-wrapper.dark-mode .member-name {
+  color: #67e8f9;
+}
+
+.member-role {
+  font-size: 1rem;
+  color: #475569;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.contact-page-wrapper.dark-mode .member-role {
+  color: #cbd5e1;
+}
+
+/* Back of Card */
+.team-card-back {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.contact-page-wrapper.dark-mode .team-card-back {
+  background: linear-gradient(135deg, #0c4a6e, #0e7490);
+}
+
+.member-bio {
+  color: white;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.member-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.linkedin-button {
+  background: #0077b5;
+  color: white;
+}
+
+.linkedin-button:hover {
+  background: #005885;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 119, 181, 0.3);
+}
+
+.email-button {
+  background: white;
+  color: #1e3a8a;
+}
+
+.email-button:hover {
+  background: #f0f9ff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(30, 58, 138, 0.2);
+}
+
+.button-icon {
+  font-size: 1.25rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .team-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-title {
+    font-size: 2.5rem;
+  }
+
+  .team-card {
+    height: 380px;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .contact-container {
+    padding: 2rem 1rem;
+  }
+
+  .contact-title {
+    font-size: 2rem;
+  }
+
+  .team-card {
+    height: 350px;
+  }
+
+  .member-photo {
+    width: 120px;
+    height: 120px;
+  }
+}
