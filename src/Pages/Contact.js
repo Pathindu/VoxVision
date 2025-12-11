@@ -125,9 +125,6 @@ export default function ContactUs({ darkMode, toggleDarkMode }) {
                           alt={member.name}
                           className="member-photo"
                         />
-                        <div className="linkedin-badge">
-                          <span className="linkedin-icon">in</span>
-                        </div>
                       </div>
                       <div className="member-info">
                         <h3 className="member-name">{member.name}</h3>
