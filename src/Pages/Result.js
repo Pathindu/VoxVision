@@ -9,10 +9,113 @@ export default function Result({ darkMode, toggleDarkMode }) {
   const location = useLocation();
   const [isPlaying, setIsPlaying] = useState(false);
   const speechSynthesisRef = useRef(null);
+  const [audioBlob, setAudioBlob] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   
   // Get result text from navigation state or use default
   const resultText = location.state?.resultText || "Detected: Rs. 1000 Note";
   const resultType = location.state?.resultType || "cash"; // 'cash' or 'document'
+
+  const handleReadDocument = async (fullText) => {
+    if (audioBlob.length > 0) {
+      playAudio();
+      return;
+    }
+    setIsLoading(true);
+    setAudioBlob([]);
+    // 1. Split into large blocks by script type
+    const segments = fullText.match(/[\x00-\x7F]+|[^\x41-\x5A\x61-\x7A]+/g);
+    
+    if (!segments) {
+      setIsLoading(false);
+      return;
+    }
+
+    const fetchedBlobs = [];
+
+    for (const segment of segments) {
+      // Skip segments that are just whitespace
+      if (!segment.trim()) continue;
+
+      // 2. Determine the language of this specific chunk
+      let lang = 'en-US'; // Default
+      if ((/[\x41-\x5A\x61-\x7A]/.test(segment))) {
+        lang = "en-US";
+      } else lang = "si-LK"
+      console.log(lang,": ", segment);
+      
+      // Wait for each segment to finish before starting the next
+      const blob = await speakWithGoogleTTS(segment, lang);
+      if (blob) {
+        fetchedBlobs.push(blob);
+      }
+    }
+    
+    setAudioBlob(fetchedBlobs);
+    setIsLoading(false);
+    
+    if (fetchedBlobs.length > 0) {
+      await playAudioBlobs(fetchedBlobs);
+    }
+  };
+
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [audio, setAudio] = useState(null);
+
+  const speakWithGoogleTTS = async (text, lang) => {
+    try {
+      // 1. Call your Python backend endpoint
+      const response = await fetch('http://localhost:8000/synthesize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: text, lang_code: lang }),
+      });
+
+      if (!response.ok) throw new Error("Failed to get audio from backend");
+
+      // 2. Convert the response to a Blob (Binary Large Object)
+      const blob = await response.blob();
+      return blob;
+
+    } catch (error) {
+      console.error("TTS Error:", error);
+      setIsSpeaking(false);
+      return null;
+    }
+  };
+
+  const playAudioBlobs = async (blobs) => {
+    if (!blobs || blobs.length === 0) {
+      alert("No audio to play");
+      return;
+    }
+    setIsSpeaking(true);
+    for (const blob of blobs) {
+      // 3. Create a temporary URL for the audio file
+      const audioUrl = URL.createObjectURL(blob);
+      
+      // 4. Play the audio
+      const newAudio = new Audio(audioUrl);
+      setAudio(newAudio);
+      
+      await new Promise((resolve) => {
+        newAudio.onended = () => {
+          URL.revokeObjectURL(audioUrl); // Clean up memory
+          resolve();
+        };
+
+        newAudio.play().catch(error => {
+          console.error("Audio playback error:", error);
+          resolve();
+        });
+      });
+    }
+    setIsSpeaking(false);
+  };
+
+  const playAudio = async () => {
+    await playAudioBlobs(audioBlob);
+  };
 
   // Text-to-Speech functions
   const speakText = (text) => {
@@ -37,13 +140,18 @@ export default function Result({ darkMode, toggleDarkMode }) {
   };
 
   const handlePlay = () => {
-    speakText(resultText);
+    // speakText(resultText);
+    handleReadDocument(resultText);
   };
 
   const handlePause = () => {
     if (window.speechSynthesis.speaking) {
       window.speechSynthesis.pause();
       setIsPlaying(false);
+    }
+    if (isSpeaking){
+      audio.pause();
+      setIsSpeaking(false);
     }
   };
 
@@ -59,7 +167,9 @@ export default function Result({ darkMode, toggleDarkMode }) {
 
   const handleRepeat = () => {
     window.speechSynthesis.cancel();
-    speakText(resultText);
+    // speakText(resultText);
+    console.log(audioBlob.length);
+    playAudio();
   };
 
   const handleDownload = () => {
@@ -104,7 +214,8 @@ export default function Result({ darkMode, toggleDarkMode }) {
               <button 
                 className="audio-btn pause-btn" 
                 onClick={handlePause}
-                disabled={!isPlaying}
+                // disabled={!isPlaying}
+                disabled={!isSpeaking}
               >
                 <span className="audio-icon">⏸</span>
                 <span className="audio-label">Pause</span>
@@ -113,9 +224,10 @@ export default function Result({ darkMode, toggleDarkMode }) {
               <button 
                 className="audio-btn play-btn" 
                 onClick={handlePlay}
+                disabled={isLoading}
               >
-                <span className="audio-icon">▶</span>
-                <span className="audio-label">Play</span>
+                <span className="audio-icon">{isLoading ? "⏳" : "▶"}</span>
+                <span className="audio-label">{isLoading ? "Loading..." : "Play"}</span>
               </button>
 
               <button 

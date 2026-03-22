@@ -57,22 +57,62 @@ export default function Capture({ darkMode, toggleDarkMode }) {
   };
 
   // Handle Cash Reader - Navigate to Result page
-  const handleCashReader = () => {
+  const handleCashReader = async () => {
+    // Convert the base64 data URL to a File object
+    const res = await fetch(capturedImage);
+    const blob = await res.blob();
+    const file = new File([blob], "capture.png", { type: "image/png" });
+    
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const response = await fetch('http://localhost:8000/cash-to-text/', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+    console.log("Extracted Text:", data.result);
+
     navigate('/result', {
       state: {
-        resultText: 'Detected: Rs. 1000 Note',
-        resultType: 'cash'
+        resultText: data.result,
+        resultType: 'document'
       }
+      // state: {
+      //   resultText: 'Detected: Rs. 1000 Note',
+      //   resultType: 'cash'
+      // }
     });
   };
 
   // Handle Document Reader - Navigate to Result page
-  const handleDocumentReader = () => {
+  const handleDocumentReader = async () => {
+    // Convert the base64 data URL to a File object
+    const res = await fetch(capturedImage);
+    const blob = await res.blob();
+    const file = new File([blob], "capture.png", { type: "image/png" });
+    
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const response = await fetch('http://localhost:8000/image-to-text/', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+    console.log("Extracted Text:", data.result);
+
     navigate('/result', {
       state: {
-        resultText: 'The quick brown fox jumps over the lazy dog. This is a sample text extracted from the captured image.',
+        resultText: data.result,
         resultType: 'document'
       }
+      // state: {
+      //   resultText: 'The quick brown fox jumps over the lazy dog. This is a sample text extracted from the captured image.',
+      //   resultType: 'document'
+      // }
     });
   };
 

@@ -6,6 +6,7 @@ import '../Components/Upload.css';
 
 export default function Upload({ darkMode, toggleDarkMode }) {
   const [uploadedImage, setUploadedImage] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setUploadedImage(e.target.result);
+        setUploadedFile(file);
       };
       reader.readAsDataURL(file);
     } else {
@@ -37,12 +39,13 @@ export default function Upload({ darkMode, toggleDarkMode }) {
   const handleDrop = (event) => {
     event.preventDefault();
     setIsDragging(false);
-    
+
     const file = event.dataTransfer.files[0];
     if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setUploadedImage(e.target.result);
+        setUploadedFile(file);
       };
       reader.readAsDataURL(file);
     } else {
@@ -58,6 +61,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
   // Remove uploaded image
   const handleRemoveImage = () => {
     setUploadedImage(null);
+    setUploadedFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -74,12 +78,27 @@ export default function Upload({ darkMode, toggleDarkMode }) {
   };
 
   // Handle Document Reader - Navigate to Result page
-  const handleDocumentReader = () => {
+  const handleDocumentReader = async (image) => {
+    const formData = new FormData();
+    formData.append('image', image);
+
+    const response = await fetch('http://localhost:8000/image-to-text/', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+    console.log("Extracted Text:", data.result);
+
     navigate('/result', {
       state: {
-        resultText: 'The quick brown fox jumps over the lazy dog. This is a sample text extracted from the document.',
+        resultText: data.result,
         resultType: 'document'
       }
+      // state: {
+      //   resultText: 'The quick brown fox jumps over the lazy dog. This is a sample text extracted from the document.',
+      //   resultType: 'document'
+      // }
     });
   };
 
@@ -153,7 +172,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
               </button>
               <button 
                 className="process-btn-upload document-btn-upload" 
-                onClick={handleDocumentReader}
+                onClick={() => handleDocumentReader(uploadedFile)}
                 disabled={!uploadedImage}
               >
                 <span className="btn-icon-upload">📄</span>
