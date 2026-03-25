@@ -8,6 +8,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
   
@@ -84,16 +85,19 @@ export default function Upload({ darkMode, toggleDarkMode }) {
 
   // Handle Cash Reader - Navigate to Result page
   const handleCashReader = () => {
+    setLoading(true);
     navigate('/result', {
       state: {
         resultText: 'Detected: Rs. 1000 Note',
         resultType: 'cash'
       }
     });
+    setLoading(false);
   };
 
   // Handle Document Reader - Navigate to Result page
   const handleDocumentReader = async (image) => {
+    setLoading(true);
     const formData = new FormData();
     formData.append('image', image);
 
@@ -115,6 +119,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
       //   resultType: 'document'
       // }
     });
+    setLoading(false);
   };
 
   return (
@@ -180,18 +185,26 @@ export default function Upload({ darkMode, toggleDarkMode }) {
               <button 
                 className="process-btn-upload cash-btn-upload" 
                 onClick={handleCashReader}
-                disabled={!uploadedImage}
+                disabled={!uploadedImage || loading}
               >
-                <span className="btn-icon-upload">💰</span>
-                <span className="btn-text-upload">CASH READER</span>
+                {loading ? (
+                  <span className="loader-upload"></span>
+                ) : (
+                  <span className="btn-icon-upload">💰</span>
+                )}
+                <span className="btn-text-upload">{loading ? 'PROCESSING...' : 'CASH READER'}</span>
               </button>
               <button 
                 className="process-btn-upload document-btn-upload" 
                 onClick={() => handleDocumentReader(uploadedFile)}
-                disabled={!uploadedImage}
+                disabled={!uploadedImage || loading}
               >
-                <span className="btn-icon-upload">📄</span>
-                <span className="btn-text-upload">DOCUMENT READER</span>
+                {loading ? (
+                  <span className="loader-upload"></span>
+                ) : (
+                  <span className="btn-icon-upload">📄</span>
+                )}
+                <span className="btn-text-upload">{loading ? 'PROCESSING...' : 'DOCUMENT READER'}</span>
               </button>
             </div>
           </div>

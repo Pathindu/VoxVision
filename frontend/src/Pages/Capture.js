@@ -7,6 +7,7 @@ import '../Components/Capture.css';
 export default function Capture({ darkMode, toggleDarkMode }) {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
+  const [loading, setLoading] = useState(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const navigate = useNavigate();
@@ -73,6 +74,7 @@ export default function Capture({ darkMode, toggleDarkMode }) {
 
   // Handle Cash Reader - Navigate to Result page
   const handleCashReader = async () => {
+    setLoading(true);
     // Convert the base64 data URL to a File object
     const res = await fetch(capturedImage);
     const blob = await res.blob();
@@ -99,10 +101,12 @@ export default function Capture({ darkMode, toggleDarkMode }) {
       //   resultType: 'cash'
       // }
     });
+    setLoading(false);
   };
 
   // Handle Document Reader - Navigate to Result page
   const handleDocumentReader = async () => {
+    setLoading(true);
     // Convert the base64 data URL to a File object
     const res = await fetch(capturedImage);
     const blob = await res.blob();
@@ -129,6 +133,7 @@ export default function Capture({ darkMode, toggleDarkMode }) {
       //   resultType: 'document'
       // }
     });
+    setLoading(false);
   };
 
   // Start camera on component mount
@@ -201,13 +206,21 @@ export default function Capture({ darkMode, toggleDarkMode }) {
             <div className="processing-section">
               <h2 className="processing-title">Processing Options</h2>
               <div className="processing-buttons">
-                <button className="process-btn cash-btn" onClick={handleCashReader}>
-                  <span className="btn-icon">💰</span>
-                  <span className="btn-text">CASH READER</span>
+                <button className="process-btn cash-btn" onClick={handleCashReader} disabled={loading}>
+                  {loading ? (
+                    <span className="loader-capture"></span>
+                  ) : (
+                    <span className="btn-icon">💰</span>
+                  )}
+                  <span className="btn-text">{loading ? 'PROCESSING...' : 'CASH READER'}</span>
                 </button>
-                <button className="process-btn document-btn" onClick={handleDocumentReader}>
-                  <span className="btn-icon">📄</span>
-                  <span className="btn-text">DOCUMENT READER</span>
+                <button className="process-btn document-btn" onClick={handleDocumentReader} disabled={loading}>
+                  {loading ? (
+                    <span className="loader-capture"></span>
+                  ) : (
+                    <span className="btn-icon">📄</span>
+                  )}
+                  <span className="btn-text">{loading ? 'PROCESSING...' : 'DOCUMENT READER'}</span>
                 </button>
               </div>
             </div>
