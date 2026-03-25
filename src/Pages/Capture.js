@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
@@ -10,6 +10,21 @@ export default function Capture({ darkMode, toggleDarkMode }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const navigate = useNavigate();
+  
+  const checkBackend = async () => {
+    try {
+      const backend = await fetch("http://localhost:8000/");
+      const data = await backend.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+      alert("Backend is not running. Please start the backend.");
+    }
+  };
+
+  useEffect(() => {
+    checkBackend();
+  }, [])
 
   // Start camera
   const startCamera = async () => {
