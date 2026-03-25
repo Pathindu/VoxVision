@@ -203,6 +203,32 @@
   border-color: #f59e0b;
 }
 
+.process-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.loader-capture {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid #1e3a8a;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation-capture 1s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes rotation-capture {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .document-btn:hover {
   background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
   border-color: #3b82f6;
