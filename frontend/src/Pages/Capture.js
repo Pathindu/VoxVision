@@ -94,12 +94,8 @@ export default function Capture({ darkMode, toggleDarkMode }) {
     navigate('/result', {
       state: {
         resultText: data.result,
-        resultType: 'document'
+        resultType: 'cash'
       }
-      // state: {
-      //   resultText: 'Detected: Rs. 1000 Note',
-      //   resultType: 'cash'
-      // }
     });
     setLoading(false);
   };

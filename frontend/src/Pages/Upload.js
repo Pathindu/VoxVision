@@ -6,7 +6,6 @@ import '../Components/Upload.css';
 
 export default function Upload({ darkMode, toggleDarkMode }) {
   const [uploadedImage, setUploadedImage] = useState(null);
-  const [uploadedFile, setUploadedFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
@@ -34,7 +33,6 @@ export default function Upload({ darkMode, toggleDarkMode }) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setUploadedImage(e.target.result);
-        setUploadedFile(file);
       };
       reader.readAsDataURL(file);
     } else {
@@ -61,7 +59,6 @@ export default function Upload({ darkMode, toggleDarkMode }) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setUploadedImage(e.target.result);
-        setUploadedFile(file);
       };
       reader.readAsDataURL(file);
     } else {
@@ -77,18 +74,33 @@ export default function Upload({ darkMode, toggleDarkMode }) {
   // Remove uploaded image
   const handleRemoveImage = () => {
     setUploadedImage(null);
-    setUploadedFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
 
   // Handle Cash Reader - Navigate to Result page
-  const handleCashReader = () => {
+  const handleCashReader = async () => {
     setLoading(true);
+    // Convert the base64 data URL to a File object
+    const res = await fetch(uploadedImage);
+    const blob = await res.blob();
+    const file = new File([blob], "capture.png", { type: "image/png" });
+    
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const response = await fetch('http://localhost:8000/cash-to-text/', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+    console.log("Extracted Text:", data.result);
+
     navigate('/result', {
       state: {
-        resultText: 'Detected: Rs. 1000 Note',
+        resultText: data.result,
         resultType: 'cash'
       }
     });
@@ -96,10 +108,15 @@ export default function Upload({ darkMode, toggleDarkMode }) {
   };
 
   // Handle Document Reader - Navigate to Result page
-  const handleDocumentReader = async (image) => {
+  const handleDocumentReader = async () => {
     setLoading(true);
+    // Convert the base64 data URL to a File object
+    const res = await fetch(uploadedImage);
+    const blob = await res.blob();
+    const file = new File([blob], "capture.png", { type: "image/png" });
+    
     const formData = new FormData();
-    formData.append('image', image);
+    formData.append('image', file);
 
     const response = await fetch('http://localhost:8000/image-to-text/', {
       method: 'POST',
@@ -114,10 +131,6 @@ export default function Upload({ darkMode, toggleDarkMode }) {
         resultText: data.result,
         resultType: 'document'
       }
-      // state: {
-      //   resultText: 'The quick brown fox jumps over the lazy dog. This is a sample text extracted from the document.',
-      //   resultType: 'document'
-      // }
     });
     setLoading(false);
   };
@@ -196,7 +209,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
               </button>
               <button 
                 className="process-btn-upload document-btn-upload" 
-                onClick={() => handleDocumentReader(uploadedFile)}
+                onClick={handleDocumentReader}
                 disabled={!uploadedImage || loading}
               >
                 {loading ? (
