@@ -7,7 +7,8 @@ import '../Components/Upload.css';
 export default function Upload({ darkMode, toggleDarkMode }) {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loadingCash, setLoadingCash] = useState(false);
+  const [loadingDoc, setLoadingDoc] = useState(false);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
   
@@ -81,7 +82,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
 
   // Handle Cash Reader - Navigate to Result page
   const handleCashReader = async () => {
-    setLoading(true);
+    setLoadingCash(true);
     // Convert the base64 data URL to a File object
     const res = await fetch(uploadedImage);
     const blob = await res.blob();
@@ -104,12 +105,13 @@ export default function Upload({ darkMode, toggleDarkMode }) {
         resultType: 'cash'
       }
     });
-    setLoading(false);
+    setLoadingCash(false);
+    setLoadingDoc(false);
   };
 
   // Handle Document Reader - Navigate to Result page
   const handleDocumentReader = async () => {
-    setLoading(true);
+    setLoadingDoc(true);
     // Convert the base64 data URL to a File object
     const res = await fetch(uploadedImage);
     const blob = await res.blob();
@@ -132,7 +134,8 @@ export default function Upload({ darkMode, toggleDarkMode }) {
         resultType: 'document'
       }
     });
-    setLoading(false);
+    setLoadingCash(false);
+    setLoadingDoc(false);
   };
 
   return (
@@ -198,26 +201,26 @@ export default function Upload({ darkMode, toggleDarkMode }) {
               <button 
                 className="process-btn-upload cash-btn-upload" 
                 onClick={handleCashReader}
-                disabled={!uploadedImage || loading}
+                disabled={!uploadedImage || loadingCash || loadingDoc}
               >
-                {loading ? (
+                {loadingCash ? (
                   <span className="loader-upload"></span>
                 ) : (
                   <span className="btn-icon-upload">💰</span>
                 )}
-                <span className="btn-text-upload">{loading ? 'PROCESSING...' : 'CASH READER'}</span>
+                <span className="btn-text-upload">{loadingCash ? 'PROCESSING...' : 'CASH READER'}</span>
               </button>
               <button 
                 className="process-btn-upload document-btn-upload" 
                 onClick={handleDocumentReader}
-                disabled={!uploadedImage || loading}
+                disabled={!uploadedImage || loadingDoc || loadingCash}
               >
-                {loading ? (
+                {loadingDoc ? (
                   <span className="loader-upload"></span>
                 ) : (
                   <span className="btn-icon-upload">📄</span>
                 )}
-                <span className="btn-text-upload">{loading ? 'PROCESSING...' : 'DOCUMENT READER'}</span>
+                <span className="btn-text-upload">{loadingDoc ? 'PROCESSING...' : 'DOCUMENT READER'}</span>
               </button>
             </div>
           </div>

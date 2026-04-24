@@ -7,7 +7,8 @@ import '../Components/Capture.css';
 export default function Capture({ darkMode, toggleDarkMode }) {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loadingCash, setLoadingCash] = useState(false);
+  const [loadingDoc, setLoadingDoc] = useState(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ export default function Capture({ darkMode, toggleDarkMode }) {
 
   // Handle Cash Reader - Navigate to Result page
   const handleCashReader = async () => {
-    setLoading(true);
+    setLoadingCash(true);
     // Convert the base64 data URL to a File object
     const res = await fetch(capturedImage);
     const blob = await res.blob();
@@ -97,12 +98,13 @@ export default function Capture({ darkMode, toggleDarkMode }) {
         resultType: 'cash'
       }
     });
-    setLoading(false);
+    setLoadingCash(false);
+    setLoadingDoc(false);
   };
 
   // Handle Document Reader - Navigate to Result page
   const handleDocumentReader = async () => {
-    setLoading(true);
+    setLoadingDoc(true);
     // Convert the base64 data URL to a File object
     const res = await fetch(capturedImage);
     const blob = await res.blob();
@@ -124,12 +126,9 @@ export default function Capture({ darkMode, toggleDarkMode }) {
         resultText: data.result,
         resultType: 'document'
       }
-      // state: {
-      //   resultText: 'The quick brown fox jumps over the lazy dog. This is a sample text extracted from the captured image.',
-      //   resultType: 'document'
-      // }
     });
-    setLoading(false);
+    setLoadingCash(false);
+    setLoadingDoc(false);
   };
 
   // Start camera on component mount
@@ -202,21 +201,29 @@ export default function Capture({ darkMode, toggleDarkMode }) {
             <div className="processing-section">
               <h2 className="processing-title">Processing Options</h2>
               <div className="processing-buttons">
-                <button className="process-btn cash-btn" onClick={handleCashReader} disabled={loading}>
-                  {loading ? (
+                <button 
+                className="process-btn cash-btn" 
+                onClick={handleCashReader} 
+                disabled={loadingCash || loadingDoc}
+                >
+                  {loadingCash ? (
                     <span className="loader-capture"></span>
                   ) : (
                     <span className="btn-icon">💰</span>
                   )}
-                  <span className="btn-text">{loading ? 'PROCESSING...' : 'CASH READER'}</span>
+                  <span className="btn-text">{loadingCash ? 'PROCESSING...' : 'CASH READER'}</span>
                 </button>
-                <button className="process-btn document-btn" onClick={handleDocumentReader} disabled={loading}>
-                  {loading ? (
+                <button 
+                className="process-btn document-btn" 
+                onClick={handleDocumentReader} 
+                disabled={loadingCash || loadingDoc}
+                >
+                  {loadingDoc ? (
                     <span className="loader-capture"></span>
                   ) : (
                     <span className="btn-icon">📄</span>
                   )}
-                  <span className="btn-text">{loading ? 'PROCESSING...' : 'DOCUMENT READER'}</span>
+                  <span className="btn-text">{loadingDoc ? 'PROCESSING...' : 'DOCUMENT READER'}</span>
                 </button>
               </div>
             </div>
