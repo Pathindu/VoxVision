@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
@@ -16,6 +16,10 @@ export default function Result({ darkMode, toggleDarkMode }) {
   // Get result text from navigation state or use default
   const resultText = location.state?.resultText || "Detected: Rs. 1000 Note";
   const resultType = location.state?.resultType || "cash"; // 'cash' or 'document'
+
+  useEffect(() => {
+    handleReadDocument(resultText);
+  }, [])
 
   const handleReadDocument = async (fullText) => {
     setIsLoading(true);
@@ -49,10 +53,6 @@ export default function Result({ darkMode, toggleDarkMode }) {
     
     createAudio(fetchedBlobs);
     setIsLoading(false);
-    
-    if (audioSrc) {
-      playAudio();
-    }
   };
 
   const createAudio = (blobs) => {
@@ -63,28 +63,6 @@ export default function Result({ darkMode, toggleDarkMode }) {
     URL.revokeObjectURL(audioSrc); // Clean up memory
     setAudioSrc(audioUrl);
   }
-
-  const speakWithGoogleTTS = async (text, lang) => {
-    try {
-      // 1. Call your Python backend endpoint
-      const response = await fetch('http://localhost:8000/synthesize', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: text, lang_code: lang }),
-      });
-
-      if (!response.ok) throw new Error("Failed to get audio from backend");
-
-      // 2. Convert the response to a Blob (Binary Large Object)
-      const blob = await response.blob();
-      return blob;
-
-    } catch (error) {
-      console.error("TTS Error:", error);
-      setIsSpeaking(false);
-      return null;
-    }
-  };
 
   const playAudio = async () => {
     setIsSpeaking(true)
@@ -108,9 +86,31 @@ export default function Result({ darkMode, toggleDarkMode }) {
     setIsSpeaking(false)
   };
 
+  const speakWithGoogleTTS = async (text, lang) => {
+    try {
+      // 1. Call your Python backend endpoint
+      const response = await fetch('http://localhost:8000/synthesize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: text, lang_code: lang }),
+      });
+
+      if (!response.ok) throw new Error("Failed to get audio from backend");
+
+      // 2. Convert the response to a Blob (Binary Large Object)
+      const blob = await response.blob();
+      return blob;
+
+    } catch (error) {
+      console.error("TTS Error:", error);
+      setIsSpeaking(false);
+      return null;
+    }
+  };
+
   const handlePlay = () => {
-    if (!audioSrc) handleReadDocument(resultText);
-    else playAudio();
+    if (audioSrc) playAudio();
+    else alert("No audio to play. Please wait for the audio to be generated.");
   };
 
   const handlePause = () => {
@@ -159,7 +159,9 @@ export default function Result({ darkMode, toggleDarkMode }) {
 
   const handleProcessAnother = () => {
     // Stop any ongoing speech
-    audio.pause();
+    if (isSpeaking){
+      audio.pause();
+    }
     setIsSpeaking(false);
     setIsPaused(false);
     
