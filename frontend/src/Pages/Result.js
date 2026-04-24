@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
@@ -7,22 +7,22 @@ import '../Components/Result.css';
 export default function Result({ darkMode, toggleDarkMode }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const speechSynthesisRef = useRef(null);
-  const [audioBlob, setAudioBlob] = useState([]);
+  const [isPaused, setIsPaused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [audio, setAudio] = useState(null);
+  const [audioSrc, setAudioSrc] = useState(null);
   
   // Get result text from navigation state or use default
   const resultText = location.state?.resultText || "Detected: Rs. 1000 Note";
   const resultType = location.state?.resultType || "cash"; // 'cash' or 'document'
 
+  useEffect(() => {
+    handleReadDocument(resultText);
+  }, [])
+
   const handleReadDocument = async (fullText) => {
-    if (audioBlob.length > 0) {
-      playAudio();
-      return;
-    }
     setIsLoading(true);
-    setAudioBlob([]);
     // 1. Split into large blocks by script type
     const segments = fullText.match(/[\x00-\x7F]+|[^\x41-\x5A\x61-\x7A]+/g);
     
@@ -51,16 +51,40 @@ export default function Result({ darkMode, toggleDarkMode }) {
       }
     }
     
-    setAudioBlob(fetchedBlobs);
+    createAudio(fetchedBlobs);
     setIsLoading(false);
-    
-    if (fetchedBlobs.length > 0) {
-      await playAudioBlobs(fetchedBlobs);
-    }
   };
 
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [audio, setAudio] = useState(null);
+  const createAudio = (blobs) => {
+    const combinedBlobs = new Blob(blobs, { type: 'audio/mpeg' });
+    const audioUrl = URL.createObjectURL(combinedBlobs);
+    const audio = new Audio(audioUrl);
+    setAudio(audio);
+    URL.revokeObjectURL(audioSrc); // Clean up memory
+    setAudioSrc(audioUrl);
+  }
+
+  const playAudio = async () => {
+    setIsSpeaking(true)
+    await new Promise((resolve) => {
+      if (isPaused){
+        setIsPaused(false)
+        audio.currentTime = audio.currentTime - 2;
+        audio.play().catch(error => {
+          console.error("Audio playback error:", error);
+          resolve();
+        });
+      }
+      else {
+        audio.currentTime = 0;
+        audio.play().catch(error => {
+          console.error("Audio playback error:", error);
+          resolve();
+        });
+      }
+    });
+    setIsSpeaking(false)
+  };
 
   const speakWithGoogleTTS = async (text, lang) => {
     try {
@@ -84,74 +108,16 @@ export default function Result({ darkMode, toggleDarkMode }) {
     }
   };
 
-  const playAudioBlobs = async (blobs) => {
-    if (!blobs || blobs.length === 0) {
-      alert("No audio to play");
-      return;
-    }
-    setIsSpeaking(true);
-    for (const blob of blobs) {
-      // 3. Create a temporary URL for the audio file
-      const audioUrl = URL.createObjectURL(blob);
-      
-      // 4. Play the audio
-      const newAudio = new Audio(audioUrl);
-      setAudio(newAudio);
-      
-      await new Promise((resolve) => {
-        newAudio.onended = () => {
-          URL.revokeObjectURL(audioUrl); // Clean up memory
-          resolve();
-        };
-
-        newAudio.play().catch(error => {
-          console.error("Audio playback error:", error);
-          resolve();
-        });
-      });
-    }
-    setIsSpeaking(false);
-  };
-
-  const playAudio = async () => {
-    await playAudioBlobs(audioBlob);
-  };
-
-  // Text-to-Speech functions
-  const speakText = (text) => {
-    if ('speechSynthesis' in window) {
-      // Cancel any ongoing speech
-      window.speechSynthesis.cancel();
-      
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9;
-      utterance.pitch = 1;
-      utterance.volume = 1;
-      
-      utterance.onstart = () => setIsPlaying(true);
-      utterance.onend = () => setIsPlaying(false);
-      utterance.onerror = () => setIsPlaying(false);
-      
-      speechSynthesisRef.current = utterance;
-      window.speechSynthesis.speak(utterance);
-    } else {
-      alert('Text-to-speech is not supported in your browser');
-    }
-  };
-
   const handlePlay = () => {
-    // speakText(resultText);
-    handleReadDocument(resultText);
+    if (audioSrc) playAudio();
+    else alert("No audio to play. Please wait for the audio to be generated.");
   };
 
   const handlePause = () => {
-    if (window.speechSynthesis.speaking) {
-      window.speechSynthesis.pause();
-      setIsPlaying(false);
-    }
     if (isSpeaking){
       audio.pause();
       setIsSpeaking(false);
+      setIsPaused(true);
     }
   };
 
@@ -166,27 +132,38 @@ export default function Result({ darkMode, toggleDarkMode }) {
   };
 
   const handleRepeat = () => {
-    window.speechSynthesis.cancel();
-    // speakText(resultText);
-    console.log(audioBlob.length);
+    setIsPaused(false)
+    audio.currentTime = 0;
     playAudio();
   };
 
   const handleDownload = () => {
+    if (!audioSrc) {
+      alert("No audio to download")
+      return 
+    }
+    const link = document.createElement('a');
+    link.href = audioSrc;
+    link.download = `${resultType}-audio-${Date.now()}.mp3`;
+    link.click();
+
     // Create a text file and download
-    const element = document.createElement('a');
-    const file = new Blob([resultText], { type: 'text/plain' });
-    element.href = URL.createObjectURL(file);
-    element.download = `${resultType}-result-${Date.now()}.txt`;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+    // const element = document.createElement('a');
+    // const file = new Blob([resultText], { type: 'text/plain' });
+    // element.href = URL.createObjectURL(file);
+    // element.download = `${resultType}-result-${Date.now()}.txt`;
+    // document.body.appendChild(element);
+    // element.click();
+    // document.body.removeChild(element);
   };
 
   const handleProcessAnother = () => {
     // Stop any ongoing speech
-    window.speechSynthesis.cancel();
-    setIsPlaying(false);
+    if (isSpeaking){
+      audio.pause();
+    }
+    setIsSpeaking(false);
+    setIsPaused(false);
     
     // Navigate back to home
     navigate('/');
@@ -215,7 +192,7 @@ export default function Result({ darkMode, toggleDarkMode }) {
                 className="audio-btn pause-btn" 
                 onClick={handlePause}
                 // disabled={!isPlaying}
-                disabled={!isSpeaking}
+                disabled={isLoading || !isSpeaking}
               >
                 <span className="audio-icon">⏸</span>
                 <span className="audio-label">Pause</span>
@@ -224,7 +201,7 @@ export default function Result({ darkMode, toggleDarkMode }) {
               <button 
                 className="audio-btn play-btn" 
                 onClick={handlePlay}
-                disabled={isLoading}
+                disabled={isLoading || isSpeaking}
               >
                 <span className="audio-icon">{isLoading ? "⏳" : "▶"}</span>
                 <span className="audio-label">{isLoading ? "Loading..." : "Play"}</span>
@@ -233,6 +210,7 @@ export default function Result({ darkMode, toggleDarkMode }) {
               <button 
                 className="audio-btn repeat-btn" 
                 onClick={handleRepeat}
+                disabled={isLoading}
               >
                 <span className="audio-icon">🔁</span>
                 <span className="audio-label">Repeat</span>
