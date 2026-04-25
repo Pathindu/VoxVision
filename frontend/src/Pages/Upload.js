@@ -30,14 +30,14 @@ export default function Upload({ darkMode, toggleDarkMode }) {
   // Handle file selection
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
-    if (file && file.type.startsWith('image/')) {
+    if (file && (file.type.startsWith('image/') || file.type === 'application/pdf')) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setUploadedImage(e.target.result);
       };
       reader.readAsDataURL(file);
     } else {
-      alert('Please select a valid image file');
+      alert('Please select a valid image or PDF file');
     }
   };
 
@@ -56,14 +56,14 @@ export default function Upload({ darkMode, toggleDarkMode }) {
     setIsDragging(false);
 
     const file = event.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
+    if (file && (file.type.startsWith('image/') || file.type === 'application/pdf')) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setUploadedImage(e.target.result);
       };
       reader.readAsDataURL(file);
     } else {
-      alert('Please drop a valid image file');
+      alert('Please drop a valid image or PDF file');
     }
   };
 
@@ -86,7 +86,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
     // Convert the base64 data URL to a File object
     const res = await fetch(uploadedImage);
     const blob = await res.blob();
-    const file = new File([blob], "capture.png", { type: "image/png" });
+    const file = new File([blob], blob.type === 'application/pdf' ? 'upload.pdf' : 'upload.png', { type: blob.type });
     
     const formData = new FormData();
     formData.append('image', file);
@@ -115,7 +115,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
     // Convert the base64 data URL to a File object
     const res = await fetch(uploadedImage);
     const blob = await res.blob();
-    const file = new File([blob], "capture.png", { type: "image/png" });
+    const file = new File([blob], blob.type === 'application/pdf' ? 'upload.pdf' : 'upload.png', { type: blob.type });
     
     const formData = new FormData();
     formData.append('image', file);
@@ -171,7 +171,11 @@ export default function Upload({ darkMode, toggleDarkMode }) {
                 </div>
               ) : (
                 <div className="uploaded-image-container">
-                  <img src={uploadedImage} alt="Uploaded" className="uploaded-image" />
+                  {uploadedImage.startsWith('data:application/pdf') ? (
+                    <embed src={uploadedImage} type="application/pdf" className="uploaded-image" />
+                  ) : (
+                    <img src={uploadedImage} alt="Uploaded" className="uploaded-image" />
+                  )}
                   <button className="remove-button" onClick={handleRemoveImage}>
                     ✕
                   </button>
@@ -188,7 +192,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/*"
+              accept="image/*,application/pdf"
               onChange={handleFileSelect}
               style={{ display: 'none' }}
             />
