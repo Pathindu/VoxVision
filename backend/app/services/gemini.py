@@ -14,12 +14,15 @@ class GeminiService:
         
         self.model = settings.GEMINI_MODEL
 
-    def process_image(self, image_bytes: bytes, prompt: str, system_instruction: str, temperature: float) -> str:
+    def process_image(self, image_bytes: bytes, prompt: str, system_instruction: str, temperature: float, mime_type: str = "image/png") -> str:
         if not self.client:
             raise ValueError("Gemini API Key is not configured.")
         
         try:
-            img = Image.open(io.BytesIO(image_bytes))
+            file_part = types.Part.from_bytes(
+                data=image_bytes,
+                mime_type=mime_type
+            )
             
             response = self.client.models.generate_content(
                 model=self.model,
@@ -28,10 +31,10 @@ class GeminiService:
                     temperature=temperature,
                     response_mime_type="text/plain"
                 ),
-                contents=[prompt, img]
+                contents=[prompt, file_part]
             )
             return response.text
         except Exception as e:
-            raise Exception(f"Failed to process image: {str(e)}")
+            raise Exception(f"Failed to process file: {str(e)}")
 
 gemini_service = GeminiService()

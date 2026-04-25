@@ -18,7 +18,8 @@ system_instruction = """Act as a high-fidelity document reader for visually impa
 async def analyze_image(image: UploadFile = File(...)):
     try:
         image_data = await image.read()
-        text_result = gemini_service.process_image(image_data, prompt, system_instruction, 0.3)
+        mime_type = image.content_type or "image/png"
+        text_result = gemini_service.process_image(image_data, prompt, system_instruction, 0.3, mime_type)
         return {"result": text_result}
     except ValueError as e:
         raise HTTPException(status_code=500, detail=str(e))
