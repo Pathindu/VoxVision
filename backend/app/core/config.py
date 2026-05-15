@@ -6,6 +6,7 @@ load_dotenv()
 class Settings:
     PROJECT_NAME: str = "SMR Backend"
     GEMINI_API_KEY: str | None = os.getenv("GEMINI_API_KEY")
-    GEMINI_MODEL: str = "gemini-3.1-flash-lite-preview"
+    GEMINI_MODEL: str = "gemini-3.1-flash-lite"
+    APP_ORIGINS: str | None = os.getenv("APP_ORIGINS")
 
 settings = Settings()

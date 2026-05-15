@@ -12,10 +12,11 @@ export default function Capture({ darkMode, toggleDarkMode }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const navigate = useNavigate();
-  
+
   const checkBackend = async () => {
     try {
-      const backend = await fetch("http://localhost:8000/");
+      // const backend = await fetch("http://localhost:8000/");
+      const backend = await fetch(process.env.REACT_APP_API_URL);
       const data = await backend.json();
       console.log(data);
     } catch (error) {
@@ -31,8 +32,8 @@ export default function Capture({ darkMode, toggleDarkMode }) {
   // Start camera
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'environment' } 
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment' }
       });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
@@ -49,16 +50,16 @@ export default function Capture({ darkMode, toggleDarkMode }) {
     if (videoRef.current && canvasRef.current) {
       const canvas = canvasRef.current;
       const video = videoRef.current;
-      
+
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-      
+
       const context = canvas.getContext('2d');
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      
+
       const imageData = canvas.toDataURL('image/png');
       setCapturedImage(imageData);
-      
+
       // Stop camera
       const stream = video.srcObject;
       const tracks = stream.getTracks();
@@ -80,11 +81,11 @@ export default function Capture({ darkMode, toggleDarkMode }) {
     const res = await fetch(capturedImage);
     const blob = await res.blob();
     const file = new File([blob], "capture.png", { type: "image/png" });
-    
+
     const formData = new FormData();
     formData.append('image', file);
 
-    const response = await fetch('http://localhost:8000/cash-to-text/', {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/cash-to-text/`, {
       method: 'POST',
       body: formData,
     });
@@ -109,11 +110,11 @@ export default function Capture({ darkMode, toggleDarkMode }) {
     const res = await fetch(capturedImage);
     const blob = await res.blob();
     const file = new File([blob], "capture.png", { type: "image/png" });
-    
+
     const formData = new FormData();
     formData.append('image', file);
 
-    const response = await fetch('http://localhost:8000/image-to-text/', {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/image-to-text/`, {
       method: 'POST',
       body: formData,
     });
@@ -134,7 +135,7 @@ export default function Capture({ darkMode, toggleDarkMode }) {
   // Start camera on component mount
   React.useEffect(() => {
     startCamera();
-    
+
     return () => {
       // Cleanup: stop camera when component unmounts
       if (videoRef.current && videoRef.current.srcObject) {
@@ -146,7 +147,7 @@ export default function Capture({ darkMode, toggleDarkMode }) {
   }, []);
 
   return (
-      <div className={`capture-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+    <div className={`capture-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
       {/* Navigation */}
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
@@ -201,10 +202,10 @@ export default function Capture({ darkMode, toggleDarkMode }) {
             <div className="processing-section">
               <h2 className="processing-title">Processing Options</h2>
               <div className="processing-buttons">
-                <button 
-                className="process-btn cash-btn" 
-                onClick={handleCashReader} 
-                disabled={loadingCash || loadingDoc}
+                <button
+                  className="process-btn cash-btn"
+                  onClick={handleCashReader}
+                  disabled={loadingCash || loadingDoc}
                 >
                   {loadingCash ? (
                     <span className="loader-capture"></span>
@@ -213,10 +214,10 @@ export default function Capture({ darkMode, toggleDarkMode }) {
                   )}
                   <span className="btn-text">{loadingCash ? 'PROCESSING...' : 'CASH READER'}</span>
                 </button>
-                <button 
-                className="process-btn document-btn" 
-                onClick={handleDocumentReader} 
-                disabled={loadingCash || loadingDoc}
+                <button
+                  className="process-btn document-btn"
+                  onClick={handleDocumentReader}
+                  disabled={loadingCash || loadingDoc}
                 >
                   {loadingDoc ? (
                     <span className="loader-capture"></span>

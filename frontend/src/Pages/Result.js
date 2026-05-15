@@ -12,20 +12,16 @@ export default function Result({ darkMode, toggleDarkMode }) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [audio, setAudio] = useState(null);
   const [audioSrc, setAudioSrc] = useState(null);
-  
+
   // Get result text from navigation state or use default
   const resultText = location.state?.resultText || "Detected: Rs. 1000 Note";
   const resultType = location.state?.resultType || "cash"; // 'cash' or 'document'
-
-  useEffect(() => {
-    handleReadDocument(resultText);
-  }, [])
 
   const handleReadDocument = async (fullText) => {
     setIsLoading(true);
     // 1. Split into large blocks by script type
     const segments = fullText.match(/[\x00-\x7F]+|[^\x41-\x5A\x61-\x7A]+/g);
-    
+
     if (!segments) {
       setIsLoading(false);
       return;
@@ -42,18 +38,48 @@ export default function Result({ darkMode, toggleDarkMode }) {
       if ((/[\x41-\x5A\x61-\x7A]/.test(segment))) {
         lang = "en-US";
       } else lang = "si-LK"
-      console.log(lang,": ", segment);
-      
-      // Wait for each segment to finish before starting the next
-      const blob = await speakWithGoogleTTS(segment, lang);
-      if (blob) {
-        fetchedBlobs.push(blob);
+
+      if (new Blob([segment]).size > 5000) {
+        let subsegment = [];
+        const sbSize = Math.ceil(new Blob([segment]).size / 5000);
+        let breake = segment.length / sbSize;
+        for (let b = breake, i = 0; b < segment.length; b += breake) {
+          while (b > i) {
+            if (segment.charCodeAt(b) == 46 || segment.charCodeAt(b) == 10) {
+              subsegment = segment.slice(i, b);
+              i = b + 1;
+              break;
+            }
+            b--;
+          }
+          // Wait for each segment to finish before starting the next
+          const blob = await speakWithGoogleTTS(subsegment, lang);
+          if (blob) {
+            fetchedBlobs.push(blob);
+          }
+        }
+      } else {
+        // Wait for each segment to finish before starting the next
+        const blob = await speakWithGoogleTTS(segment, lang);
+        if (blob) {
+          fetchedBlobs.push(blob);
+        }
       }
     }
-    
+
     createAudio(fetchedBlobs);
     setIsLoading(false);
   };
+  
+  const hasRun = useRef(false);
+
+  useEffect(() => {
+    if (!hasRun.current) {
+      handleReadDocument(resultText);
+      hasRun.current = true;
+    }
+  }, [resultText]);
+
 
   const createAudio = (blobs) => {
     const combinedBlobs = new Blob(blobs, { type: 'audio/mpeg' });
@@ -67,7 +93,7 @@ export default function Result({ darkMode, toggleDarkMode }) {
   const playAudio = async () => {
     setIsSpeaking(true)
     await new Promise((resolve) => {
-      if (isPaused){
+      if (isPaused) {
         setIsPaused(false)
         audio.currentTime = audio.currentTime - 2;
         audio.play().catch(error => {
@@ -82,14 +108,15 @@ export default function Result({ darkMode, toggleDarkMode }) {
           resolve();
         });
       }
+      audio.onended = () => setIsSpeaking(false);
     });
-    setIsSpeaking(false)
   };
 
   const speakWithGoogleTTS = async (text, lang) => {
+    console.log(lang, " Size: ", new Blob([text]).size, ": ", text);
     try {
       // 1. Call your Python backend endpoint
-      const response = await fetch('https://voxvision-backend.onrender.com/synthesize', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/synthesize`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: text, lang_code: lang }),
@@ -103,18 +130,21 @@ export default function Result({ darkMode, toggleDarkMode }) {
 
     } catch (error) {
       console.error("TTS Error:", error);
-      setIsSpeaking(false);
       return null;
     }
   };
 
   const handlePlay = () => {
     if (audioSrc) playAudio();
-    else alert("No audio to play. Please wait for the audio to be generated.");
+    else {
+      // alert("No audio to play. Please wait for the audio to be generated.");
+      hasRun.current = false;
+      handleReadDocument(resultText);
+    };
   };
 
   const handlePause = () => {
-    if (isSpeaking){
+    if (isSpeaking) {
       audio.pause();
       setIsSpeaking(false);
       setIsPaused(true);
@@ -140,7 +170,7 @@ export default function Result({ darkMode, toggleDarkMode }) {
   const handleDownload = () => {
     if (!audioSrc) {
       alert("No audio to download")
-      return 
+      return
     }
     const link = document.createElement('a');
     link.href = audioSrc;
@@ -159,18 +189,18 @@ export default function Result({ darkMode, toggleDarkMode }) {
 
   const handleProcessAnother = () => {
     // Stop any ongoing speech
-    if (isSpeaking){
+    if (isSpeaking) {
       audio.pause();
     }
     setIsSpeaking(false);
     setIsPaused(false);
-    
+
     // Navigate back to home
     navigate('/');
   };
 
   return (
-      <div className={`result-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+    <div className={`result-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
       {/* Navigation */}
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
@@ -180,16 +210,16 @@ export default function Result({ darkMode, toggleDarkMode }) {
 
           {/* Result Display Box */}
           <div className="result-box">
-            <p className="result-text">{resultText}</p>
+            <p className="result-text" tabIndex={0} aria-description='Result text'>{resultText}</p>
           </div>
 
           {/* Audio Controls */}
           <div className="audio-controls-section">
             <h2 className="audio-title">Audio Controls</h2>
-            
+
             <div className="audio-buttons">
-              <button 
-                className="audio-btn pause-btn" 
+              <button
+                className="audio-btn pause-btn"
                 onClick={handlePause}
                 // disabled={!isPlaying}
                 disabled={isLoading || !isSpeaking}
@@ -198,8 +228,8 @@ export default function Result({ darkMode, toggleDarkMode }) {
                 <span className="audio-label">Pause</span>
               </button>
 
-              <button 
-                className="audio-btn play-btn" 
+              <button
+                className="audio-btn play-btn"
                 onClick={handlePlay}
                 disabled={isLoading || isSpeaking}
               >
@@ -207,8 +237,8 @@ export default function Result({ darkMode, toggleDarkMode }) {
                 <span className="audio-label">{isLoading ? "Loading..." : "Play"}</span>
               </button>
 
-              <button 
-                className="audio-btn repeat-btn" 
+              <button
+                className="audio-btn repeat-btn"
                 onClick={handleRepeat}
                 disabled={isLoading}
               >

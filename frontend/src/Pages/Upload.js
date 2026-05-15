@@ -20,7 +20,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
       try {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 10000);
-        const backend = await fetch("https://voxvision-backend.onrender.com/", {
+        const backend = await fetch(process.env.REACT_APP_API_URL, {
           signal: controller.signal
         });
         clearTimeout(timeout);
@@ -93,7 +93,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
       const formData = new FormData();
       formData.append('image', file);
 
-      const response = await fetch('https://voxvision-backend.onrender.com/cash-to-text/', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/cash-to-text/`, {
         method: 'POST',
         body: formData,
       });
@@ -124,7 +124,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
       const formData = new FormData();
       formData.append('image', file);
 
-      const response = await fetch('https://voxvision-backend.onrender.com/image-to-text/', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/image-to-text/`, {
         method: 'POST',
         body: formData,
       });
@@ -172,6 +172,15 @@ export default function Upload({ darkMode, toggleDarkMode }) {
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               onClick={!uploadedImage ? handleUploadClick : null}
+              tabIndex={!uploadedImage ? "0" : "-1"}
+              role={!uploadedImage ? "button" : "region"}
+              aria-label={!uploadedImage ? "Upload area" : "Uploaded file view"}
+              onKeyDown={!uploadedImage ? (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleUploadClick();
+                }
+              } : null}
             >
               {!uploadedImage ? (
                 <div className="upload-prompt">
