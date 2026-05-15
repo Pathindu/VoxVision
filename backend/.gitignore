@@ -7,6 +7,3 @@ __pycache__/
 .vscode/
 cloud-tts-api.json
 test.py
-
-.env
-cloud-tts-api.json

@@ -17,10 +17,6 @@ export default function Result({ darkMode, toggleDarkMode }) {
   const resultText = location.state?.resultText || "Detected: Rs. 1000 Note";
   const resultType = location.state?.resultType || "cash"; // 'cash' or 'document'
 
-  useEffect(() => {
-    handleReadDocument(resultText);
-  }, [])
-
   const handleReadDocument = async (fullText) => {
     setIsLoading(true);
     // 1. Split into large blocks by script type
@@ -42,11 +38,10 @@ export default function Result({ darkMode, toggleDarkMode }) {
       if ((/[\x41-\x5A\x61-\x7A]/.test(segment))) {
         lang = "en-US";
       } else lang = "si-LK"
-      console.log(lang, ": ", segment);
 
       if (new Blob([segment]).size > 5000) {
         let subsegment = [];
-        const sbSize = Math.round(new Blob([segment]).size / 5000);
+        const sbSize = Math.ceil(new Blob([segment]).size / 5000);
         let breake = segment.length / sbSize;
         for (let b = breake, i = 0; b < segment.length; b += breake) {
           while (b > i) {
@@ -63,18 +58,28 @@ export default function Result({ darkMode, toggleDarkMode }) {
             fetchedBlobs.push(blob);
           }
         }
-      }
-
-      // Wait for each segment to finish before starting the next
-      const blob = await speakWithGoogleTTS(segment, lang);
-      if (blob) {
-        fetchedBlobs.push(blob);
+      } else {
+        // Wait for each segment to finish before starting the next
+        const blob = await speakWithGoogleTTS(segment, lang);
+        if (blob) {
+          fetchedBlobs.push(blob);
+        }
       }
     }
 
     createAudio(fetchedBlobs);
     setIsLoading(false);
   };
+  
+  const hasRun = useRef(false);
+
+  useEffect(() => {
+    if (!hasRun.current) {
+      handleReadDocument(resultText);
+      hasRun.current = true;
+    }
+  }, [resultText]);
+
 
   const createAudio = (blobs) => {
     const combinedBlobs = new Blob(blobs, { type: 'audio/mpeg' });
@@ -108,6 +113,7 @@ export default function Result({ darkMode, toggleDarkMode }) {
   };
 
   const speakWithGoogleTTS = async (text, lang) => {
+    console.log(lang, " Size: ", new Blob([text]).size, ": ", text);
     try {
       // 1. Call your Python backend endpoint
       const response = await fetch(`${process.env.REACT_APP_API_URL}/synthesize`, {
@@ -130,7 +136,11 @@ export default function Result({ darkMode, toggleDarkMode }) {
 
   const handlePlay = () => {
     if (audioSrc) playAudio();
-    else alert("No audio to play. Please wait for the audio to be generated.");
+    else {
+      // alert("No audio to play. Please wait for the audio to be generated.");
+      hasRun.current = false;
+      handleReadDocument(resultText);
+    };
   };
 
   const handlePause = () => {
