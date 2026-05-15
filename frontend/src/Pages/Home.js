@@ -37,7 +37,7 @@ export default function Home({ darkMode, toggleDarkMode }) {
 
             {/* Right Side - Main Content */}
             <div className="hero-right">
-              <div className="phone-icon">📱</div>
+              <img src="/voxvision-logo.png" alt="VoxVision Logo" className="hero-logo" />
               <h1 className="hero-title">
                 Smart Cash & Document Reader
               </h1>

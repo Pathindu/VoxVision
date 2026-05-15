@@ -41,19 +41,22 @@
   transform: scale(1.05);
 }
 
-.navbar-logo-icon {
-  font-size: 2.25rem;
+.creative-logo {
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: linear-gradient(to right, #1e3a8a, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
 }
 
-.navbar-logo-text {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1e3a8a;
-  transition: color 0.3s ease;
-}
-
-.navbar.dark-mode .navbar-logo-text {
-  color: #67e8f9;
+.navbar.dark-mode .creative-logo {
+  background: linear-gradient(to right, #67e8f9, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Links - Right Side */

@@ -12,7 +12,7 @@
 .hero-content {
   max-width: 80rem;
   margin: 0 auto;
-  padding: 5rem 2rem;
+  padding: 3rem 2rem 5rem 2rem; /* Reduced top padding from 5rem to 3rem */
 }
 
 .hero-grid {
@@ -80,10 +80,14 @@
   }
 }
 
-.phone-icon {
-  font-size: 6rem;
-  margin-bottom: 1.5rem;
+.hero-logo {
+  width: 200px;
+  height: auto;
+  margin: 0 auto 1.5rem auto;
+  display: block;
   animation: float 3s ease-in-out infinite;
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(103, 232, 249, 0.4); /* subtle glow matching the neon ring */
 }
 
 @keyframes float {
