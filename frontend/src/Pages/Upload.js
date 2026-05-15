@@ -14,7 +14,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
   
   const checkBackend = async () => {
     try {
-      const backend = await fetch("http://localhost:8000/");
+      const backend = await fetch("https://voxvision-backend.onrender.com/");
       const data = await backend.json();
       console.log(data);
     } catch (error) {
