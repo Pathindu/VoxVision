@@ -82,14 +82,14 @@ export default function Result({ darkMode, toggleDarkMode }) {
           resolve();
         });
       }
+    audio.onended = () => setIsSpeaking(false);
     });
-    setIsSpeaking(false)
   };
 
   const speakWithGoogleTTS = async (text, lang) => {
     try {
       // 1. Call your Python backend endpoint
-      const response = await fetch('http://localhost:8000/synthesize', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/synthesize`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: text, lang_code: lang }),
@@ -103,7 +103,6 @@ export default function Result({ darkMode, toggleDarkMode }) {
 
     } catch (error) {
       console.error("TTS Error:", error);
-      setIsSpeaking(false);
       return null;
     }
   };
@@ -180,7 +179,7 @@ export default function Result({ darkMode, toggleDarkMode }) {
 
           {/* Result Display Box */}
           <div className="result-box">
-            <p className="result-text">{resultText}</p>
+            <p className="result-text" tabIndex={0} aria-description='Result text'>{resultText}</p>
           </div>
 
           {/* Audio Controls */}

@@ -38,10 +38,15 @@
   justify-content: center;
 }
 
-.upload-area:hover:not(.has-image) {
+.upload-area:hover:not(.has-image) , .upload-area:focus-visible:not(.has-image) {
   transform: scale(1.02);
   box-shadow: 0 20px 40px rgba(30, 58, 138, 0.15);
 }
+
+/* .upload-area:focus-visible {
+  transform: scale(1.02);
+  box-shadow: 0 20px 40px rgba(30, 58, 138, 0.15);
+} */
 
 .upload-area.dragging {
   border-color: #3b82f6;
