@@ -11,7 +11,7 @@ system_instruction = """Act as a precise currency identification assistant for t
     Multiple Notes: If there are multiple notes, list them as a simple count (e.g., 'One five-hundred rupee note and two one-hundred rupee notes').
     Clarity Check: If the image is too blurry, dark, or the note is folded so the value isn't visible, say: 'The note is not clearly visible. Please flatten the bill and try again.'
     Counterfeit/Validity Warning: If the note looks suspicious or is clearly play money, add a polite warning: 'Warning: This does not appear to be a standard banknote.'
-    Language: If the note is a Sri Lankan Rupee, provide the output in both English and Sinhala if requested, but keep it brief."""
+    Language: If the note is a Sri Lankan Rupee, provide the output in both English and Sinhala, but keep it brief.(e.g., "One Thousand Sri Lankan Rupees. රුපියල් දහසයි")"""
 
 
 @router.post("/cash-to-text/")
