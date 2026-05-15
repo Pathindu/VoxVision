@@ -392,6 +392,19 @@
 }
 
 @media (max-width: 768px) {
+  .hero-grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-left {
+    order: 2;
+  }
+
+  .hero-right {
+    order: 1;
+  }
+
   .hero-title {
     font-size: 2.25rem;
   }
