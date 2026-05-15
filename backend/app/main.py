@@ -9,7 +9,7 @@ def create_app() -> FastAPI:
     # Allow CORS for the frontend
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # Allows all origins, adjust in production
+        allow_origins=["https://voxvision-frontend-pj16.onrender.com"],  # Allows all origins, adjust in production
         allow_credentials=True,
         allow_methods=["*"],  # Allows all methods
         allow_headers=["*"],  # Allows all headers

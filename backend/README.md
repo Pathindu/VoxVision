@@ -91,4 +91,5 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 - `main.py`: Application entry point.
 - `requirements.txt`: Python dependencies.
 
-Server Runs on : https://voxvision-backend.onrender.com/
+Backend Server Runs on : https://voxvision-backend.onrender.com/
+Frontend Server Runs on : https://voxvision-frontend-pj16.onrender.com
