@@ -1,5 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
-from app.services.gemini import gemini_service
+from app.services.gemini import GeminiService
 
 router = APIRouter()
 
@@ -24,7 +24,8 @@ async def analyze_image(image: UploadFile = File(...)):
     try:
         image_data = await image.read()
         mime_type = image.content_type or "image/png"
-        text_result = gemini_service.process_image(image_data, prompt, system_instruction, 0.3, mime_type)
+        service = GeminiService()
+        text_result = service.process_image(image_data, prompt, system_instruction, 0.3, mime_type)
         return {"result": text_result}
     except ValueError as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
-from app.services.gemini import gemini_service
+from app.services.gemini import GeminiService
 
 router = APIRouter()
 
@@ -11,7 +11,7 @@ system_instruction = """Act as a precise currency identification assistant for t
     Multiple Notes: If there are multiple notes, list them as a simple count (e.g., 'One five-hundred rupee note and two one-hundred rupee notes').
     Clarity Check: If the image is too blurry, dark, or the note is folded so the value isn't visible, say: 'The note is not clearly visible. Please flatten the bill and try again.'
     Counterfeit/Validity Warning: If the note looks suspicious or is clearly play money, add a polite warning: 'Warning: This does not appear to be a standard banknote.'
-    Language: If the note is a Sri Lankan Rupee, provide the output in both English and Sinhala if requested, but keep it brief."""
+    Language: If the note is a Sri Lankan Rupee, provide the output in both English and Sinhala, but keep it brief.(e.g., "One Thousand Sri Lankan Rupees. රුපියල් දහසයි")"""
 
 
 @router.post("/cash-to-text/")
@@ -19,7 +19,8 @@ async def analyze_image(image: UploadFile = File(...)):
     try:
         image_data = await image.read()
         mime_type = image.content_type or "image/png"
-        text_result = gemini_service.process_image(image_data, prompt, system_instruction, 0.1, mime_type)
+        service = GeminiService()
+        text_result = service.process_image(image_data, prompt, system_instruction, 0.1, mime_type)
         return {"result": text_result}
     except ValueError as e:
         raise HTTPException(status_code=500, detail=str(e))

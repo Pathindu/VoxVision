@@ -90,3 +90,5 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
   - `services/`: External service integrations (Gemini, Google Cloud).
 - `main.py`: Application entry point.
 - `requirements.txt`: Python dependencies.
+
+Server Runs on : https://voxvision-backend.onrender.com/
