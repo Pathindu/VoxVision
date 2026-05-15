@@ -11,10 +11,11 @@ export default function Upload({ darkMode, toggleDarkMode }) {
   const [loadingDoc, setLoadingDoc] = useState(false);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
-  
+
   const checkBackend = async () => {
     try {
-      const backend = await fetch("http://localhost:8000/");
+      // const backend = await fetch("http://localhost:8000/");
+      const backend = await fetch(process.env.REACT_APP_API_URL);
       const data = await backend.json();
       console.log(data);
     } catch (error) {
@@ -87,24 +88,29 @@ export default function Upload({ darkMode, toggleDarkMode }) {
     const res = await fetch(uploadedImage);
     const blob = await res.blob();
     const file = new File([blob], blob.type === 'application/pdf' ? 'upload.pdf' : 'upload.png', { type: blob.type });
-    
+
     const formData = new FormData();
     formData.append('image', file);
 
-    const response = await fetch('http://localhost:8000/cash-to-text/', {
-      method: 'POST',
-      body: formData,
-    });
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/cash-to-text/`, {
+        method: 'POST',
+        body: formData,
+      });
 
-    const data = await response.json();
-    console.log("Extracted Text:", data.result);
+      const data = await response.json();
+      console.log("Extracted Text:", data.result);
 
-    navigate('/result', {
-      state: {
-        resultText: data.result,
-        resultType: 'cash'
-      }
-    });
+      navigate('/result', {
+        state: {
+          resultText: data.result,
+          resultType: 'cash'
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong. Please try again.\n" + error.message);
+    }
     setLoadingCash(false);
     setLoadingDoc(false);
   };
@@ -116,30 +122,35 @@ export default function Upload({ darkMode, toggleDarkMode }) {
     const res = await fetch(uploadedImage);
     const blob = await res.blob();
     const file = new File([blob], blob.type === 'application/pdf' ? 'upload.pdf' : 'upload.png', { type: blob.type });
-    
+
     const formData = new FormData();
     formData.append('image', file);
 
-    const response = await fetch('http://localhost:8000/image-to-text/', {
-      method: 'POST',
-      body: formData,
-    });
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/image-to-text/`, {
+        method: 'POST',
+        body: formData,
+      });
 
-    const data = await response.json();
-    console.log("Extracted Text:", data.result);
+      const data = await response.json();
+      console.log("Extracted Text:", data.result);
 
-    navigate('/result', {
-      state: {
-        resultText: data.result,
-        resultType: 'document'
-      }
-    });
+      navigate('/result', {
+        state: {
+          resultText: data.result,
+          resultType: 'document'
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong. Please try again.\n" + error.message);
+    }
     setLoadingCash(false);
     setLoadingDoc(false);
   };
 
   return (
-      <div className={`upload-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+    <div className={`upload-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
       {/* Navigation */}
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
@@ -155,6 +166,15 @@ export default function Upload({ darkMode, toggleDarkMode }) {
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               onClick={!uploadedImage ? handleUploadClick : null}
+              tabIndex={!uploadedImage ? "0" : "-1"}
+              role={!uploadedImage ? "button" : "region"}
+              aria-label={!uploadedImage ? "Upload area" : "Uploaded file view"}
+              onKeyDown={!uploadedImage ? (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleUploadClick();
+                }
+              } : null}
             >
               {!uploadedImage ? (
                 <div className="upload-prompt">
@@ -202,8 +222,8 @@ export default function Upload({ darkMode, toggleDarkMode }) {
           <div className="processing-section-upload">
             <h2 className="processing-title-upload">Processing Options</h2>
             <div className="processing-buttons-upload">
-              <button 
-                className="process-btn-upload cash-btn-upload" 
+              <button
+                className="process-btn-upload cash-btn-upload"
                 onClick={handleCashReader}
                 disabled={!uploadedImage || loadingCash || loadingDoc}
               >
@@ -214,8 +234,8 @@ export default function Upload({ darkMode, toggleDarkMode }) {
                 )}
                 <span className="btn-text-upload">{loadingCash ? 'PROCESSING...' : 'CASH READER'}</span>
               </button>
-              <button 
-                className="process-btn-upload document-btn-upload" 
+              <button
+                className="process-btn-upload document-btn-upload"
                 onClick={handleDocumentReader}
                 disabled={!uploadedImage || loadingDoc || loadingCash}
               >
