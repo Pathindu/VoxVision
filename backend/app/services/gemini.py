@@ -1,7 +1,5 @@
-import io
 from google import genai
 from google.genai import types
-from PIL import Image
 from app.core.config import settings
 
 class GeminiService:
@@ -37,4 +35,3 @@ class GeminiService:
         except Exception as e:
             raise Exception(f"Failed to process file: {str(e)}")
 
-gemini_service = GeminiService()

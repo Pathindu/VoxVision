@@ -1,4 +1,3 @@
-import os
 from google.cloud import texttospeech
 
 class GoogleService:
@@ -27,5 +26,3 @@ class GoogleService:
             print("Language: ", lang)
             print(f"Error synthesizing text: {str(e)}")
             return None
-
-google_service = GoogleService()
