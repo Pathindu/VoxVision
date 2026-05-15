@@ -89,7 +89,7 @@ export default function Result({ darkMode, toggleDarkMode }) {
   const speakWithGoogleTTS = async (text, lang) => {
     try {
       // 1. Call your Python backend endpoint
-      const response = await fetch('http://localhost:8000/synthesize', {
+      const response = await fetch('https://voxvision-backend.onrender.com/synthesize', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: text, lang_code: lang }),
