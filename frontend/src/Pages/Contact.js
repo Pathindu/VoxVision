@@ -63,12 +63,41 @@ export default function ContactUs({ darkMode, toggleDarkMode }) {
     }
   ];
 
+  // Utility to parse, encode, and enforce absolute URLs securely
+  const buildSecureUrl = (rawUrl) => {
+    // Null Checking
+    if (!rawUrl || typeof rawUrl !== 'string') return '#';
+    
+    try {
+      let urlString = rawUrl.trim();
+      
+      // Enforce Absolute URLs
+      if (!urlString.startsWith('http://') && !urlString.startsWith('https://')) {
+        urlString = `https://${urlString}`;
+      }
+      
+      // Fix broken trailing slashes that cause Firebase Dynamic Link parsing errors
+      urlString = urlString.replace(/\/{2,}$/, '/');
+      if (urlString.endsWith('/')) {
+        urlString = urlString.slice(0, -1);
+      }
+
+      // Proper URL Encoding using the URL constructor
+      const url = new URL(urlString);
+      return url.toString();
+    } catch (error) {
+      console.error('Invalid URL format:', error);
+      return '#';
+    }
+  };
+
   const handleLinkedInClick = (linkedinUrl) => {
-    window.open(linkedinUrl, '_blank', 'noopener,noreferrer');
+    const safeUrl = buildSecureUrl(linkedinUrl);
+    if (safeUrl !== '#') window.open(safeUrl, '_blank', 'noopener,noreferrer');
   };
 
   const handleEmailClick = (email) => {
-    window.location.href = `mailto:${email}`;
+    if (email) window.location.href = `mailto:${email.trim()}`;
   };
 
   return (
@@ -88,21 +117,35 @@ export default function ContactUs({ darkMode, toggleDarkMode }) {
           {/* Contact Information Section */}
           <div className="contact-info-section">
             <div className="contact-info-grid">
-              <div className="info-card">
+              <a 
+                href="mailto:contact@smartreader.com"
+                aria-label="Email Us at contact@smartreader.com"
+                className="info-card info-card-link"
+              >
                 <div className="info-icon">📧</div>
                 <h3>Email Us</h3>
                 <p>contact@smartreader.com</p>
-              </div>
-              <div className="info-card">
+              </a>
+              <a 
+                href="tel:+15551234567"
+                aria-label="Call Us at +1 (555) 123-4567"
+                className="info-card info-card-link"
+              >
                 <div className="info-icon">📞</div>
                 <h3>Call Us</h3>
                 <p>+1 (555) 123-4567</p>
-              </div>
-              <div className="info-card">
+              </a>
+              <a 
+                href={buildSecureUrl("https://maps.app.goo.gl/XDtvJXaA4XLghwWBA//")}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit Us: Open University of Kelaniya location in Google Maps in a new tab"
+                className="info-card info-card-link"
+              >
                 <div className="info-icon">📍</div>
                 <h3>Visit Us</h3>
                 <p>University of Kelaniya, Sri Lanka</p>
-              </div>
+              </a>
             </div>
           </div>
 

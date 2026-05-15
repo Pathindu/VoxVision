@@ -81,6 +81,31 @@
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
+/* Clickable Info Card Links */
+.info-card-link {
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.info-card-link:hover {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+
+.contact-page-wrapper.dark-mode .info-card-link:hover {
+  background: linear-gradient(135deg, #2563eb, #0e7490);
+  border-color: #a5f3fc;
+}
+
+.info-card-link:focus,
+.info-card-link:active {
+  outline: 4px solid #fde047; /* High-contrast yellow for accessibility */
+  outline-offset: 4px;
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
 .info-icon {
   font-size: 3rem;
   margin-bottom: 1rem;
