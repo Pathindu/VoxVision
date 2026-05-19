@@ -38,7 +38,7 @@ export default function Home({ darkMode, toggleDarkMode }) {
                     Redefining How<br />We Navigate.
                   </h2>
                   <p className="slogan-subheading">
-                    <i>*Because reading belongs to everyone.*</i>
+                    Smart Cash &amp; Document Reader
                   </p>
                   
                   <div className="slogan-actions">
@@ -64,7 +64,7 @@ export default function Home({ darkMode, toggleDarkMode }) {
             <div className="hero-right">
               <img src="/voxvision-logo.png" alt="VoxVision Logo" className="hero-logo" />
               <h1 className="hero-title">
-                Smart Cash & Document Reader
+                Because reading belongs to everyone.
               </h1>
               <p className="hero-subtitle">
                 Empowering Independence Through Technology

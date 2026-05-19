@@ -48,53 +48,132 @@
   color: #cbd5e1;
 }
 
-/* Order Coming Soon Card (matches info-card in Contact.css) */
-.order-coming-soon {
+/* Product Card Grid */
+.order-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+  margin-top: 3rem;
+  justify-content: center;
+}
+
+/* Product Cards */
+.order-card {
   background: white;
-  padding: 3.5rem 2.5rem;
+  padding: 3rem 2rem;
   border-radius: 1.5rem;
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   border: 3px solid #e0f2fe;
-  max-width: 600px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.order-page-wrapper.dark-mode .order-coming-soon {
+.order-page-wrapper.dark-mode .order-card {
   background: linear-gradient(135deg, #1e3a8a, #0c4a6e);
   border-color: #67e8f9;
 }
 
-.order-coming-soon:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+.order-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 }
 
-.order-coming-soon h3 {
-  font-size: 2rem;
-  color: #1e3a8a;
-  margin-bottom: 1rem;
+.order-card-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.order-card-title {
+  font-size: 1.75rem;
   font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 0.5rem;
   transition: color 0.3s ease;
 }
 
-.order-page-wrapper.dark-mode .order-coming-soon h3 {
+.order-page-wrapper.dark-mode .order-card-title {
   color: #67e8f9;
 }
 
-.order-coming-soon p {
-  font-size: 1.125rem;
-  color: #475569;
-  line-height: 1.6;
+.order-card-price {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #2563eb;
+  margin-bottom: 1.5rem;
   transition: color 0.3s ease;
 }
 
-.order-page-wrapper.dark-mode .order-coming-soon p {
+.order-page-wrapper.dark-mode .order-card-price {
+  color: #38bdf8;
+}
+
+.order-card-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+  text-align: left;
+}
+
+.order-card-features li {
+  font-size: 1.05rem;
+  color: #475569;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.order-page-wrapper.dark-mode .order-card-features li {
   color: #cbd5e1;
 }
 
+.order-card-features li::before {
+  content: "✓";
+  color: #10b981;
+  font-weight: bold;
+}
+
+/* Order Button */
+.order-now-btn {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  padding: 0.85rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.order-now-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+}
+
+.order-page-wrapper.dark-mode .order-now-btn {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+}
+
+.order-page-wrapper.dark-mode .order-now-btn:hover {
+  box-shadow: 0 5px 15px rgba(6, 182, 212, 0.4);
+  background: linear-gradient(135deg, #0891b2, #0369a1);
+}
+
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .order-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+}
+
 @media (max-width: 768px) {
   .order-title {
     font-size: 2.5rem;
@@ -110,7 +189,7 @@
     font-size: 2rem;
   }
 
-  .order-coming-soon {
+  .order-card {
     padding: 2.5rem 1.5rem;
   }
 }

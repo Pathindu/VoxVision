@@ -105,9 +105,15 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
       {isMobileMenuOpen && (
         <div className="mobile-drawer-overlay" onClick={() => setIsMobileMenuOpen(false)}>
           <div className={`mobile-drawer ${darkMode ? 'dark-mode' : ''}`} onClick={(e) => e.stopPropagation()}>
-            <button className="mobile-drawer-close" aria-label="Close menu" onClick={() => setIsMobileMenuOpen(false)}>
-              &times;
-            </button>
+            <div className="mobile-menu-header">
+              {/* Dark Mode Toggle inside Drawer */}
+              <button className="dark-mode-toggle" onClick={toggleDarkMode}>
+                <span className="toggle-icon">{darkMode ? '☀️' : '🌙'}</span>
+              </button>
+              <button className="mobile-drawer-close" aria-label="Close menu" onClick={() => setIsMobileMenuOpen(false)}>
+                &times;
+              </button>
+            </div>
             <ul className="mobile-drawer-links">
               <li>
                 <a href="#home" role="button" onClick={(e) => { e.preventDefault(); handleNavigation('home'); }} className="navbar-link">Home</a>
@@ -125,6 +131,14 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
                 <a href="#login" role="button" onClick={(e) => { e.preventDefault(); handleNavigation('login'); }} className="navbar-link">Login/Register</a>
               </li>
             </ul>
+            <a
+              href="/donate"
+              className="mobile-support-btn"
+              aria-label="Support our mission by donating"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <span className="support-text">Support Us</span>
+            </a>
           </div>
         </div>
       )}
