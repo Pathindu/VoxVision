@@ -5,7 +5,7 @@ export default function Footer({ darkMode }) {
   // Define the Quick Links array
   const quickLinks = [
     { name: 'Home', href: '/' },
-    { name: 'About Us', href: '/about-us' },
+    { name: 'About Us', href: '/about' },
     { name: 'Contact Us', href: '/contact' },
   ];
 

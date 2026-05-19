@@ -16,6 +16,8 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
       navigate('/contact');
     } else if (path === 'order') {
       navigate('/order');
+    } else if (path === 'about') {
+      navigate('/about');
     } else {
       // Handle other navigation items
       alert(`Navigating to ${path}`);

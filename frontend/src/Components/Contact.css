@@ -62,75 +62,72 @@
 }
 
 .info-card {
-  background: white;
-  padding: 2.5rem 2rem;
-  border-radius: 1.5rem;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 32px 24px;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
-  border: 3px solid #e0f2fe;
-}
-
-.contact-page-wrapper.dark-mode .info-card {
-  background: linear-gradient(135deg, #1e3a8a, #0c4a6e);
-  border-color: #67e8f9;
+  position: relative;
+  overflow: hidden;
+  max-width: 300px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .info-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  transform: translateY(-8px);
+  border-color: #00E5FF;
+  box-shadow: 0 20px 25px -5px rgba(0, 229, 255, 0.2);
 }
 
 /* Clickable Info Card Links */
 .info-card-link {
-  display: block;
+  display: flex;
   text-decoration: none;
   cursor: pointer;
 }
 
-.info-card-link:hover {
-  background: #f0f9ff;
-  border-color: #bae6fd;
-}
-
-.contact-page-wrapper.dark-mode .info-card-link:hover {
-  background: linear-gradient(135deg, #2563eb, #0e7490);
-  border-color: #a5f3fc;
-}
-
 .info-card-link:focus,
 .info-card-link:active {
-  outline: 4px solid #fde047; /* High-contrast yellow for accessibility */
+  outline: 3px solid #00E5FF;
   outline-offset: 4px;
-  transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 229, 255, 0.2);
 }
 
 .info-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(0, 229, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .info-card h3 {
   font-size: 1.5rem;
-  color: #1e3a8a;
-  margin-bottom: 0.75rem;
   font-weight: 700;
+  color: #22d3ee;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 12px rgba(34, 211, 238, 0.35);
   transition: color 0.3s ease;
-}
-
-.contact-page-wrapper.dark-mode .info-card h3 {
-  color: #67e8f9;
 }
 
 .info-card p {
-  font-size: 1.125rem;
-  color: #475569;
+  font-size: 1rem;
+  color: #E2E8F0;
+  font-weight: 400;
+  line-height: 1.6;
   transition: color 0.3s ease;
-}
-
-.contact-page-wrapper.dark-mode .info-card p {
-  color: #cbd5e1;
 }
 
 /* Team Section */
@@ -347,6 +344,27 @@
     height: 380px;
   }
 
+  .info-card {
+    padding: 20px 16px;
+    max-width: 250px;
+  }
+
+  .info-icon {
+    font-size: 2.25rem;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+  }
+
+  .info-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .info-card p {
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
 }
 
 @media (max-width: 480px) {

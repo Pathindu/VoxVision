@@ -1,0 +1,291 @@
+/* About Page Wrapper - Deep dark blue or solid black */
+.about-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #090d16; /* Deep dark blue */
+  color: #ffffff; /* Crisp white for paragraph text */
+  font-family: 'Open Sans', 'Roboto', 'Arial', sans-serif;
+  transition: background 0.3s ease;
+}
+
+.about-page-wrapper.dark-mode {
+  background: #000000; /* Solid black in dark mode */
+}
+
+/* About Container */
+.about-container {
+  flex: 1;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem 2rem;
+  font-size: 20px; /* Large base font size for accessibility */
+  line-height: 1.7;
+}
+
+/* Audio Control Bar - Massive locatable button at the top */
+.audio-control-bar {
+  margin-bottom: 3rem;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.audio-control-group {
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 600px;
+}
+
+.audio-btn {
+  font-size: 1.5rem;
+  font-weight: 800;
+  padding: 1.25rem 2rem;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Accessible focus ring for buttons */
+.audio-btn:focus,
+.about-card:focus,
+.about-feature-card:focus,
+.about-main-title:focus,
+.section-title:focus {
+  outline: 4px solid #fde047; /* Thick bright yellow outline */
+  outline-offset: 4px;
+}
+
+.start-btn {
+  background: #fde047; /* Bright yellow */
+  color: #000000;
+}
+
+.start-btn:hover {
+  background: #facc15;
+  transform: translateY(-2px);
+}
+
+.pause-btn {
+  background: #22d3ee; /* Neon cyan */
+  color: #000000;
+}
+
+.pause-btn:hover {
+  background: #06b6d4;
+  transform: translateY(-2px);
+}
+
+.stop-btn {
+  background: #ef4444; /* High-contrast red */
+  color: #ffffff;
+}
+
+.stop-btn:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+/* Header */
+.about-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.about-main-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #00e5ff; /* Neon Cyan */
+  line-height: 1.2;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.about-page-wrapper.dark-mode .about-main-title {
+  color: #fde047; /* Bright Yellow in dark mode */
+}
+
+/* Content Grid - simple wide blocks */
+.about-content-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* Wide Cards */
+.about-card {
+  background: #111827; /* Dark gray/blue card background */
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.about-page-wrapper.dark-mode .about-card {
+  background: #0f172a;
+  border-color: #fde047; /* Extra high contrast borders in dark mode */
+}
+
+.about-card h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fde047; /* Yellow headers */
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(253, 224, 71, 0.2);
+  padding-bottom: 0.5rem;
+}
+
+.about-page-wrapper.dark-mode .about-card h2 {
+  color: #00e5ff; /* Cyan headings in dark mode */
+  border-bottom-color: rgba(0, 229, 255, 0.2);
+}
+
+.about-card p {
+  margin: 0;
+  color: #ffffff;
+}
+
+/* Split cards: Vision & Mission */
+.about-split-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .about-split-cards {
+    grid-template-columns: 1fr 1fr; /* Split visual blocks side by side on wide screen for layout balance, but keeping it sequential in markup */
+  }
+}
+
+/* What We Built For You */
+.about-features-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.section-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #00e5ff;
+  margin: 0;
+  text-align: center;
+}
+
+.about-page-wrapper.dark-mode .section-title {
+  color: #fde047;
+}
+
+.about-feature-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.about-feature-card {
+  background: #111827;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 768px) {
+  .about-feature-card {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.about-page-wrapper.dark-mode .about-feature-card {
+  background: #0f172a;
+  border-color: #fde047;
+}
+
+.feature-icon-wrapper {
+  font-size: 4rem;
+  line-height: 1;
+  background: rgba(0, 229, 255, 0.1);
+  padding: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  min-width: 100px;
+}
+
+.about-page-wrapper.dark-mode .feature-icon-wrapper {
+  background: rgba(253, 224, 71, 0.1);
+}
+
+.feature-text-wrapper h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #00e5ff;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.about-page-wrapper.dark-mode .feature-text-wrapper h3 {
+  color: #fde047;
+}
+
+.feature-text-wrapper p {
+  margin: 0;
+  color: #ffffff;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .about-container {
+    padding: 2rem 1rem 4rem 1rem;
+    font-size: 18px; /* Slightly smaller for mobile but still large */
+  }
+
+  .about-main-title {
+    font-size: 2.25rem;
+  }
+
+  .audio-btn {
+    font-size: 1.25rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .about-card, .about-feature-card {
+    padding: 1.75rem;
+  }
+
+  .about-card h2 {
+    font-size: 1.75rem;
+  }
+
+  .feature-icon-wrapper {
+    font-size: 3rem;
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+  }
+
+  .feature-text-wrapper h3 {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+}

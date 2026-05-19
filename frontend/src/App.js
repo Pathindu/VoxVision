@@ -7,6 +7,7 @@ import LoginRegister from './Pages/LoginRegister';
 import Result from './Pages/Result';
 import Contact from './Pages/Contact';
 import Order from './Pages/Order';
+import About from './Pages/About';
 import './App.css';
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
           <Route path="/result" element={<Result darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
           <Route path="/contact" element={<Contact darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
           <Route path="/order" element={<Order darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
+          <Route path="/about" element={<About darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
         </Routes>
       </div>
     </Router>

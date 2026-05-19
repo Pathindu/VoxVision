@@ -102,19 +102,22 @@ export default function Home({ darkMode, toggleDarkMode }) {
                 icon: '💵',
                 title: 'Cash Reader',
                 description: 'Identify currency notes instantly with high accuracy',
-                cardClass: 'feature-card-1'
+                cardClass: 'feature-card-1',
+                link: '/about#cash-reader'
               },
               {
                 icon: '📄',
                 title: 'Document Reader',
                 description: 'Read text aloud from any printed document',
-                cardClass: 'feature-card-2'
+                cardClass: 'feature-card-2',
+                link: '/about#document-reader'
               },
               {
                 icon: '🎯',
                 title: 'Voice Guide',
                 description: 'Real-time camera alignment assistance',
-                cardClass: 'feature-card-3'
+                cardClass: 'feature-card-3',
+                link: '/about#voice-guide'
               }
             ].map((feature, index) => (
               <div
@@ -122,6 +125,13 @@ export default function Home({ darkMode, toggleDarkMode }) {
                 className={`feature-card ${feature.cardClass}`}
                 role="button"
                 tabIndex="0"
+                onClick={() => navigate(feature.link)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    navigate(feature.link);
+                  }
+                }}
               >
                 <div className="feature-icon">{feature.icon}</div>
                 <h3 className="feature-title">{feature.title}</h3>

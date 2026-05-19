@@ -358,11 +358,19 @@
   justify-content: center;
 }
 
+/* Feature Card Titles — Cash Reader · Document Reader · Voice Guide */
 .feature-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #FFFFFF;
+  color: #22d3ee;
   margin-bottom: 0.75rem;
+  letter-spacing: 0.3px;
+}
+
+.feature-card .feature-title {
+  color: #22d3ee;
+  font-weight: 700;
+  text-shadow: 0 0 12px rgba(34, 211, 238, 0.35); /* subtle glow for readability on dark bg */
 }
 
 .feature-description {
