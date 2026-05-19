@@ -31,6 +31,7 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
           </button>
           
           <div className="navbar-logo" onClick={() => handleNavigation('home')}>
+            <img src="/voxvision-logo.png" alt="VoxVision Logo" className="navbar-logo-img" />
             <span className="navbar-logo-text creative-logo">VoxVision</span>
           </div>
           
