@@ -1,0 +1,116 @@
+/* Order Page Wrapper */
+.order-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to bottom right, #f0f9ff, #e0f2fe);
+  transition: background 0.3s ease;
+}
+
+.order-page-wrapper.dark-mode {
+  background: linear-gradient(to bottom right, #1e293b, #0f172a);
+}
+
+/* Order Container */
+.order-container {
+  flex: 1;
+  padding: 3rem 2rem;
+}
+
+.order-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+.order-title {
+  text-align: center;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 1rem;
+  transition: color 0.3s ease;
+}
+
+.order-page-wrapper.dark-mode .order-title {
+  color: #67e8f9;
+}
+
+.order-description {
+  text-align: center;
+  font-size: 1.25rem;
+  color: #475569;
+  transition: color 0.3s ease;
+  margin-bottom: 4rem;
+}
+
+.order-page-wrapper.dark-mode .order-description {
+  color: #cbd5e1;
+}
+
+/* Order Coming Soon Card (matches info-card in Contact.css) */
+.order-coming-soon {
+  background: white;
+  padding: 3.5rem 2.5rem;
+  border-radius: 1.5rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 3px solid #e0f2fe;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.order-page-wrapper.dark-mode .order-coming-soon {
+  background: linear-gradient(135deg, #1e3a8a, #0c4a6e);
+  border-color: #67e8f9;
+}
+
+.order-coming-soon:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.order-coming-soon h3 {
+  font-size: 2rem;
+  color: #1e3a8a;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.order-page-wrapper.dark-mode .order-coming-soon h3 {
+  color: #67e8f9;
+}
+
+.order-coming-soon p {
+  font-size: 1.125rem;
+  color: #475569;
+  line-height: 1.6;
+  transition: color 0.3s ease;
+}
+
+.order-page-wrapper.dark-mode .order-coming-soon p {
+  color: #cbd5e1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .order-title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-container {
+    padding: 2rem 1rem;
+  }
+
+  .order-title {
+    font-size: 2rem;
+  }
+
+  .order-coming-soon {
+    padding: 2.5rem 1.5rem;
+  }
+}

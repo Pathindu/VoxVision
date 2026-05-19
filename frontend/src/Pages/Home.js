@@ -16,6 +16,10 @@ export default function Home({ darkMode, toggleDarkMode }) {
     navigate('/capture');
   };
 
+  const handleOrder = () => {
+    navigate('/order');
+  };
+
   return (
     <>
     <div className={`home-container ${darkMode ? 'dark-mode' : ''}`}>
@@ -25,17 +29,38 @@ export default function Home({ darkMode, toggleDarkMode }) {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
-          <div className="hero-grid">
-            {/* Left Side - Description */}
+          <div className="hero-flex">
+            {/* Left Column - Slogan */}
             <div className="hero-left">
-              <div className="description-box">
-                <p className="description-text">
-                  Our <span className="highlight">Smart Cash & Document Reader</span> is a revolutionary web application designed specifically for visually impaired individuals. Using advanced OCR technology and intelligent voice guidance, we help users independently read printed documents and identify currency notes.
-                </p>
+              <div className="hero-slogan-card">
+                <div className="hero-slogan-content">
+                  <h2 className="slogan-heading">
+                    Redefining How<br />We Navigate.
+                  </h2>
+                  <p className="slogan-subheading">
+                    <i>*Because reading belongs to everyone.*</i>
+                  </p>
+                  
+                  <div className="slogan-actions">
+                    <button onClick={handleOrder} className="slogan-btn primary-btn">
+                      <span className="btn-icon">🏷️</span> Order Your Smart Tags
+                    </button>
+                    <button className="slogan-btn outline-btn">
+                      <span className="btn-icon">🤍</span> Support the Mission
+                    </button>
+                  </div>
+                  
+                  <p className="slogan-description">
+                    <strong>Voice &amp; Accessibility: The future is audible.</strong>
+                    <br />
+                    Access detailed product info, expiry dates, and<br />
+                    usage instructions simply by tapping.
+                  </p>
+                </div>
               </div>
             </div>
 
-            {/* Right Side - Main Content */}
+            {/* Right Column - Brand & Actions */}
             <div className="hero-right">
               <img src="/voxvision-logo.png" alt="VoxVision Logo" className="hero-logo" />
               <h1 className="hero-title">
@@ -95,6 +120,8 @@ export default function Home({ darkMode, toggleDarkMode }) {
               <div
                 key={index}
                 className={`feature-card ${feature.cardClass}`}
+                role="button"
+                tabIndex="0"
               >
                 <div className="feature-icon">{feature.icon}</div>
                 <h3 className="feature-title">{feature.title}</h3>

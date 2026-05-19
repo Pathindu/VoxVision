@@ -14,6 +14,8 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
       navigate('/login');
     } else if (path === 'contact') {
       navigate('/contact');
+    } else if (path === 'order') {
+      navigate('/order');
     } else {
       // Handle other navigation items
       alert(`Navigating to ${path}`);
@@ -63,6 +65,15 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
               </li>
               <li>
                 <a 
+                  href="#order" 
+                  onClick={(e) => { e.preventDefault(); handleNavigation('order'); }}
+                  className="navbar-link"
+                >
+                  Order
+                </a>
+              </li>
+              <li>
+                <a 
                   href="#login" 
                   onClick={(e) => { e.preventDefault(); handleNavigation('login'); }}
                   className="navbar-link"
@@ -72,10 +83,20 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
               </li>
             </ul>
 
-            {/* Dark Mode Toggle Button */}
-            <button className="dark-mode-toggle" onClick={toggleDarkMode}>
-              <span className="toggle-icon">{darkMode ? '☀️' : '🌙'}</span>
-            </button>
+            {/* Action Buttons */}
+            <div className="navbar-actions">
+              <button className="dark-mode-toggle" onClick={toggleDarkMode}>
+                <span className="toggle-icon">{darkMode ? '☀️' : '🌙'}</span>
+              </button>
+              
+              <a 
+                href="/donate" 
+                className="navbar-donate-btn"
+                aria-label="Support our mission by donating"
+              >
+                <span className="support-text">Support Us</span>
+              </a>
+            </div>
           </div>
         </div>
       </nav>
@@ -96,6 +117,9 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
               </li>
               <li>
                 <a href="#contact" role="button" onClick={(e) => { e.preventDefault(); handleNavigation('contact'); }} className="navbar-link">Contact us</a>
+              </li>
+              <li>
+                <a href="#order" role="button" onClick={(e) => { e.preventDefault(); handleNavigation('order'); }} className="navbar-link">Order</a>
               </li>
               <li>
                 <a href="#login" role="button" onClick={(e) => { e.preventDefault(); handleNavigation('login'); }} className="navbar-link">Login/Register</a>
