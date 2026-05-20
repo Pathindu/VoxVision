@@ -8,10 +8,11 @@ import Result from './Pages/Result';
 import Contact from './Pages/Contact';
 import Order from './Pages/Order';
 import About from './Pages/About';
+import OurTeam from './Pages/OurTeam';
 import './App.css';
 
 function App() {
-    // Dark mode state - load from localStorage if available
+  // Dark mode state - load from localStorage if available
   const [darkMode, setDarkMode] = useState(() => {
     const savedMode = localStorage.getItem('darkMode');
     return savedMode === 'true' || false;
@@ -35,7 +36,7 @@ function App() {
 
   return (
     <Router>
-     <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
+      <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
         <Routes>
           <Route path="/" element={<Home darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
           <Route path="/capture" element={<Capture darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
@@ -45,6 +46,7 @@ function App() {
           <Route path="/contact" element={<Contact darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
           <Route path="/order" element={<Order darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
           <Route path="/about" element={<About darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
+          <Route path="/team" element={<OurTeam darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
         </Routes>
       </div>
     </Router>
