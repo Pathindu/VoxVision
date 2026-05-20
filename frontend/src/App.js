@@ -1,49 +1,55 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './Pages/Home';
-import Capture from './Pages/Capture';
-import Upload from './Pages/Upload';
+
+// Pages
+import Home          from './Pages/Home';
+import Capture       from './Pages/Capture';
+import Upload        from './Pages/Upload';
 import LoginRegister from './Pages/LoginRegister';
-import Result from './Pages/Result';
-import Contact from './Pages/Contact';
+import Result        from './Pages/Result';
+import Contact       from './Pages/Contact';
+import TagWriter     from './Pages/TagWriter';
+import TagScanner    from './Pages/TagScanner';
+import Store         from './Pages/Store';
+
+// Auth context
+import { AuthProvider } from './context/AuthContext';
+
 import './App.css';
 
 function App() {
-    // Dark mode state - load from localStorage if available
-  const [darkMode, setDarkMode] = useState(() => {
-    const savedMode = localStorage.getItem('darkMode');
-    return savedMode === 'true' || false;
-  });
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
 
-  // Toggle dark mode
-  const toggleDarkMode = () => {
-    setDarkMode(prevMode => !prevMode);
-  };
+  const toggleDarkMode = () => setDarkMode(prev => !prev);
 
-  // Save dark mode preference to localStorage
   useEffect(() => {
     localStorage.setItem('darkMode', darkMode);
-    // Apply dark mode class to body
-    if (darkMode) {
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.remove('dark-mode');
-    }
+    document.body.classList.toggle('dark-mode', darkMode);
   }, [darkMode]);
 
+  const common = { darkMode, toggleDarkMode };
+
   return (
-    <Router>
-     <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
-        <Routes>
-          <Route path="/" element={<Home darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
-          <Route path="/capture" element={<Capture darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
-          <Route path="/upload" element={<Upload darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
-          <Route path="/login" element={<LoginRegister darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
-          <Route path="/result" element={<Result darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
-          <Route path="/contact" element={<Contact darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
-        </Routes>
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
+          <Routes>
+            {/* ── Existing routes ── */}
+            <Route path="/"        element={<Home    {...common} />} />
+            <Route path="/capture" element={<Capture {...common} />} />
+            <Route path="/upload"  element={<Upload  {...common} />} />
+            <Route path="/login"   element={<LoginRegister {...common} />} />
+            <Route path="/result"  element={<Result  {...common} />} />
+            <Route path="/contact" element={<Contact {...common} />} />
+
+            {/* ── New VoxVision routes ── */}
+            <Route path="/tags"        element={<TagWriter  {...common} />} />
+            <Route path="/scan/:tagId" element={<TagScanner {...common} />} />
+            <Route path="/store"       element={<Store      {...common} />} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

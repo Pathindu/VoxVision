@@ -1,16 +1,22 @@
+# ── Web framework ─────────────────────────────────────────────────────────
 fastapi
-uvicorn
+uvicorn[standard]
 python-multipart
-google-genai
-python-dotenv
-pillow
-google-cloud-texttospeech
+
+# ── Database ──────────────────────────────────────────────────────────────
 sqlalchemy
 psycopg2-binary
-python-dotenv
-passlib[bcrypt]
-python-jose
-pydantic
-email-validator
-python-multipart
 alembic
+
+# ── Auth ──────────────────────────────────────────────────────────────────
+passlib[bcrypt]
+python-jose[cryptography]
+
+# ── Config ────────────────────────────────────────────────────────────────
+python-dotenv
+pydantic[email]
+
+# ── Google AI / TTS ───────────────────────────────────────────────────────
+google-genai
+google-cloud-texttospeech
+pillow

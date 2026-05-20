@@ -1,73 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import '../Components/Navbar.css';
 
 export default function Navbar({ darkMode, toggleDarkMode }) {
   const navigate = useNavigate();
+  const { isLoggedIn, isCaregiver, user, logout } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleNavigation = (path) => {
-    if (path === 'home') {
-      navigate('/');
-    } else if (path === 'login') {
-      navigate('/login');
-    } else if (path === 'contact') {
-      navigate('/contact');
-    } else {
-      // Handle other navigation items
-      alert(`Navigating to ${path}`);
-    }
-  };
+  const go = (path) => { navigate(path); setMenuOpen(false); };
+
+  const handleLogout = () => { logout(); navigate('/'); setMenuOpen(false); };
 
   return (
     <nav className={`navbar ${darkMode ? 'dark-mode' : ''}`}>
       <div className="navbar-content">
-        <div className="navbar-logo" onClick={() => handleNavigation('home')}>
-          <span className="navbar-logo-icon">💡</span>
-          <span className="navbar-logo-text">Logo & Name</span>
+
+        {/* Logo */}
+        <div className="navbar-logo" onClick={() => go('/')}>
+          <span className="navbar-logo-icon">👁️</span>
+          <span className="navbar-logo-text">VoxVision</span>
         </div>
-        
+
         <div className="navbar-right">
           <ul className="navbar-links">
-            <li>
-              <a 
-                href="#home" 
-                onClick={(e) => { e.preventDefault(); handleNavigation('home'); }}
-                className="navbar-link"
-              >
-                Home
-              </a>
-            </li>
-            <li>
-              <a 
-                href="#about" 
-                onClick={(e) => { e.preventDefault(); handleNavigation('about'); }}
-                className="navbar-link"
-              >
-                About us
-              </a>
-            </li>
-            <li>
-              <a 
-                href="#contact" 
-                onClick={(e) => { e.preventDefault(); handleNavigation('contact'); }}
-                className="navbar-link"
-              >
-                Contact us
-              </a>
-            </li>
-            <li>
-              <a 
-                href="#login" 
-                onClick={(e) => { e.preventDefault(); handleNavigation('login'); }}
-                className="navbar-link"
-              >
-                Login/Register
-              </a>
-            </li>
+            <li><a href="/" onClick={(e) => { e.preventDefault(); go('/'); }} className="navbar-link">Home</a></li>
+            <li><a href="/store" onClick={(e) => { e.preventDefault(); go('/store'); }} className="navbar-link">Store</a></li>
+            {isCaregiver && (
+              <li><a href="/tags" onClick={(e) => { e.preventDefault(); go('/tags'); }} className="navbar-link">My Tags</a></li>
+            )}
+            <li><a href="/contact" onClick={(e) => { e.preventDefault(); go('/contact'); }} className="navbar-link">Contact</a></li>
+
+            {isLoggedIn ? (
+              <>
+                <li>
+                  <span className="navbar-link" style={{ color: '#6d28d9', fontWeight: '600', cursor: 'default' }}>
+                    👤 {user?.username}
+                  </span>
+                </li>
+                <li>
+                  <a href="/logout" onClick={(e) => { e.preventDefault(); handleLogout(); }} className="navbar-link">
+                    Logout
+                  </a>
+                </li>
+              </>
+            ) : (
+              <li>
+                <a href="/login" onClick={(e) => { e.preventDefault(); go('/login'); }} className="navbar-link">
+                  Login / Register
+                </a>
+              </li>
+            )}
           </ul>
 
-          {/* Dark Mode Toggle Button */}
-          <button className="dark-mode-toggle" onClick={toggleDarkMode}>
+          <button className="dark-mode-toggle" onClick={toggleDarkMode} aria-label="Toggle dark mode">
             <span className="toggle-icon">{darkMode ? '☀️' : '🌙'}</span>
           </button>
         </div>
