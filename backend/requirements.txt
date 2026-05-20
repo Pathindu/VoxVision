@@ -5,3 +5,12 @@ google-genai
 python-dotenv
 pillow
 google-cloud-texttospeech
+sqlalchemy
+psycopg2-binary
+python-dotenv
+passlib[bcrypt]
+python-jose
+pydantic
+email-validator
+python-multipart
+alembic
