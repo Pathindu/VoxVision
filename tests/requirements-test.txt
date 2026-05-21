@@ -1,0 +1,4 @@
+# Install these in addition to the main requirements.txt
+pytest
+pytest-asyncio
+httpx
