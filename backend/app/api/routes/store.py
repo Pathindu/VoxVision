@@ -17,6 +17,9 @@ router = APIRouter(tags=["Store & Payments"])
 
 # ── ORDERS ────────────────────────────────────────────────────────────────
 
+# Make sure you have this import at the top of the file!
+# from app.services.payment_services import generate_payhere_hash
+
 @router.post("/orders/create", response_model=OrderOut, status_code=status.HTTP_201_CREATED)
 def create_order(
     payload: OrderCreate,
@@ -35,17 +38,30 @@ def create_order(
     )
     db.add(order)
     db.commit()
+    db.refresh(order) # This generates the order.id
+    
+    # ─── NEW PAYHERE HASH LOGIC ──────────────────────────────────────
+    # 1. Use the EXACT same credentials you used for donations
+    merchant_id = "1235833"
+    merchant_secret = "Mjk2NTAxNjM5MjMzMDY1NjgzMzQxNjY2NzUxMTg5MjgyNzEyNzQxMQ==" # Paste your real secret here
+    
+    # 2. Generate the secure MD5 hash using the new order.id and total_amount
+    payment_hash = generate_payhere_hash(
+        merchant_id=merchant_id,
+        merchant_secret=merchant_secret,
+        order_id=str(order.id),
+        amount=order.total_amount 
+    )
+    
+    # 3. Attach the generated hash to the database model
+    order.hash = payment_hash
+    
+    # 4. Commit the transaction again to save the hash to the database
+    db.commit()
     db.refresh(order)
+    # ─────────────────────────────────────────────────────────────────
+
     return order
-
-
-@router.get("/orders/my", response_model=list[OrderOut])
-def my_orders(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    """List the current user's orders."""
-    return db.query(Order).filter(Order.user_id == current_user.id).all()
 
 
 # ── DONATIONS ─────────────────────────────────────────────────────────────

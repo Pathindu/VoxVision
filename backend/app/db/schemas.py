@@ -75,6 +75,10 @@ class OrderCreate(BaseModel):
     shipping_address: str = Field(..., min_length=10, max_length=500)
 
 
+from typing import Optional
+from pydantic import BaseModel
+from datetime import datetime
+
 class OrderOut(BaseModel):
     id: str
     user_id: str
@@ -84,8 +88,12 @@ class OrderOut(BaseModel):
     total_amount: float
     shipping_address: str
     status: str
-    payhere_order_id: Optional[str]
+    payhere_order_id: Optional[str] = None
     created_at: datetime
+    
+    # ─── NEW FIELD FOR PAYHERE ───
+    hash: Optional[str] = None 
+    # ─────────────────────────────
 
     class Config:
         from_attributes = True
