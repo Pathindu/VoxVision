@@ -1,186 +1,258 @@
 # VoxVision — PayHere Sandbox Manual Testing Guide
 
+## What is PayHere Sandbox?
+
+PayHere Sandbox (`sandbox.payhere.lk`) is a **completely separate test environment** — a clone
+of the live PayHere platform. No real payments are processed. It simulates payments so you can
+test your integration before going live.
+
+> ⚠️ Your Sandbox account **cannot** be converted to a Live account.
+> When ready for production, sign up separately at payhere.lk/merchant/sign-up
+
+---
+
 ## Setup Before Testing
 
 1. Make sure both servers are running:
    ```
-   # Backend
+   # Terminal 1 — Backend
    cd backend
    py -m uvicorn app.main:app --reload --port 8000
 
-   # Frontend  
+   # Terminal 2 — Frontend
    cd frontend
    npm start
    ```
 
-2. Make sure your `frontend/.env` has:
+2. Make sure `frontend/.env` has:
    ```
    REACT_APP_API_URL=http://localhost:8000
    REACT_APP_PAYHERE_MERCHANT_ID=your_app_id_here
    ```
 
-3. Make sure your PayHere sandbox domain includes `localhost` or `127.0.0.1`
-   → sandbox.payhere.lk → Integrations → API Keys
+3. Your domain must be whitelisted in PayHere:
+   → sandbox.payhere.lk → Integrations → API Keys → add `localhost`
 
 ---
 
 ## PayHere Sandbox Test Cards
 
-| Card Number          | Result       |
-|----------------------|--------------|
-| 4111 1111 1111 1111  | ✅ SUCCESS   |
-| 5431 1111 1111 1111  | ✅ SUCCESS (Mastercard) |
-| 4111 1111 1111 0000  | ❌ FAILED    |
+### ✅ Successful Payment Cards
 
-**Use for all tests:**
-- Expiry: any future date (e.g. 12/26)
-- CVV: any 3 digits (e.g. 123)
-- OTP (if asked): 123456
+| Card Type  | Card Number          |
+|------------|----------------------|
+| Visa       | 4916 2175 0161 1292  |
+| MasterCard | 5307 7321 2553 1191  |
+| AMEX       | 3467 8100 5510 225   |
+
+> For **Name on Card**, **CVV**, and **Expiry Date** — enter any valid data (e.g. expiry 12/26, CVV 123)
+
+---
+
+### ❌ Decline Scenario Cards
+
+**Insufficient Funds:**
+| Card Type  | Card Number          |
+|------------|----------------------|
+| Visa       | 4024 0071 9434 9121  |
+| MasterCard | 5459 0514 3377 7487  |
+| AMEX       | 3707 8771 1978 928   |
+
+**Limit Exceeded:**
+| Card Type  | Card Number          |
+|------------|----------------------|
+| Visa       | 4929 1197 9936 5646  |
+| MasterCard | 5491 1822 4317 8283  |
+| AMEX       | 3407 0181 1823 469   |
+
+**Do Not Honor:**
+| Card Type  | Card Number          |
+|------------|----------------------|
+| Visa       | 4929 7689 0083 7248  |
+| MasterCard | 5388 1721 3736 7973  |
+| AMEX       | 3746 6417 5202 812   |
+
+**Network Error:**
+| Card Type  | Card Number          |
+|------------|----------------------|
+| Visa       | 4024 0071 2086 9333  |
+| MasterCard | 5237 9805 6518 5003  |
+| AMEX       | 3734 3350 0205 887   |
 
 ---
 
 ## Test Scenarios
 
-### TEST 1 — Successful Order Payment
+### TEST 1 — Successful Order Payment (Visa)
 
 **Steps:**
-1. Go to `http://localhost:3000/login` → Login as a registered user
+1. Go to `http://localhost:3000/login` → Login
 2. Go to `http://localhost:3000/store`
 3. Select **VoxVision NFC Tag Pack (10 stickers)**
-4. Set Quantity: **2**
-5. Enter Phone: `0771234567`
-6. Enter Address: `No 1 Main Street, Colombo 03`
-7. Click **💳 Pay with PayHere**
+4. Set Quantity: **2**, Phone: `0771234567`
+5. Address: `No 1 Main Street, Colombo 03`
+6. Click **💳 Pay with PayHere**
+7. On PayHere page — use card `4916 2175 0161 1292`, any expiry, any CVV
+8. Click Pay
 
 **Expected:**
-- Browser redirects to `https://sandbox.payhere.lk/pay/checkout`
-- PayHere checkout page shows **VoxVision NFC Tag Pack (10 stickers)** — LKR 700.00
-- Enter card: `4111 1111 1111 1111` → any expiry → any CVV
-- Click Pay
-- Browser redirects back to `http://localhost:3000/store?payment=success`
-- Green banner: **"🎉 Payment successful! Your order has been confirmed."**
+- Redirects to `/store?payment=success`
+- Green banner: **"🎉 Payment successful!"**
 
 **Verify in pgAdmin:**
 ```sql
 SELECT id, status, payhere_order_id FROM orders ORDER BY created_at DESC LIMIT 1;
 ```
-→ status should be **paid**, payhere_order_id should be filled
+→ `status = paid`, `payhere_order_id` filled in
 
 ---
 
-### TEST 2 — Successful Donation
+### TEST 2 — Successful Donation (MasterCard)
 
 **Steps:**
-1. Go to `http://localhost:3000/store`
-2. Click **❤️ Donate** tab
-3. Enter Name: `Nimal Perera`
-4. Enter Email: `nimal@test.com`
-5. Enter Phone: `0771234567`
-6. Click quick amount button **1,000**
-7. Enter message: `Keep up the great work!`
-8. Click **❤️ Donate with PayHere**
+1. Go to Store → **❤️ Donate** tab
+2. Name: `Nimal Perera`, Email: `nimal@test.com`, Phone: `0771234567`
+3. Click quick amount **1,000**
+4. Click **❤️ Donate with PayHere**
+5. Use card `5307 7321 2553 1191`
 
 **Expected:**
-- Redirects to PayHere sandbox
-- Amount shows LKR 1,000.00 — Item: VoxVision Donation
-- Pay with test card
 - Redirects to `/store?payment=success`
 
-**Verify in pgAdmin:**
+**Verify:**
 ```sql
-SELECT id, status, amount, payhere_order_id FROM donations ORDER BY created_at DESC LIMIT 1;
+SELECT status, amount FROM donations ORDER BY created_at DESC LIMIT 1;
 ```
-→ status should be **paid**
+→ `status = paid`
 
 ---
 
 ### TEST 3 — Payment Cancellation
 
 **Steps:**
-1. Place an order (same as Test 1)
-2. On PayHere checkout page — click **Cancel** or **Go Back**
+1. Place any order → PayHere page opens
+2. Click **Cancel** or browser back button
 
 **Expected:**
-- Browser redirects to `http://localhost:3000/store?payment=cancelled`
-- Yellow banner: **"⚠️ Payment was cancelled. Your order is saved — try again anytime."**
+- Redirects to `/store?payment=cancelled`
+- Yellow warning banner shown
 
-**Verify in pgAdmin:**
+**Verify:**
 ```sql
 SELECT status FROM orders ORDER BY created_at DESC LIMIT 1;
 ```
-→ status should still be **pending** (NOT changed)
+→ `status = pending` (unchanged)
 
 ---
 
-### TEST 4 — Failed Payment (Invalid Card)
+### TEST 4 — Insufficient Funds
 
 **Steps:**
 1. Place an order
-2. On PayHere checkout — use card `4111 1111 1111 0000`
-3. Click Pay
+2. Use card `4024 0071 9434 9121`
 
 **Expected:**
-- PayHere shows payment failed error
-- Order status stays **pending** in DB
+- PayHere shows "Insufficient Funds" error
+- Order stays `pending` in DB
 
 ---
 
-### TEST 5 — Wrong Merchant ID
+### TEST 5 — Limit Exceeded
+
+**Steps:**
+1. Place an order
+2. Use card `4929 1197 9936 5646`
+
+**Expected:**
+- PayHere shows "Limit Exceeded" error
+
+---
+
+### TEST 6 — Do Not Honor
+
+**Steps:**
+1. Place an order
+2. Use card `4929 7689 0083 7248`
+
+**Expected:**
+- PayHere shows "Do Not Honor" error
+
+---
+
+### TEST 7 — Network Error
+
+**Steps:**
+1. Place an order
+2. Use card `4024 0071 2086 9333`
+
+**Expected:**
+- PayHere shows "Network Error"
+
+---
+
+### TEST 8 — Wrong Merchant ID
 
 **Steps:**
 1. Temporarily change `frontend/.env`:
    ```
    REACT_APP_PAYHERE_MERCHANT_ID=9999999
    ```
-2. Restart frontend (`npm start`)
-3. Try to place an order
+2. Restart frontend → try to place order
 
 **Expected:**
-- PayHere shows **error 440621052647** (invalid merchant)
+- PayHere error **440621052647**
 
-**Fix:** Revert the merchant ID to the correct one
+**Fix:** Revert merchant ID, restart frontend
 
 ---
 
-### TEST 6 — Domain Not Whitelisted
+### TEST 9 — Domain Not Whitelisted
 
 **Steps:**
 1. In PayHere sandbox → Integrations → delete the `localhost` API key
 2. Try to place an order
 
 **Expected:**
-- PayHere shows **error 440621052647**
+- PayHere error **440621052647**
 
 **Fix:** Re-add `localhost` in PayHere Integrations
 
 ---
 
-### TEST 7 — Webhook Verification (Advanced)
+## Full Test Checklist
 
-To test the webhook is being called by PayHere:
-
-1. Use **ngrok** to expose your local backend:
-   ```
-   ngrok http 8000
-   ```
-2. Update `frontend/.env`:
-   ```
-   REACT_APP_API_URL=https://xxxx.ngrok.io
-   ```
-3. Place an order and complete payment
-4. Check ngrok dashboard for the webhook POST request to `/payments/webhook`
-5. Check backend terminal for the log
+| # | Scenario                  | Card Used                  | Expected Result                    | ✓ |
+|---|---------------------------|----------------------------|------------------------------------|---|
+| 1 | Successful order (Visa)   | 4916 2175 0161 1292        | Redirect success, DB=paid          | ☐ |
+| 2 | Successful donation (MC)  | 5307 7321 2553 1191        | Redirect success, DB=paid          | ☐ |
+| 3 | Payment cancelled         | —                          | Redirect cancelled, DB=pending     | ☐ |
+| 4 | Insufficient funds        | 4024 0071 9434 9121        | PayHere error, DB=pending          | ☐ |
+| 5 | Limit exceeded            | 4929 1197 9936 5646        | PayHere error, DB=pending          | ☐ |
+| 6 | Do not honor              | 4929 7689 0083 7248        | PayHere error, DB=pending          | ☐ |
+| 7 | Network error             | 4024 0071 2086 9333        | PayHere error, DB=pending          | ☐ |
+| 8 | Wrong merchant ID         | —                          | Error 440621052647                 | ☐ |
+| 9 | Domain not whitelisted    | —                          | Error 440621052647                 | ☐ |
 
 ---
 
-## Verify All Tests Pass
+## Going Live
 
-| # | Test Scenario           | Expected Result                        | Status |
-|---|-------------------------|----------------------------------------|--------|
-| 1 | Successful order payment | Redirect success, DB status=paid       | ☐      |
-| 2 | Successful donation      | Redirect success, DB status=paid       | ☐      |
-| 3 | Payment cancelled        | Redirect cancelled, DB status=pending  | ☐      |
-| 4 | Failed card              | PayHere error, DB status=pending       | ☐      |
-| 5 | Wrong merchant ID        | Error 440621052647                     | ☐      |
-| 6 | Domain not whitelisted   | Error 440621052647                     | ☐      |
-| 7 | Webhook called correctly | POST visible in ngrok dashboard        | ☐      |
+Once all sandbox tests pass:
+1. Sign up for a Live account at **payhere.lk/merchant/sign-up**
+2. Get your Live Merchant ID and Secret
+3. Update Render environment variables:
+   ```
+   PAYHERE_MERCHANT_ID=your_live_merchant_id
+   PAYHERE_MERCHANT_SECRET=your_live_merchant_secret
+   ```
+4. Update `frontend/.env` or Render frontend environment:
+   ```
+   REACT_APP_PAYHERE_MERCHANT_ID=your_live_merchant_id
+   ```
+5. Change PayHere checkout URL in `Store.js` from sandbox to live:
+   ```js
+   // Change this line:
+   form.action = 'https://sandbox.payhere.lk/pay/checkout';
+   // To:
+   form.action = 'https://www.payhere.lk/pay/checkout';
+   ```
