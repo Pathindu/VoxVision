@@ -12,12 +12,12 @@ const PRODUCTS = [
 ];
 
 // ── PayHere sandbox config ────────────────────────────────────────────────
-const PAYHERE_MERCHANT_ID = process.env.REACT_APP_PAYHERE_MERCHANT_ID || '1230213';
+const PAYHERE_MERCHANT_ID = process.env.REACT_APP_PAYHERE_MERCHANT_ID || '1235833';
 const PAYHERE_NOTIFY_URL  = `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/payments/webhook`;
 const PAYHERE_RETURN_URL  = `${window.location.origin}/store?payment=success`;
 const PAYHERE_CANCEL_URL  = `${window.location.origin}/store?payment=cancelled`;
 
-function launchPayhere({ orderId, amount, name, email, phone, itemName, customType }) {
+function launchPayhere({ orderId, amount, name, email, phone, itemName, customType, hash }) {
   // Create a hidden HTML form and submit it to PayHere sandbox
   const form = document.createElement('form');
   form.method = 'POST';
@@ -41,6 +41,7 @@ function launchPayhere({ orderId, amount, name, email, phone, itemName, customTy
     country:       'Sri Lanka',
     custom_1:      customType,   // 'order' or 'donation'
     custom_2:      orderId,      // internal record ID
+    hash:          hash          // ADDED HASH HERE
   };
 
   Object.entries(fields).forEach(([key, val]) => {
@@ -100,6 +101,7 @@ export default function Store({ darkMode, toggleDarkMode }) {
         phone:      orderForm.phone,
         itemName:   orderForm.product.name,
         customType: 'order',
+        hash:       res.data.hash // PASSED HASH HERE
       });
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to create order.');
@@ -131,6 +133,7 @@ export default function Store({ darkMode, toggleDarkMode }) {
         phone:      donateForm.phone || '0771234567',
         itemName:   'VoxVision Donation',
         customType: 'donation',
+        hash:       res.data.hash // PASSED HASH HERE
       });
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to process donation.');
@@ -287,7 +290,7 @@ export default function Store({ darkMode, toggleDarkMode }) {
 
               <label className="form-label">Donation Amount (LKR) *</label>
               <div style={{ display: 'flex', gap: '10px', margin: '8px 0 4px', flexWrap: 'wrap' }}>
-                {[250, 500, 1000, 2500].map(amt => (
+                {[250.00, 500.00, 1000.00, 2500.00].map(amt => (
                   <button key={amt} type="button"
                     onClick={() => setDonateForm({ ...donateForm, amount: String(amt) })}
                     style={{

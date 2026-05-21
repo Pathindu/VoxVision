@@ -106,6 +106,7 @@ class DonationOut(BaseModel):
     message: Optional[str]
     status: str
     created_at: datetime
+    hash: Optional[str] = None  # 👈 ADD THIS LINE
 
     class Config:
         from_attributes = True

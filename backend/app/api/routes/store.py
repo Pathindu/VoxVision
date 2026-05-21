@@ -1,4 +1,7 @@
 import hashlib
+import os
+# Adjust this import path if your payment_services.py is in a different folder
+from app.services.payment_service import generate_payhere_hash
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Request, status
 from sqlalchemy.orm import Session
@@ -50,6 +53,8 @@ def my_orders(
 @router.post("/donations/create", response_model=DonationOut, status_code=status.HTTP_201_CREATED)
 def create_donation(payload: DonationCreate, db: Session = Depends(get_db)):
     """PUBLIC – anyone can make a donation to support VoxVision."""
+    
+    # 1. Create and save the initial record to generate the UUID
     donation = Donation(
         donor_name=payload.donor_name,
         donor_email=payload.donor_email,
@@ -59,6 +64,28 @@ def create_donation(payload: DonationCreate, db: Session = Depends(get_db)):
     db.add(donation)
     db.commit()
     db.refresh(donation)
+    
+    # 2. Load PayHere Credentials from environment variables
+    # (Replace the fallback strings with your actual Sandbox credentials for now)
+    merchant_id = os.getenv("1235833", "1235833")
+    merchant_secret = os.getenv("Mjk2NTAxNjM5MjMzMDY1NjgzMzQxNjY2NzUxMTg5MjgyNzEyNzQxMQ==", "Mjk2NTAxNjM5MjMzMDY1NjgzMzQxNjY2NzUxMTg5MjgyNzEyNzQxMQ==")
+    
+    # 3. Generate the secure MD5 hash using the new donation.id
+    payment_hash = generate_payhere_hash(
+        merchant_id=merchant_id,
+        merchant_secret=merchant_secret,
+        order_id=str(donation.id),
+        amount=donation.amount
+    )
+    
+    # 4. Attach the generated hash to the database model
+    donation.hash = payment_hash
+    
+    # 5. Commit the transaction again to save the hash to the database
+    db.commit()
+    db.refresh(donation)
+
+    # 6. Return the updated donation object
     return donation
 
 
