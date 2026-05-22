@@ -25,9 +25,7 @@ export default function Home({ darkMode, toggleDarkMode }) {
         <div className="ambient-blob ambient-blob-3" aria-hidden="true" role="presentation"></div>
 
         {/* ── Site Header ──────────────────────────────────── */}
-        <header>
-          <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-        </header>
+        <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
         {/* ── Main Content ─────────────────────────────────── */}
         <main id="main-content" tabIndex="-1">

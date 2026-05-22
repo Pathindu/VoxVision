@@ -180,7 +180,7 @@
 }
 
 .process-btn {
-  background: rgba(99, 102, 241, 0.1);
+  background: rgba(0, 229, 255, 0.1);
   border: none;
   backdrop-filter: blur(18px) saturate(1.8);
   -webkit-backdrop-filter: blur(18px) saturate(1.8);
@@ -193,8 +193,8 @@
   align-items: center;
   gap: 0.75rem;
   box-shadow:
-    0 0 0 1.5px rgba(99, 102, 241, 0.55),
-    0 12px 36px rgba(99, 102, 241, 0.22),
+    0 0 0 1.5px rgba(0, 229, 255, 0.5),
+    0 12px 36px rgba(0, 229, 255, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
   position: relative;
   overflow: hidden;
@@ -230,19 +230,19 @@
 }
 
 .process-btn:hover {
-  background: rgba(99, 102, 241, 0.2);
+  background: rgba(0, 229, 255, 0.18);
   transform: translateY(-4px);
   box-shadow:
-    0 0 0 2px rgba(99, 102, 241, 0.9),
-    0 16px 48px rgba(99, 102, 241, 0.38),
+    0 0 0 2px rgba(0, 229, 255, 0.95),
+    0 16px 48px rgba(0, 229, 255, 0.38),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .process-btn:focus-visible {
   outline: 3px solid #ffffff;
   outline-offset: 5px;
-  background: rgba(99, 102, 241, 0.22);
-  box-shadow: 0 0 0 7px rgba(99, 102, 241, 0.2), 0 0 32px rgba(99, 102, 241, 0.55);
+  background: rgba(0, 229, 255, 0.22);
+  box-shadow: 0 0 0 7px rgba(34, 211, 238, 0.2), 0 0 32px rgba(0, 229, 255, 0.55);
 }
 
 .process-btn:disabled {
@@ -311,7 +311,8 @@
   }
 
   .processing-buttons {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
   }
 
   .processing-title {
@@ -335,7 +336,7 @@
   }
 
   .process-btn {
-    padding: 1.25rem 0.75rem;
+    padding: 1rem 0.5rem;
   }
 
   .process-btn .btn-icon {
@@ -343,7 +344,7 @@
   }
 
   .process-btn .btn-text {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
   }
 }
 
