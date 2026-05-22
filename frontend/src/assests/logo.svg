@@ -4,23 +4,18 @@
       <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#000000" flood-opacity="0.15"/>
     </filter>
   </defs>
-  <rect width="100%" height="100%" fill="#F8FAFC" />
+
+  <rect x="0" y="0" width="500" height="500" fill="#F8FAFC" />
+
   <g filter="url(#shadow)">
     <path d="M 130 180 L 215 390" fill="none" stroke="#5DA9E9" stroke-width="55" stroke-linecap="round" />
     
     <path d="M 215 390 L 300 180" fill="none" stroke="#4A90E2" stroke-width="55" stroke-linecap="round" />
 
     <g transform="translate(300, 180) rotate(-68)">
-      
-      <path d="M 42.4 -42.4 A 60 60 0 0 1 42.4 42.4" 
-            fill="none" stroke="#F4CB45" stroke-width="25" stroke-linecap="round" />
-      
-      <path d="M 77.8 -77.8 A 110 110 0 0 1 77.8 77.8" 
-            fill="none" stroke="#F4CB45" stroke-width="25" stroke-linecap="round" />
-      
-      <path d="M 113.1 -113.1 A 160 160 0 0 1 113.1 113.1" 
-            fill="none" stroke="#F4CB45" stroke-width="25" stroke-linecap="round" />
-            
+      <path d="M 42.4 -42.4 A 60 60 0 0 1 42.4 42.4" fill="none" stroke="#F4CB45" stroke-width="25" stroke-linecap="round" />
+      <path d="M 77.8 -77.8 A 110 110 0 0 1 77.8 77.8" fill="none" stroke="#F4CB45" stroke-width="25" stroke-linecap="round" />
+      <path d="M 113.1 -113.1 A 160 160 0 0 1 113.1 113.1" fill="none" stroke="#F4CB45" stroke-width="25" stroke-linecap="round" />
     </g>
   </g>
 </svg>
