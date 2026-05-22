@@ -17,7 +17,7 @@ def create_app() -> FastAPI:
 
     app = FastAPI(title=settings.PROJECT_NAME)
 
-    origins = ["http://localhost:3000", "http://127.0.0.1:3000","http://localhost:3004"]
+    origins = ["http://localhost:3000", "http://127.0.0.1:3000","http://localhost:3004","https://voxvision-frontend-pj16.onrender.com"]
     if settings.APP_ORIGINS:
         origins.append(settings.APP_ORIGINS)
 

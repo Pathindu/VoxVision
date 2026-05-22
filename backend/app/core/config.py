@@ -3,7 +3,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # Explicitly load .env from the backend/ root, regardless of where uvicorn is run from
-_env_path = Path(__file__).resolve().parents[3] / ".env"
+_env_path = Path(__file__).resolve().parents[2] / ".env"
 load_dotenv(dotenv_path=_env_path)
 
 
