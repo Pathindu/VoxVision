@@ -13,7 +13,7 @@ import TagScanner    from './Pages/TagScanner';
 import Store         from './Pages/Store';
 
 // Components
-import SplashScreen  from './components/SplashScreen'; // 👈 IMPORT THE SPLASH SCREEN
+import SplashScreen  from './Components/SplashScreen'; // 👈 IMPORT THE SPLASH SCREEN
 
 // Auth context
 import { AuthProvider } from './context/AuthContext';
