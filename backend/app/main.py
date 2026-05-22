@@ -1,25 +1,31 @@
-from app.core.config import settings  # noqa
+from app.core.config import settings  # noqa – must be first: loads .env + writes Google creds
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.db.database import engine, Base
-
-# Import ALL models so SQLAlchemy knows about them before create_all
-from app.db.models import User, Tag, Order, Donation  # noqa
-
+from app.db.models import User, Tag, Order, Donation  # noqa – registers ORM classes
 from app.api.router import api_router
 
 
 def create_app() -> FastAPI:
-    # This creates all tables
     Base.metadata.create_all(bind=engine)
 
     app = FastAPI(title=settings.PROJECT_NAME)
 
-    origins = ["http://localhost:3000", "http://127.0.0.1:3000","http://localhost:3004","https://voxvision-frontend-pj16.onrender.com"]
+    # Build CORS origin list:
+    # - always allow localhost dev ports
+    # - add any origin(s) from APP_ORIGINS env var (comma-separated for multiple)
+    origins = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:3004",
+    ]
     if settings.APP_ORIGINS:
-        origins.append(settings.APP_ORIGINS)
+        for o in settings.APP_ORIGINS.split(","):
+            o = o.strip()
+            if o and o not in origins:
+                origins.append(o)
 
     app.add_middleware(
         CORSMiddleware,

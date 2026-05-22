@@ -1,7 +1,6 @@
 from google import genai
 from google.genai import types
 from app.core.config import settings
-import traceback
 
 class GeminiService:
     def __init__(self):
@@ -18,11 +17,14 @@ class GeminiService:
             raise ValueError("Gemini API Key is not configured.")
         
         try:
+            print(f"Attempting to contact Gemini using model: {self.model}...")
+            
             file_part = types.Part.from_bytes(
                 data=image_bytes,
                 mime_type=mime_type
             )
             
+            # Swapped order: Image first, prompt second (Best practice for Gemini)
             response = self.client.models.generate_content(
                 model=self.model,
                 config=types.GenerateContentConfig(
@@ -30,10 +32,17 @@ class GeminiService:
                     temperature=temperature,
                     response_mime_type="text/plain"
                 ),
-                contents=[prompt, file_part]
+                contents=[file_part, prompt] 
             )
+            
+            print("✅ Gemini successfully returned a response!")
             return response.text
+            
         except Exception as e:
-            traceback.print_exc() 
-            raise Exception(f"Failed to process file: {str(e)}")
-
+            # ─── BUG HUNTING UPGRADE ──────────────────────────────
+            # This forces the terminal to show you exactly what Google is complaining about
+            print("\n" + "🚨"*25)
+            print("GEMINI API ERROR DETECTED")
+            print(f"Exact Reason: {str(e)}")
+            print("🚨"*25 + "\n")
+            raise Exception(f"Gemini processing failed: {str(e)}")

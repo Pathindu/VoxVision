@@ -3,7 +3,7 @@
 // NEVER cache: Gemini API, backend API calls, image uploads, TTS audio.
 // These are all dynamic and must always go to the network.
 
-const CACHE_NAME = 'voxvision-v1'; // 👈 Bump this (v2, v3...) every time you redeploy
+const CACHE_NAME = 'voxvision-v2'; // 👈 Bump this (v2, v3...) every time you redeploy
 
 const SHELL_FILES = [
   '/',

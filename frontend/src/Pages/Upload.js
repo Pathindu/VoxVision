@@ -13,7 +13,6 @@ export default function Upload({ darkMode, toggleDarkMode }) {
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
-  // ✅ checkBackend defined properly
   const checkBackend = async (retries = 5, delay = 5000) => {
     setBackendStatus('checking');
     for (let i = 0; i < retries; i++) {
@@ -78,7 +77,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  // ✅ Only ONE handleCashReader
+  // ✅ Graceful Cash Reader
   const handleCashReader = async () => {
     if (!uploadedImage) return;
     setLoadingCash(true);
@@ -97,19 +96,26 @@ export default function Upload({ darkMode, toggleDarkMode }) {
         method: 'POST',
         body: formData,
       });
-      if (!response.ok) throw new Error(`Server error: ${response.status}`);
+      
+      // Prevent React crash screen by handling non-ok responses safely
+      if (!response.ok) {
+        console.warn(`Backend returned ${response.status}`);
+        alert("The backend failed to process this image. Please check your Python terminal for Gemini API errors.");
+        setLoadingCash(false);
+        return; 
+      }
 
       const data = await response.json();
       navigate('/result', { state: { resultText: data.result, resultType: 'cash' } });
     } catch (error) {
-      console.error("Cash Reader Error:", error);
+      console.error("Cash Reader Network Error:", error);
       alert("Failed to connect to backend. Please wait a moment and try again.");
     } finally {
       setLoadingCash(false);
     }
   };
 
-  // ✅ Only ONE handleDocumentReader
+  // ✅ Graceful Document Reader
   const handleDocumentReader = async () => {
     if (!uploadedImage) return;
     setLoadingDoc(true);
@@ -128,12 +134,19 @@ export default function Upload({ darkMode, toggleDarkMode }) {
         method: 'POST',
         body: formData,
       });
-      if (!response.ok) throw new Error(`Server error: ${response.status}`);
+      
+      // Prevent React crash screen by handling non-ok responses safely
+      if (!response.ok) {
+        console.warn(`Backend returned ${response.status}`);
+        alert("The backend failed to process this document. Please check your Python terminal for Gemini API errors.");
+        setLoadingDoc(false);
+        return; 
+      }
 
       const data = await response.json();
       navigate('/result', { state: { resultText: data.result, resultType: 'document' } });
     } catch (error) {
-      console.error("Document Reader Error:", error);
+      console.error("Document Reader Network Error:", error);
       alert("Failed to connect to backend. Please wait a moment and try again.");
     } finally {
       setLoadingDoc(false);
@@ -144,7 +157,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
     <div className={`upload-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
-      {/* ✅ Backend Status Banner */}
+      {/* Backend Status Banner */}
       {backendStatus === 'checking' && (
         <div style={{ background: '#f59e0b', color: '#fff', textAlign: 'center', padding: '10px', fontWeight: 'bold' }}>
           ⏳ Backend is starting up, please wait...

@@ -1,227 +1,221 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import '../Components/Result.css';
 
-export default function Result({ darkMode, toggleDarkMode }) {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [isPaused, setIsPaused] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [audio, setAudio] = useState(null);
-  const [audioSrc, setAudioSrc] = useState(null);
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
-  // Get result text from navigation state or use default
-  const resultText = location.state?.resultText || "Detected: Rs. 1000 Note";
-  const resultType = location.state?.resultType || "cash"; // 'cash' or 'document'
+/** True when the segment contains Sinhala Unicode characters (U+0D80–U+0DFF). */
+const isSinhala = (text) => /[\u0D80-\u0DFF]/.test(text);
 
-  const handleReadDocument = async (fullText) => {
-    setIsLoading(true);
-    // 1. Split into large blocks by script type
-    const segments = fullText.match(/[\x00-\x7F]+|[^\x41-\x5A\x61-\x7A]+/g);
+/**
+ * Split mixed-language text into an array of { text, lang } objects.
+ * Adjacent characters of the same script are grouped together.
+ */
+const segmentByLanguage = (text) => {
+  const raw = text.match(/[\u0D80-\u0DFF\s]+|[^\u0D80-\u0DFF]+/g) || [];
+  return raw
+    .filter((s) => s.trim())
+    .map((s) => ({ text: s, lang: isSinhala(s) ? 'si-LK' : 'en-US' }));
+};
 
-    if (!segments) {
-      setIsLoading(false);
-      return;
+/**
+ * Split a segment into chunks that are each under maxBytes bytes.
+ * Tries to break at sentence boundaries (. or \n) when possible.
+ */
+const chunkSegment = (text, maxBytes = 4800) => {
+  const enc = (s) => new Blob([s]).size;
+  if (enc(text) <= maxBytes) return [text];
+
+  const chunks = [];
+  let start = 0;
+  while (start < text.length) {
+    let end = start;
+    while (end < text.length && enc(text.slice(start, end + 1)) <= maxBytes) end++;
+    if (end === start) { end = start + 1; } // safety: always advance
+
+    // Back up to a sentence boundary
+    let cut = end;
+    for (let i = end; i > start && i > end - 80; i--) {
+      if (text[i] === '.' || text[i] === '\n') { cut = i + 1; break; }
     }
+    const chunk = text.slice(start, cut).trim();
+    if (chunk) chunks.push(chunk);
+    start = cut;
+  }
+  return chunks;
+};
 
-    const fetchedBlobs = [];
+// ── Component ─────────────────────────────────────────────────────────────────
 
-    for (const segment of segments) {
-      // Skip segments that are just whitespace
-      if (!segment.trim()) continue;
+export default function Result({ darkMode, toggleDarkMode }) {
+  const navigate  = useNavigate();
+  const location  = useLocation();
 
-      // 2. Determine the language of this specific chunk
-      let lang = 'en-US'; // Default
-      if ((/[\x41-\x5A\x61-\x7A]/.test(segment))) {
-        lang = "en-US";
-      } else lang = "si-LK"
+  const resultText = location.state?.resultText || 'Detected: Rs. 1000 Note';
+  const resultType = location.state?.resultType || 'cash';
 
-      if (new Blob([segment]).size > 5000) {
-        let subsegment = [];
-        const sbSize = Math.ceil(new Blob([segment]).size / 5000);
-        let breake = segment.length / sbSize;
-        for (let b = breake, i = 0; b < segment.length; b += breake) {
-          while (b > i) {
-            if (segment.charCodeAt(b) == 46 || segment.charCodeAt(b) == 10) {
-              subsegment = segment.slice(i, b);
-              i = b + 1;
-              break;
-            }
-            b--;
-          }
-          // Wait for each segment to finish before starting the next
-          const blob = await speakWithGoogleTTS(subsegment, lang);
-          if (blob) {
-            fetchedBlobs.push(blob);
-          }
-        }
-      } else {
-        // Wait for each segment to finish before starting the next
-        const blob = await speakWithGoogleTTS(segment, lang);
-        if (blob) {
-          fetchedBlobs.push(blob);
+  const [isLoading,  setIsLoading]  = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isPaused,   setIsPaused]   = useState(false);
+  const [ttsError,   setTtsError]   = useState(null);
+
+  const audioRef    = useRef(null);   // Audio object
+  const audioUrlRef = useRef(null);   // Blob URL (for cleanup + download)
+  const hasRun      = useRef(false);
+
+  // ── TTS backend call ────────────────────────────────────────────────────
+  const fetchTTSBlob = async (text, lang) => {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/synthesize`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ text, lang_code: lang }),
+    });
+    if (!res.ok) {
+      const msg = await res.text();
+      throw new Error(`TTS ${res.status}: ${msg}`);
+    }
+    return res.blob();
+  };
+
+  // ── Full TTS pipeline ───────────────────────────────────────────────────
+  const generateAudio = useCallback(async (text) => {
+    setIsLoading(true);
+    setTtsError(null);
+
+    try {
+      const segments = segmentByLanguage(text);
+      const blobs    = [];
+
+      for (const { text: seg, lang } of segments) {
+        for (const chunk of chunkSegment(seg)) {
+          console.log(`[TTS] lang=${lang} bytes=${new Blob([chunk]).size}`);
+          const blob = await fetchTTSBlob(chunk, lang);
+          blobs.push(blob);
         }
       }
-    }
 
-    createAudio(fetchedBlobs);
-    setIsLoading(false);
-  };
-  
-  const hasRun = useRef(false);
+      if (!blobs.length) throw new Error('No audio blobs returned from TTS.');
+
+      // Combine all MP3 blobs
+      const combined = new Blob(blobs, { type: 'audio/mpeg' });
+      const url      = URL.createObjectURL(combined);
+
+      // Cleanup previous
+      if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+      audioUrlRef.current = url;
+
+      const audio    = new Audio(url);
+      audioRef.current = audio;
+
+      audio.onended = () => { setIsSpeaking(false); setIsPaused(false); };
+
+      // Auto-play
+      await audio.play();
+      setIsSpeaking(true);
+    } catch (err) {
+      console.error('[TTS]', err);
+      setTtsError(err.message || 'Audio generation failed.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    if (!hasRun.current) {
-      handleReadDocument(resultText);
+    if (!hasRun.current && resultText) {
       hasRun.current = true;
+      generateAudio(resultText);
     }
-  }, [resultText]);
-
-
-  const createAudio = (blobs) => {
-    const combinedBlobs = new Blob(blobs, { type: 'audio/mpeg' });
-    const audioUrl = URL.createObjectURL(combinedBlobs);
-    const audio = new Audio(audioUrl);
-    setAudio(audio);
-    URL.revokeObjectURL(audioSrc); // Clean up memory
-    setAudioSrc(audioUrl);
-  }
-
-  const playAudio = async () => {
-    setIsSpeaking(true)
-    await new Promise((resolve) => {
-      if (isPaused) {
-        setIsPaused(false)
-        audio.currentTime = audio.currentTime - 2;
-        audio.play().catch(error => {
-          console.error("Audio playback error:", error);
-          resolve();
-        });
-      }
-      else {
-        audio.currentTime = 0;
-        audio.play().catch(error => {
-          console.error("Audio playback error:", error);
-          resolve();
-        });
-      }
-      audio.onended = () => setIsSpeaking(false);
-    });
-  };
-
-  const speakWithGoogleTTS = async (text, lang) => {
-    console.log(lang, " Size: ", new Blob([text]).size, ": ", text);
-    try {
-      // 1. Call your Python backend endpoint
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/synthesize`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: text, lang_code: lang }),
-      });
-
-      if (!response.ok) throw new Error("Failed to get audio from backend");
-
-      // 2. Convert the response to a Blob (Binary Large Object)
-      const blob = await response.blob();
-      return blob;
-
-    } catch (error) {
-      console.error("TTS Error:", error);
-      return null;
-    }
-  };
-
-  const handlePlay = () => {
-    if (audioSrc) playAudio();
-    else {
-      // alert("No audio to play. Please wait for the audio to be generated.");
-      hasRun.current = false;
-      handleReadDocument(resultText);
+    return () => {
+      if (audioRef.current) audioRef.current.pause();
+      if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
     };
+  }, [resultText, generateAudio]);
+
+  // ── Controls ────────────────────────────────────────────────────────────
+  const handlePlay = () => {
+    if (!audioRef.current) {
+      hasRun.current = false;
+      generateAudio(resultText);
+      return;
+    }
+    if (isPaused) {
+      audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 2);
+    } else {
+      audioRef.current.currentTime = 0;
+    }
+    audioRef.current.play();
+    setIsSpeaking(true);
+    setIsPaused(false);
   };
 
   const handlePause = () => {
-    if (isSpeaking) {
-      audio.pause();
+    if (audioRef.current && isSpeaking) {
+      audioRef.current.pause();
       setIsSpeaking(false);
       setIsPaused(true);
     }
   };
 
-  const handlePrev = () => {
-    // Navigate to previous section of text
-    alert('Previous feature - Navigate to previous section');
-  };
-
-  const handleNext = () => {
-    // Navigate to next section of text
-    alert('Next feature - Navigate to next section');
-  };
-
   const handleRepeat = () => {
-    setIsPaused(false)
-    audio.currentTime = 0;
-    playAudio();
+    if (!audioRef.current) return;
+    audioRef.current.currentTime = 0;
+    audioRef.current.play();
+    setIsSpeaking(true);
+    setIsPaused(false);
   };
 
   const handleDownload = () => {
-    if (!audioSrc) {
-      alert("No audio to download")
-      return
-    }
-    const link = document.createElement('a');
-    link.href = audioSrc;
-    link.download = `${resultType}-audio-${Date.now()}.mp3`;
-    link.click();
-
-    // Create a text file and download
-    // const element = document.createElement('a');
-    // const file = new Blob([resultText], { type: 'text/plain' });
-    // element.href = URL.createObjectURL(file);
-    // element.download = `${resultType}-result-${Date.now()}.txt`;
-    // document.body.appendChild(element);
-    // element.click();
-    // document.body.removeChild(element);
+    if (!audioUrlRef.current) { alert('No audio to download yet.'); return; }
+    const a  = document.createElement('a');
+    a.href   = audioUrlRef.current;
+    a.download = `${resultType}-audio-${Date.now()}.mp3`;
+    a.click();
   };
 
   const handleProcessAnother = () => {
-    // Stop any ongoing speech
-    if (isSpeaking) {
-      audio.pause();
-    }
+    if (audioRef.current) audioRef.current.pause();
     setIsSpeaking(false);
     setIsPaused(false);
-
-    // Navigate back to home
     navigate('/');
   };
 
+  // ── Render ──────────────────────────────────────────────────────────────
   return (
     <div className={`result-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
-      {/* Navigation */}
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
       <div className="result-container">
         <div className="result-content">
           <h1 className="result-page-title">Results</h1>
 
-          {/* Result Display Box */}
           <div className="result-box">
-            <p className="result-text" tabIndex={0} aria-description='Result text'>{resultText}</p>
+            <p className="result-text" tabIndex={0}>{resultText}</p>
           </div>
 
-          {/* Audio Controls */}
+          {ttsError && (
+            <div style={{
+              background: '#fef2f2', color: '#dc2626',
+              border: '1px solid #fca5a5', borderRadius: '8px',
+              padding: '12px 16px', margin: '12px 0', fontSize: '0.9rem',
+            }}>
+              ⚠️ Audio Error: {ttsError}
+              <button
+                onClick={() => { hasRun.current = false; generateAudio(resultText); }}
+                style={{ marginLeft: '12px', cursor: 'pointer' }}
+              >
+                Retry
+              </button>
+            </div>
+          )}
+
           <div className="audio-controls-section">
             <h2 className="audio-title">Audio Controls</h2>
-
             <div className="audio-buttons">
               <button
                 className="audio-btn pause-btn"
                 onClick={handlePause}
-                // disabled={!isPlaying}
                 disabled={isLoading || !isSpeaking}
               >
                 <span className="audio-icon">⏸</span>
@@ -233,14 +227,14 @@ export default function Result({ darkMode, toggleDarkMode }) {
                 onClick={handlePlay}
                 disabled={isLoading || isSpeaking}
               >
-                <span className="audio-icon">{isLoading ? "⏳" : "▶"}</span>
-                <span className="audio-label">{isLoading ? "Loading..." : "Play"}</span>
+                <span className="audio-icon">{isLoading ? '⏳' : '▶'}</span>
+                <span className="audio-label">{isLoading ? 'Loading...' : 'Play'}</span>
               </button>
 
               <button
                 className="audio-btn repeat-btn"
                 onClick={handleRepeat}
-                disabled={isLoading}
+                disabled={isLoading || !audioRef.current}
               >
                 <span className="audio-icon">🔁</span>
                 <span className="audio-label">Repeat</span>
@@ -248,13 +242,11 @@ export default function Result({ darkMode, toggleDarkMode }) {
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="action-buttons">
             <button className="action-btn download-btn" onClick={handleDownload}>
               <span className="action-icon">📥</span>
               <span className="action-text">DOWNLOAD</span>
             </button>
-
             <button className="action-btn process-another-btn" onClick={handleProcessAnother}>
               <span className="action-icon">🔄</span>
               <span className="action-text">PROCESS ANOTHER</span>

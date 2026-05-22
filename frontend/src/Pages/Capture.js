@@ -6,156 +6,105 @@ import '../Components/Capture.css';
 
 export default function Capture({ darkMode, toggleDarkMode }) {
   const [isCameraActive, setIsCameraActive] = useState(false);
-  const [capturedImage, setCapturedImage] = useState(null);
-  const [loadingCash, setLoadingCash] = useState(false);
-  const [loadingDoc, setLoadingDoc] = useState(false);
-  const videoRef = useRef(null);
+  const [capturedImage,  setCapturedImage]  = useState(null);
+  const [loadingCash,    setLoadingCash]    = useState(false);
+  const [loadingDoc,     setLoadingDoc]     = useState(false);
+  const [error,          setError]          = useState(null);
+
+  const videoRef  = useRef(null);
   const canvasRef = useRef(null);
-  const navigate = useNavigate();
+  const navigate  = useNavigate();
 
-  const checkBackend = async () => {
-    try {
-      // const backend = await fetch("http://localhost:8000/");
-      const backend = await fetch(process.env.REACT_APP_API_URL);
-      const data = await backend.json();
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-      alert("Backend is not running. Please start the backend.");
-    }
-  };
-
-  useEffect(() => {
-    checkBackend();
-  }, [])
-
-  // Start camera
+  // ── Camera ────────────────────────────────────────────────────────────
   const startCamera = async () => {
+    setError(null);
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' }
-      });
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         setIsCameraActive(true);
       }
-    } catch (error) {
-      console.error('Error accessing camera:', error);
-      alert('Unable to access camera. Please check permissions.');
+    } catch (err) {
+      console.error('Camera error:', err);
+      setError('Unable to access camera. Please check permissions.');
     }
   };
 
-  // Capture image
-  const captureImage = () => {
-    if (videoRef.current && canvasRef.current) {
-      const canvas = canvasRef.current;
-      const video = videoRef.current;
-
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-
-      const context = canvas.getContext('2d');
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      const imageData = canvas.toDataURL('image/png');
-      setCapturedImage(imageData);
-
-      // Stop camera
-      const stream = video.srcObject;
-      const tracks = stream.getTracks();
-      tracks.forEach(track => track.stop());
+  const stopCamera = () => {
+    if (videoRef.current?.srcObject) {
+      videoRef.current.srcObject.getTracks().forEach((t) => t.stop());
       setIsCameraActive(false);
     }
   };
 
-  // Retake photo
+  useEffect(() => {
+    startCamera();
+    return stopCamera;
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const captureImage = () => {
+    if (!videoRef.current || !canvasRef.current) return;
+    const canvas  = canvasRef.current;
+    const video   = videoRef.current;
+    canvas.width  = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+    setCapturedImage(canvas.toDataURL('image/png'));
+    stopCamera();
+  };
+
   const retakePhoto = () => {
     setCapturedImage(null);
     startCamera();
   };
 
-  // Handle Cash Reader - Navigate to Result page
-  const handleCashReader = async () => {
-    setLoadingCash(true);
-    // Convert the base64 data URL to a File object
-    const res = await fetch(capturedImage);
-    const blob = await res.blob();
-    const file = new File([blob], "capture.png", { type: "image/png" });
+  // ── Submit to backend ─────────────────────────────────────────────────
+  const submitImage = async (endpoint, type) => {
+    setError(null);
+    if (type === 'cash') setLoadingCash(true); else setLoadingDoc(true);
+    try {
+      const res    = await fetch(capturedImage);
+      const blob   = await res.blob();
+      const file   = new File([blob], 'capture.png', { type: 'image/png' });
+      const form   = new FormData();
+      form.append('image', file);
 
-    const formData = new FormData();
-    formData.append('image', file);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/${endpoint}`, {
+        method: 'POST',
+        body:   form,
+      });
 
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/cash-to-text/`, {
-      method: 'POST',
-      body: formData,
-    });
-
-    const data = await response.json();
-    console.log("Extracted Text:", data.result);
-
-    navigate('/result', {
-      state: {
-        resultText: data.result,
-        resultType: 'cash'
+      if (!response.ok) {
+        const msg = await response.text();
+        throw new Error(`Server error ${response.status}: ${msg}`);
       }
-    });
-    setLoadingCash(false);
-    setLoadingDoc(false);
+
+      const data = await response.json();
+      navigate('/result', { state: { resultText: data.result, resultType: type } });
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Failed to connect to backend.');
+    } finally {
+      setLoadingCash(false);
+      setLoadingDoc(false);
+    }
   };
-
-  // Handle Document Reader - Navigate to Result page
-  const handleDocumentReader = async () => {
-    setLoadingDoc(true);
-    // Convert the base64 data URL to a File object
-    const res = await fetch(capturedImage);
-    const blob = await res.blob();
-    const file = new File([blob], "capture.png", { type: "image/png" });
-
-    const formData = new FormData();
-    formData.append('image', file);
-
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/image-to-text/`, {
-      method: 'POST',
-      body: formData,
-    });
-
-    const data = await response.json();
-    console.log("Extracted Text:", data.result);
-
-    navigate('/result', {
-      state: {
-        resultText: data.result,
-        resultType: 'document'
-      }
-    });
-    setLoadingCash(false);
-    setLoadingDoc(false);
-  };
-
-  // Start camera on component mount
-  React.useEffect(() => {
-    startCamera();
-
-    return () => {
-      // Cleanup: stop camera when component unmounts
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject;
-        const tracks = stream.getTracks();
-        tracks.forEach(track => track.stop());
-      }
-    };
-  }, []);
 
   return (
     <div className={`capture-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
-      {/* Navigation */}
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
       <div className="capture-container">
         <div className="capture-content">
           <h1 className="capture-title">Capture</h1>
 
-          {/* Camera View */}
+          {error && (
+            <div style={{ background: '#fef2f2', color: '#dc2626', border: '1px solid #fca5a5',
+                          borderRadius: '8px', padding: '10px 14px', marginBottom: '12px' }}>
+              ⚠️ {error}
+            </div>
+          )}
+
           <div className="camera-section">
             <div className="camera-header">
               <span className="camera-icon">📷</span>
@@ -165,12 +114,7 @@ export default function Capture({ darkMode, toggleDarkMode }) {
             <div className="camera-view">
               {!capturedImage ? (
                 <>
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    className="video-stream"
-                  />
+                  <video ref={videoRef} autoPlay playsInline className="video-stream" />
                   <div className="focus-frame">
                     <div className="corner top-left"></div>
                     <div className="corner top-right"></div>
@@ -185,9 +129,8 @@ export default function Capture({ darkMode, toggleDarkMode }) {
 
             <canvas ref={canvasRef} style={{ display: 'none' }} />
 
-            {/* Capture Button */}
             {!capturedImage ? (
-              <button className="capture-button" onClick={captureImage}>
+              <button className="capture-button" onClick={captureImage} disabled={!isCameraActive}>
                 CAPTURE
               </button>
             ) : (
@@ -197,33 +140,25 @@ export default function Capture({ darkMode, toggleDarkMode }) {
             )}
           </div>
 
-          {/* Processing Options */}
           {capturedImage && (
             <div className="processing-section">
               <h2 className="processing-title">Processing Options</h2>
               <div className="processing-buttons">
                 <button
                   className="process-btn cash-btn"
-                  onClick={handleCashReader}
+                  onClick={() => submitImage('cash-to-text/', 'cash')}
                   disabled={loadingCash || loadingDoc}
                 >
-                  {loadingCash ? (
-                    <span className="loader-capture"></span>
-                  ) : (
-                    <span className="btn-icon">💰</span>
-                  )}
+                  {loadingCash ? <span className="loader-capture"></span> : <span className="btn-icon">💰</span>}
                   <span className="btn-text">{loadingCash ? 'PROCESSING...' : 'CASH READER'}</span>
                 </button>
+
                 <button
                   className="process-btn document-btn"
-                  onClick={handleDocumentReader}
+                  onClick={() => submitImage('image-to-text/', 'document')}
                   disabled={loadingCash || loadingDoc}
                 >
-                  {loadingDoc ? (
-                    <span className="loader-capture"></span>
-                  ) : (
-                    <span className="btn-icon">📄</span>
-                  )}
+                  {loadingDoc ? <span className="loader-capture"></span> : <span className="btn-icon">📄</span>}
                   <span className="btn-text">{loadingDoc ? 'PROCESSING...' : 'DOCUMENT READER'}</span>
                 </button>
               </div>
@@ -232,7 +167,6 @@ export default function Capture({ darkMode, toggleDarkMode }) {
         </div>
       </div>
 
-      {/* Footer */}
       <Footer darkMode={darkMode} />
     </div>
   );
