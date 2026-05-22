@@ -28,6 +28,8 @@ async def analyze_image(image: UploadFile = File(...)):
         text_result = service.process_image(image_data, prompt, system_instruction, 0.3, mime_type)
         return {"result": text_result}
     except ValueError as e:
+        print(f"ValueError: {e}")  # ← add
         raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
+        print(f"Exception: {e}")  # ← add
         raise HTTPException(status_code=500, detail=str(e))

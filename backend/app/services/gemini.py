@@ -1,6 +1,7 @@
 from google import genai
 from google.genai import types
 from app.core.config import settings
+import traceback
 
 class GeminiService:
     def __init__(self):
@@ -33,5 +34,6 @@ class GeminiService:
             )
             return response.text
         except Exception as e:
+            traceback.print_exc() 
             raise Exception(f"Failed to process file: {str(e)}")
 

@@ -21,7 +21,7 @@ export default function Capture({ darkMode, toggleDarkMode }) {
       console.log(data);
     } catch (error) {
       console.log(error);
-      //alert("Backend is not running. Please start the backend.");
+      alert("Backend is not running. Please start the backend.");
     }
   };
 
