@@ -27,7 +27,7 @@ export default function SplashScreen({ onComplete }) {
         </div>
         
         <h1 style={styles.brandName}>VoxVision</h1>
-        <p style={styles.slogan}>"Because reading belongs to everyone."</p>
+        <p style={styles.slogan}>Because reading belongs to everyone.</p>
         
         <div style={styles.loader}>
           <div className="dot-pulse"></div>
@@ -67,6 +67,6 @@ const styles = {
   logoWrapper: { width: '140px', height: '140px', animation: 'float 3s ease-in-out infinite', marginBottom: '16px' },
   logo: { width: '100%', height: '100%', objectFit: 'contain' },
   brandName: { fontSize: '38px', fontWeight: '800', color: '#1E293B', margin: '0 0 4px 0', letterSpacing: '-0.5px', fontFamily: 'system-ui, -apple-system, sans-serif' },
-  slogan: { fontSize: '18px', color: '#64748B', margin: '0 0 36px 0', fontStyle: 'italic', fontWeight: '500', letterSpacing: '0.3px' },
+  slogan: { fontSize: '14px', color: '#64748B', margin: '0 0 36px 0', fontStyle: 'italic', fontWeight: '500', letterSpacing: '0.3px' },
   loader: { display: 'flex', justifyContent: 'center' }
 };
