@@ -8,7 +8,7 @@
 }
 
 .team-page-wrapper.dark-mode {
-    background: #090d14 !important;
+    background: linear-gradient(135deg, #080b12 0%, #0d0d18 40%, #070710 100%) !important;
 }
 
 /* Team Container */
@@ -88,17 +88,36 @@
 
 /* Front of Card */
 .team-card-front {
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: 1px solid rgba(34, 211, 238, 0.2) !important;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    background: rgba(0, 229, 255, 0.1) !important;
+    border: none !important;
+    backdrop-filter: blur(24px) saturate(1.8);
+    -webkit-backdrop-filter: blur(24px) saturate(1.8);
+    box-shadow:
+        0 0 0 1.5px rgba(0, 229, 255, 0.5),
+        0 12px 36px rgba(0, 229, 255, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 2rem;
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Inner top highlight line for team cards */
+.team-card-front::before,
+.team-card-back::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 15%;
+    width: 70%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+    border-radius: 999px;
+    z-index: 1;
 }
 
 .member-photo-wrapper {
@@ -138,15 +157,22 @@
 
 /* Back of Card */
 .team-card-back {
-    background: linear-gradient(135deg, #1e3a8a, #0c4a6e) !important;
-    border: 1px solid rgba(34, 211, 238, 0.2) !important;
+    background: rgba(0, 229, 255, 0.15) !important;
+    border: none !important;
+    backdrop-filter: blur(24px) saturate(1.8);
+    -webkit-backdrop-filter: blur(24px) saturate(1.8);
     transform: rotateY(180deg);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 2rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    padding: 2.5rem;
+    box-shadow:
+        0 0 0 1.5px rgba(0, 229, 255, 0.5),
+        0 12px 36px rgba(0, 229, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    position: relative;
+    overflow: hidden;
 }
 
 .member-bio {

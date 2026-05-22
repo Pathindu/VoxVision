@@ -32,6 +32,11 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
     <>
       <nav className={`navbar ${darkMode ? 'dark-mode' : ''}`} role="navigation" aria-label="Main navigation">
         <div className="navbar-content">
+          <div className="navbar-logo" onClick={() => handleNavigation('home')} role="link" aria-label="Go to VoxVision home">
+            <img src="/voxvision-logo.png" alt="VoxVision Logo" className="navbar-logo-img" />
+            <span className="navbar-logo-text creative-logo">VoxVision</span>
+          </div>
+
           <button
             className="navbar-mobile-toggle"
             onClick={() => setIsMobileMenuOpen(true)}
@@ -40,11 +45,6 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
           >
             &#9776;
           </button>
-
-          <div className="navbar-logo" onClick={() => handleNavigation('home')} role="link" aria-label="Go to VoxVision home">
-            <img src="/voxvision-logo.png" alt="VoxVision Logo" className="navbar-logo-img" />
-            <span className="navbar-logo-text creative-logo">VoxVision</span>
-          </div>
 
           <div className="navbar-right">
             <ul className="navbar-links" role="menubar" aria-label="Site navigation">
@@ -142,6 +142,9 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
         <div className="mobile-drawer-overlay" onClick={() => setIsMobileMenuOpen(false)} role="dialog" aria-modal="true" aria-label="Navigation menu">
           <div className={`mobile-drawer ${darkMode ? 'dark-mode' : ''}`} onClick={(e) => e.stopPropagation()}>
             <div className="mobile-menu-header">
+              <button className="dark-mode-toggle mobile-header-toggle" onClick={toggleDarkMode} aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}>
+                <span className="toggle-icon">{darkMode ? '☀️' : '🌙'}</span>
+              </button>
               <button className="mobile-drawer-close" aria-label="Close menu" onClick={() => setIsMobileMenuOpen(false)}>
                 &times;
               </button>
@@ -162,20 +165,17 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
               <li>
                 <a href="#order" role="button" data-page="order" onClick={(e) => { e.preventDefault(); handleNavigation('order'); }} className={`navbar-link${isActive('/order') ? ' active' : ''}`} aria-label="Go to Order page" aria-current={isActive('/order') ? 'page' : undefined}>Order</a>
               </li>
+              <li>
+                <a
+                  href="/donate"
+                  className="navbar-link mobile-support-link"
+                  aria-label="Support our mission by donating"
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate('/donate'); setIsMobileMenuOpen(false); }}
+                >
+                  Support Us
+                </a>
+              </li>
             </ul>
-            <div className="mobile-bottom-actions">
-              <a
-                href="/donate"
-                className="mobile-support-btn"
-                aria-label="Support our mission by donating"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <span className="support-text">Support Us</span>
-              </a>
-              <button className="dark-mode-toggle" onClick={toggleDarkMode} aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}>
-                <span className="toggle-icon">{darkMode ? '☀️' : '🌙'}</span>
-              </button>
-            </div>
           </div>
         </div>
       )}

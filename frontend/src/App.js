@@ -10,12 +10,13 @@ import Order from './Pages/Order';
 import About from './Pages/About';
 import OurTeam from './Pages/OurTeam';
 import './App.css';
+import './Components/LightTheme.css';
 
 function App() {
-  // Dark mode state - load from localStorage if available
+  // Dark mode state - load from localStorage if available (defaults to dark)
   const [darkMode, setDarkMode] = useState(() => {
     const savedMode = localStorage.getItem('darkMode');
-    return savedMode === 'true' || false;
+    return savedMode !== null ? savedMode === 'true' : true;
   });
 
   // Toggle dark mode
@@ -26,17 +27,19 @@ function App() {
   // Save dark mode preference to localStorage
   useEffect(() => {
     localStorage.setItem('darkMode', darkMode);
-    // Apply dark mode class to body
+    // Apply theme class to body
     if (darkMode) {
       document.body.classList.add('dark-mode');
+      document.body.classList.remove('light-theme');
     } else {
       document.body.classList.remove('dark-mode');
+      document.body.classList.add('light-theme');
     }
   }, [darkMode]);
 
   return (
     <Router>
-      <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
+      <div className={`App ${darkMode ? 'dark-mode' : 'light-theme'}`}>
         <Routes>
           <Route path="/" element={<Home darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
           <Route path="/capture" element={<Capture darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />

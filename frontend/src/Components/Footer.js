@@ -100,7 +100,7 @@ export default function Footer({ darkMode }) {
         {/* Footer Bottom */}
         <div className="footer-bottom">
           <div className="copyright-text">
-            &copy; 2026 VoxVision. All rights reserved. University of Kelaniya
+            &copy; 2026 VoxVision. All rights reserved.
           </div>
           <div className="legal-links">
             <a

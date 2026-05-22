@@ -58,7 +58,6 @@ body.dark-mode {
 }
 
 .dark-mode .description-box,
-.dark-mode .feature-card,
 .dark-mode .upload-area,
 .dark-mode .camera-section,
 .dark-mode .result-box {
@@ -68,8 +67,6 @@ body.dark-mode {
 
 .dark-mode .description-text,
 .dark-mode .hero-subtitle,
-.dark-mode .feature-title,
-.dark-mode .feature-description,
 .dark-mode .result-text {
   color: #e0f2fe;
 }

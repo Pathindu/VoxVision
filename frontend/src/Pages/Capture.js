@@ -147,7 +147,7 @@ export default function Capture({ darkMode, toggleDarkMode }) {
   }, []);
 
   return (
-    <div className={`capture-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+    <div className={`capture-page-wrapper ${darkMode ? 'dark-mode' : 'light-theme'}`}>
       {/* Navigation */}
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 

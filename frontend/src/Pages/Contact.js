@@ -25,7 +25,7 @@ export default function ContactUs({ darkMode, toggleDarkMode }) {
   };
 
   return (
-    <div className={`contact-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+    <div className={`contact-page-wrapper ${darkMode ? 'dark-mode' : 'light-theme'}`}>
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
       <main className="contact-container">

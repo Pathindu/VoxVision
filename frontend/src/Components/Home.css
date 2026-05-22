@@ -753,15 +753,17 @@
 }
 
 .feature-card {
-  background: rgba(34, 211, 238, 0.08);
-  border: 1.5px solid rgba(0, 229, 255, 0.45);
+  background: rgba(0, 229, 255, 0.1);
+  /* Match capture button color */
+  border: none;
   backdrop-filter: blur(24px) saturate(1.8);
   -webkit-backdrop-filter: blur(24px) saturate(1.8);
   border-radius: 20px;
   padding: 2.2rem 1.75rem;
   text-align: center;
   box-shadow:
-    0 12px 36px rgba(0, 229, 255, 0.18),
+    0 0 0 1.5px rgba(0, 229, 255, 0.5),
+    0 12px 36px rgba(0, 229, 255, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
   transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   position: relative;
@@ -773,6 +775,7 @@
   min-height: 160px;
 }
 
+/* Inner top highlight line */
 .feature-card::before {
   content: '';
   position: absolute;
@@ -780,15 +783,35 @@
   left: 15%;
   width: 70%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.35), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  border-radius: 999px;
+  z-index: 1;
+}
+
+/* Liquid shimmer sweep */
+.feature-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+  transform: skewX(-18deg);
+  transition: left 0.55s ease;
+  z-index: 0;
+}
+
+.feature-card:hover::after {
+  left: 160%;
 }
 
 .feature-card:hover {
   transform: translateY(-8px) scale(1.02);
-  background: rgba(34, 211, 238, 0.14);
-  border-color: rgba(0, 229, 255, 0.95);
+  background: rgba(0, 229, 255, 0.18);
   box-shadow:
-    0 16px 48px rgba(0, 229, 255, 0.32),
+    0 0 0 2px rgba(0, 229, 255, 0.95),
+    0 16px 48px rgba(0, 229, 255, 0.38),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
@@ -810,11 +833,13 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: rgba(0, 229, 255, 0.08);
-  border: 1px solid rgba(0, 229, 255, 0.2);
+  background: rgba(0, 229, 255, 0.15);
+  box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.4), 0 0 18px rgba(0, 229, 255, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  z-index: 1;
 }
 
 .feature-title {
@@ -988,7 +1013,7 @@
 
 @media (max-width: 768px) {
   .hero-section {
-    padding: 5.5rem 1rem 3rem;
+    padding: 5.5rem 1rem 1.5rem;
   }
 
   .hero-dashboard {
@@ -1024,12 +1049,25 @@
   }
 
   .info-actions {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
   }
 
   .slogan-btn {
-    width: 100%;
+    width: auto;
+    flex: 1;
     justify-content: center;
+    padding: 0.65rem 0.25rem;
+    font-size: 0.72rem;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .slogan-btn .btn-icon {
+    font-size: 1rem;
+    width: 24px;
+    height: 24px;
   }
 
   .hero-app-card {
@@ -1046,7 +1084,8 @@
   }
 
   .features-section {
-    padding: 3rem 1rem 4rem;
+    padding: 0.5rem 1rem 3rem;
+    /* Significantly reduced top padding to move it closer to hero */
   }
 
   .features-title {
@@ -1055,16 +1094,44 @@
   }
 
   .feature-grid {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 0.35rem;
+    padding-bottom: 0;
+  }
+
+  .feature-list-item {
+    flex: 1;
+    min-width: 0;
   }
 
   .feature-card {
-    padding: 1.75rem 1.25rem;
+    min-height: unset;
+    height: 100%;
+    padding: 1rem 0.4rem;
+  }
+
+  .feature-description {
+    display: none;
+  }
+
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-title {
+    font-size: 0.72rem;
+    margin-bottom: 0;
+    line-height: 1.3;
   }
 
   .footer {
-    padding: 2.5rem 1.25rem 1.5rem;
+    padding: 1rem 1.25rem 0.75rem;
+    /* Minimized vertical footer height for mobile */
   }
 
   .footer-grid {

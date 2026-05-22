@@ -190,7 +190,7 @@ export default function Result({ darkMode, toggleDarkMode }) {
   };
 
   return (
-    <div className={`result-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+    <div className={`result-page-wrapper ${darkMode ? 'dark-mode' : 'light-theme'}`}>
       {/* Navigation */}
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 

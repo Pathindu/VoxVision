@@ -8,7 +8,7 @@
 }
 
 .contact-page-wrapper.dark-mode {
-  background: #090d14 !important;
+  background: linear-gradient(135deg, #080b12 0%, #0d0d18 40%, #070710 100%) !important;
 }
 
 /* Contact Container */
@@ -62,27 +62,67 @@
 }
 
 .info-card {
-  background: #0f172a;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  padding: 32px 24px;
+  background: rgba(0, 229, 255, 0.1);
+  border: none;
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  border-radius: 20px;
+  padding: 2.2rem 1.75rem;
   text-align: center;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
+  box-shadow:
+    0 0 0 1.5px rgba(0, 229, 255, 0.5),
+    0 12px 36px rgba(0, 229, 255, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   position: relative;
   overflow: hidden;
-  max-width: 300px;
+  max-width: 320px;
   width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 240px;
+}
+
+/* Inner top highlight line */
+.info-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 15%;
+  width: 70%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  border-radius: 999px;
+  z-index: 1;
+}
+
+/* Liquid shimmer sweep */
+.info-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+  transform: skewX(-18deg);
+  transition: left 0.55s ease;
+  z-index: 0;
+}
+
+.info-card:hover::after {
+  left: 160%;
 }
 
 .info-card:hover {
-  transform: translateY(-8px);
-  border-color: #00E5FF;
-  box-shadow: 0 20px 25px -5px rgba(0, 229, 255, 0.2);
+  transform: translateY(-8px) scale(1.02);
+  background: rgba(0, 229, 255, 0.18);
+  box-shadow:
+    0 0 0 2px rgba(0, 229, 255, 0.95),
+    0 16px 48px rgba(0, 229, 255, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 /* Clickable Info Card Links */
@@ -106,10 +146,13 @@
   width: 90px;
   height: 90px;
   border-radius: 50%;
-  background: rgba(0, 229, 255, 0.1);
+  background: rgba(0, 229, 255, 0.15);
+  box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.4), 0 0 18px rgba(0, 229, 255, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  z-index: 1;
 }
 
 .info-card h3 {

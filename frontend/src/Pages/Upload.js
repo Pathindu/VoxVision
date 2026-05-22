@@ -150,7 +150,7 @@ export default function Upload({ darkMode, toggleDarkMode }) {
   };
 
   return (
-    <div className={`upload-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+    <div className={`upload-page-wrapper ${darkMode ? 'dark-mode' : 'light-theme'}`}>
       {/* Navigation */}
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 

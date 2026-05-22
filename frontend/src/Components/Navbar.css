@@ -403,18 +403,21 @@
 
   .navbar-logo {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 1.25rem;
+    /* Move logo back to left to make room for hamburger on right */
+    transform: none;
   }
 
   .navbar-logo:hover {
-    transform: translateX(-50%) translateY(-1px);
+    transform: translateY(-1px);
   }
 
   .navbar-mobile-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-left: auto;
+    /* Permanently push hamburger menu to the right end */
   }
 
   .navbar-right .navbar-links {
@@ -477,7 +480,16 @@
   .mobile-menu-header {
     display: flex;
     justify-content: flex-end;
+    /* Group actions on the right side for better mobile ergonomics */
+    align-items: center;
+    gap: 1rem;
     margin-bottom: 2rem;
+  }
+
+  .mobile-header-toggle {
+    width: 38px !important;
+    height: 38px !important;
+    margin: 0 !important;
   }
 
   .mobile-drawer-close {
@@ -528,9 +540,19 @@
   .mobile-drawer-links .navbar-link[data-page="about"],
   .mobile-drawer-links .navbar-link[data-page="team"],
   .mobile-drawer-links .navbar-link[data-page="contact"],
-  .mobile-drawer-links .navbar-link[data-page="order"] {
+  .mobile-drawer-links .navbar-link[data-page="order"],
+  .mobile-support-link {
     color: #67e8f9;
     border-color: rgba(103, 232, 249, 0.18);
+  }
+
+  .mobile-support-link {
+    background: rgba(0, 229, 255, 0.12) !important;
+    border: 1px solid rgba(0, 229, 255, 0.40) !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 0.5rem;
   }
 
   .mobile-drawer-links .navbar-link:hover {

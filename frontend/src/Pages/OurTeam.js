@@ -92,7 +92,7 @@ export default function OurTeam({ darkMode, toggleDarkMode }) {
     };
 
     return (
-        <div className={`team-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+        <div className={`team-page-wrapper ${darkMode ? 'dark-mode' : 'light-theme'}`}>
             <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
             <main className="team-container">

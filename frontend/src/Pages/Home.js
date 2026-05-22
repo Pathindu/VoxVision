@@ -18,7 +18,7 @@ export default function Home({ darkMode, toggleDarkMode }) {
         Skip to main content
       </a>
 
-      <div className={`home-container ${darkMode ? 'dark-mode' : ''}`}>
+      <div className={`home-container ${darkMode ? 'dark-mode' : 'light-theme'}`}>
         {/* Ambient glow blobs — decorative only */}
         <div className="ambient-blob ambient-blob-1" aria-hidden="true" role="presentation"></div>
         <div className="ambient-blob ambient-blob-2" aria-hidden="true" role="presentation"></div>
