@@ -12,13 +12,20 @@ import TagWriter     from './Pages/TagWriter';
 import TagScanner    from './Pages/TagScanner';
 import Store         from './Pages/Store';
 
+// Components
+import SplashScreen  from './components/SplashScreen'; // 👈 IMPORT THE SPLASH SCREEN
+
 // Auth context
 import { AuthProvider } from './context/AuthContext';
 
 import './App.css';
 
 function App() {
+  // 1. Existing Dark Mode State
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
+  
+  // 2. 👈 NEW: State to control the Splash Screen visibility
+  const [showSplash, setShowSplash] = useState(true);
 
   const toggleDarkMode = () => setDarkMode(prev => !prev);
 
@@ -31,6 +38,10 @@ function App() {
 
   return (
     <AuthProvider>
+      
+      {/* 3. 👈 NEW: Render the Splash Screen if 'showSplash' is true */}
+      {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
+
       <Router>
         <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
           <Routes>
