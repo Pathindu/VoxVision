@@ -1,7 +1,7 @@
 {
-  "name": "VoxVision - Visual Assistant",
+  "name": "VoxVision",
   "short_name": "VoxVision",
-  "description": "AI-powered document and cash reader for visually impaired users",
+  "description": "VoxVision Accessibility Platform",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
