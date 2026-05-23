@@ -5,9 +5,6 @@ import Footer from '../Components/Footer';
 import { useAuth } from '../context/AuthContext';
 import { createOrder, createDonation } from '../services/api';
 
-// ── CONFIGURATION: Toggle this to 'true' to redirect to Support page ──
-const REDIRECT_TO_SUPPORT = true; 
-
 const PRODUCTS = [
   { name: 'VoxVision NFC Tag Pack (10 stickers)', price: 350,  description: '10 blank NFC stickers ready to program.' },
   { name: 'VoxVision NFC Tag Pack (50 stickers)', price: 1500, description: '50 blank NFC stickers – best value for caregivers.' },
@@ -20,66 +17,53 @@ const PAYHERE_RETURN_URL  = `${window.location.origin}/store?payment=success`;
 const PAYHERE_CANCEL_URL  = `${window.location.origin}/store?payment=cancelled`;
 
 function launchPayhere({ orderId, amount, name, email, phone, itemName, customType, hash }, navigate) {
-  if (REDIRECT_TO_SUPPORT) {
-    navigate('/support');
-    return;
-  }
+  
+  // ── QUICK TOGGLE ──
+  // Comment these 2 lines to ENABLE PAYHERE
+  // Uncomment them to ENABLE SUPPORT PAGE
+  navigate('/OrderSupport');
+  return; 
 
+  /* // ── PAYHERE LIVE CODE ──
   const form = document.createElement('form');
   form.method = 'POST';
   form.action = 'https://sandbox.payhere.lk/pay/checkout';
 
   const fields = {
-    merchant_id:   PAYHERE_MERCHANT_ID,
-    return_url:    PAYHERE_RETURN_URL,
-    cancel_url:    PAYHERE_CANCEL_URL,
-    notify_url:    PAYHERE_NOTIFY_URL,
-    order_id:      orderId,
-    items:         itemName,
-    currency:      'LKR',
-    amount:        amount.toFixed(2),
-    first_name:    name.split(' ')[0] || name,
-    last_name:     name.split(' ').slice(1).join(' ') || 'N/A',
-    email:         email,
-    phone:         phone || '0771234567',
-    address:       'N/A',
-    city:          'Colombo',
-    country:       'Sri Lanka',
-    custom_1:      customType,
-    custom_2:      orderId,
-    hash:          hash
+    merchant_id: PAYHERE_MERCHANT_ID,
+    return_url: PAYHERE_RETURN_URL,
+    cancel_url: PAYHERE_CANCEL_URL,
+    notify_url: PAYHERE_NOTIFY_URL,
+    order_id: orderId,
+    items: itemName,
+    currency: 'LKR',
+    amount: amount.toFixed(2),
+    first_name: name.split(' ')[0] || name,
+    last_name: name.split(' ').slice(1).join(' ') || 'N/A',
+    email: email,
+    phone: phone || '0771234567',
+    address: 'N/A', city: 'Colombo', country: 'Sri Lanka',
+    custom_1: customType, custom_2: orderId, hash: hash
   };
 
   Object.entries(fields).forEach(([key, val]) => {
     const input = document.createElement('input');
-    input.type  = 'hidden';
-    input.name  = key;
-    input.value = val;
+    input.type = 'hidden'; input.name = key; input.value = val;
     form.appendChild(input);
   });
-
   document.body.appendChild(form);
   form.submit();
+  */
 }
 
 export default function Store({ darkMode, toggleDarkMode }) {
   const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
-
-  const [tab, setTab]         = useState('shop');
+  const [tab, setTab] = useState('shop');
   const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState('');
-  
-  const [orderForm, setOrderForm] = useState({
-    product: PRODUCTS[0], quantity: 1, address: '', phone: '',
-  });
-
-  const [donateForm, setDonateForm] = useState({
-    donor_name: '', donor_email: '', amount: '', message: '', phone: '',
-  });
-
-  const params = new URLSearchParams(window.location.search);
-  const paymentStatus = params.get('payment');
+  const [error, setError] = useState('');
+  const [orderForm, setOrderForm] = useState({ product: PRODUCTS[0], quantity: 1, address: '', phone: '' });
+  const [donateForm, setDonateForm] = useState({ donor_name: '', donor_email: '', amount: '', message: '', phone: '' });
 
   const handleOrder = async (e) => {
     e.preventDefault();
@@ -88,58 +72,41 @@ export default function Store({ darkMode, toggleDarkMode }) {
     setLoading(true); setError('');
     try {
       const res = await createOrder({
-        product_name:     orderForm.product.name,
-        quantity:         parseInt(orderForm.quantity),
-        unit_price:       orderForm.product.price,
-        shipping_address: orderForm.address,
+        product_name: orderForm.product.name, quantity: parseInt(orderForm.quantity),
+        unit_price: orderForm.product.price, shipping_address: orderForm.address,
       });
       launchPayhere({
-        orderId:    res.data.id,
-        amount:     res.data.total_amount,
-        name:       user?.full_name || user?.username || 'Customer',
-        email:      user?.email || 'customer@example.com',
-        phone:      orderForm.phone,
-        itemName:   orderForm.product.name,
-        customType: 'order',
-        hash:       res.data.hash
+        orderId: res.data.id, amount: res.data.total_amount, name: user?.full_name || 'Customer',
+        email: user?.email || 'customer@example.com', phone: orderForm.phone,
+        itemName: orderForm.product.name, customType: 'order', hash: res.data.hash
       }, navigate);
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to create order.');
+      const msg = err.response?.data?.detail;
+      setError(typeof msg === 'object' ? JSON.stringify(msg) : (msg || 'Failed to create order.'));
       setLoading(false);
     }
   };
 
   const handleDonate = async (e) => {
     e.preventDefault();
-    if (!donateForm.donor_name || !donateForm.donor_email || !donateForm.amount) {
-      setError('Please fill in all required fields.'); return;
-    }
-    if (parseFloat(donateForm.amount) <= 0) { setError('Please enter a valid amount.'); return; }
+    if (!donateForm.donor_name || !donateForm.donor_email || !donateForm.amount) { setError('All fields required.'); return; }
     setLoading(true); setError('');
     try {
       const res = await createDonation({
-        donor_name:  donateForm.donor_name,
-        donor_email: donateForm.donor_email,
-        amount:      parseFloat(donateForm.amount),
-        message:     donateForm.message || undefined,
+        donor_name: donateForm.donor_name, donor_email: donateForm.donor_email,
+        amount: parseFloat(donateForm.amount), message: donateForm.message || undefined,
       });
       launchPayhere({
-        orderId:    res.data.id,
-        amount:     res.data.amount,
-        name:       donateForm.donor_name,
-        email:      donateForm.donor_email,
-        phone:      donateForm.phone || '0771234567',
-        itemName:   'VoxVision Donation',
-        customType: 'donation',
-        hash:       res.data.hash
+        orderId: res.data.id, amount: res.data.amount, name: donateForm.donor_name,
+        email: donateForm.donor_email, phone: donateForm.phone || '0771234567',
+        itemName: 'VoxVision Donation', customType: 'donation', hash: res.data.hash
       }, navigate);
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to process donation.');
+      const msg = err.response?.data?.detail;
+      setError(typeof msg === 'object' ? JSON.stringify(msg) : (msg || 'Failed to process donation.'));
       setLoading(false);
     }
   };
-
-  const resetFeedback = () => { setError(''); };
 
   return (
     <div className={`upload-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
@@ -147,27 +114,26 @@ export default function Store({ darkMode, toggleDarkMode }) {
       <div className="upload-container">
         <div className="upload-content" style={{ maxWidth: '700px', margin: '0 auto' }}>
           <h1 className="upload-title">🛒 VoxVision Store</h1>
-          {paymentStatus === 'success' && <div style={banner('#d1fae5', '#065f46')}>🎉 Payment successful!</div>}
           {error && <div style={banner('#fee2e2', '#dc2626')}>❌ {error}</div>}
           
           <div style={{ display: 'flex', gap: '12px', marginBottom: '32px', justifyContent: 'center' }}>
-            <button onClick={() => { setTab('shop'); resetFeedback(); }} style={tabBtn(tab === 'shop')}>🏷️ Shop</button>
-            <button onClick={() => { setTab('donate'); resetFeedback(); }} style={tabBtn(tab === 'donate')}>❤️ Donate</button>
+            <button onClick={() => setTab('shop')} style={tabBtn(tab === 'shop')}>🏷️ Shop</button>
+            <button onClick={() => setTab('donate')} style={tabBtn(tab === 'donate')}>❤️ Donate</button>
           </div>
 
           {tab === 'shop' && (
             <form onSubmit={handleOrder} style={formCard}>
-              {/* Product selection fields... */}
+              {/* Product selection logic ... */}
               <button className="auth-button" type="submit" disabled={loading}>
-                {loading ? 'Processing...' : (REDIRECT_TO_SUPPORT ? 'Contact for Order' : '💳 Pay with PayHere')}
+                {loading ? 'Processing...' : 'Proceed to Inquiry'}
               </button>
             </form>
           )}
           {tab === 'donate' && (
             <form onSubmit={handleDonate} style={formCard}>
-              {/* Donation fields... */}
+              {/* Donation fields ... */}
               <button className="auth-button" type="submit" disabled={loading}>
-                {loading ? 'Processing...' : (REDIRECT_TO_SUPPORT ? 'Contact for Support' : '❤️ Donate with PayHere')}
+                {loading ? 'Processing...' : 'Submit Support Request'}
               </button>
             </form>
           )}

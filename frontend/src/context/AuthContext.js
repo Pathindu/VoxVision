@@ -1,23 +1,24 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => localStorage.getItem('vv_token') || null);
+  // Switch to sessionStorage: clears automatically when the tab is closed
+  const [token, setToken] = useState(() => sessionStorage.getItem('vv_token') || null);
   const [user, setUser]   = useState(() => {
-    try { return JSON.parse(localStorage.getItem('vv_user')); } catch { return null; }
+    try { return JSON.parse(sessionStorage.getItem('vv_user')); } catch { return null; }
   });
 
   const login = (tokenValue, userObj) => {
-    localStorage.setItem('vv_token', tokenValue);
-    localStorage.setItem('vv_user', JSON.stringify(userObj));
+    sessionStorage.setItem('vv_token', tokenValue);
+    sessionStorage.setItem('vv_user', JSON.stringify(userObj));
     setToken(tokenValue);
     setUser(userObj);
   };
 
   const logout = () => {
-    localStorage.removeItem('vv_token');
-    localStorage.removeItem('vv_user');
+    sessionStorage.removeItem('vv_token');
+    sessionStorage.removeItem('vv_user');
     setToken(null);
     setUser(null);
   };
