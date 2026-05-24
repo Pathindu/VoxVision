@@ -2,67 +2,60 @@ import React from 'react';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import '../Components/OurTeam.css';
+import '../Components/Home.css'; /* Reuse home topography and glass styles natively */
 
 export default function OurTeam({ darkMode, toggleDarkMode }) {
-    // Team members data
     const teamMembers = [
         {
             id: 1,
-            name: 'John Doe',
-            role: 'Project Lead & Full Stack Developer',
-            photo: 'https://via.placeholder.com/200/3b82f6/ffffff?text=JD',
-            linkedin: 'https://www.linkedin.com/in/johndoe',
-            email: 'john.doe@smartreader.com',
-            bio: 'Passionate about creating accessible technology solutions.'
+            name: 'Achintha Sewmina',
+            role: 'Project Manager & Backend Developer',
+            photo: 'https://github.com/Sewmina-as.png',
+            linkedin: 'https://www.linkedin.com/in/achintha-sewmina-06a5b62b1/',
+            github: 'https://github.com/Sewmina-as'
         },
         {
             id: 2,
-            name: 'Jane Smith',
-            role: 'AI/ML Engineer',
-            photo: 'https://via.placeholder.com/200/10b981/ffffff?text=JS',
-            linkedin: 'https://www.linkedin.com/in/janesmith',
-            email: 'jane.smith@smartreader.com',
-            bio: 'Specializing in computer vision and OCR technologies.'
+            name: 'Pathindu De Silva',
+            role: 'Backend Developer',
+            photo: 'https://github.com/Pathindu.png',
+            linkedin: 'https://www.linkedin.com/in/pathindu-de-silva-4318722b5/',
+            github: 'https://github.com/Pathindu'
         },
         {
             id: 3,
-            name: 'Thilini Gamage',
-            role: 'UI/UX Designer',
-            photo: 'https://media.licdn.com/dms/image/v2/D4E03AQGWkm_M14S_Ew/profile-displayphoto-crop_800_800/B4EZf.P7r5GwAI-/0/1752317291324?e=1767225600&v=beta&t=f31PACQ0AXYXK18e0G71XG_y9jxVLjq1BrO7_95taXk',
-            linkedin: 'https://www.linkedin.com/in/thilini-gamage-532365335/',
-            email: 'thilinipgm@gmail.com',
-            bio: 'Designing intuitive interfaces for accessibility.'
+            name: 'Sandun Deshan',
+            role: 'Full Stack Developer',
+            photo: 'https://github.com/KSDeshan.png',
+            linkedin: 'https://linkedin.com/in/sandun-deshan',
+            github: 'https://github.com/KSDeshan'
         },
         {
             id: 4,
-            name: 'Sarah Williams',
-            role: 'Backend Developer',
-            photo: 'https://via.placeholder.com/200/ec4899/ffffff?text=SW',
-            linkedin: 'https://www.linkedin.com/in/sarahwilliams',
-            email: 'sarah.williams@smartreader.com',
-            bio: 'Building robust and scalable backend systems.'
+            name: 'Thilini Gamage',
+            role: 'UI/UX Developer',
+            photo: 'https://github.com/TGamage123.png',
+            linkedin: 'https://www.linkedin.com/in/thilini-gamage-532365335/',
+            github: 'https://github.com/TGamage123'
         },
         {
             id: 5,
-            name: 'Sarah Williams',
-            role: 'Backend Developer',
-            photo: 'https://via.placeholder.com/200/ec4899/ffffff?text=SW',
-            linkedin: 'https://www.linkedin.com/in/sarahwilliams',
-            email: 'sarah.williams@smartreader.com',
-            bio: 'Building robust and scalable backend systems.'
+            name: 'Thulani Imansa',
+            role: 'UI/UX Developer',
+            photo: 'https://github.com/ThulaniImansa.png',
+            linkedin: 'https://www.linkedin.com/in/thulani-imansa-8a6096288/',
+            github: 'https://github.com/ThulaniImansa'
         },
         {
             id: 6,
-            name: 'Sarah Williams',
-            role: 'Backend Developer',
-            photo: 'https://via.placeholder.com/200/ec4899/ffffff?text=SW',
-            linkedin: 'https://www.linkedin.com/in/sarahwilliams',
-            email: 'sarah.williams@smartreader.com',
-            bio: 'Building robust and scalable backend systems.'
+            name: 'Kasuni Walawenayake',
+            role: 'Quality Assurance',
+            photo: 'https://github.com/kasuni-2003.png',
+            linkedin: 'https://www.linkedin.com/in/kasuni-walawenayake-087093320/',
+            github: 'https://github.com/kasuni-2003'
         }
     ];
 
-    // Utility to parse, encode, and enforce absolute URLs securely
     const buildSecureUrl = (rawUrl) => {
         if (!rawUrl || typeof rawUrl !== 'string') return '#';
         try {
@@ -70,88 +63,84 @@ export default function OurTeam({ darkMode, toggleDarkMode }) {
             if (!urlString.startsWith('http://') && !urlString.startsWith('https://')) {
                 urlString = `https://${urlString}`;
             }
-            urlString = urlString.replace(/\/{2,}$/, '/');
-            if (urlString.endsWith('/')) {
-                urlString = urlString.slice(0, -1);
-            }
             const url = new URL(urlString);
             return url.toString();
         } catch (error) {
-            console.error('Invalid URL format:', error);
             return '#';
         }
     };
 
-    const handleLinkedInClick = (linkedinUrl) => {
-        const safeUrl = buildSecureUrl(linkedinUrl);
+    const handleLinkClick = (url) => {
+        const safeUrl = buildSecureUrl(url);
         if (safeUrl !== '#') window.open(safeUrl, '_blank', 'noopener,noreferrer');
     };
 
-    const handleEmailClick = (email) => {
-        if (email) window.location.href = `mailto:${email.trim()}`;
-    };
-
     return (
-        <div className={`team-page-wrapper ${darkMode ? 'dark-mode' : 'light-theme'}`}>
+        <div className={`opt-page-wrapper App ${darkMode ? 'dark-mode' : 'light-theme'}`}>
             <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
-            <main className="team-container">
-                <div className="team-content">
-                    {/* Header Section */}
-                    <header className="team-header">
-                        <h1 className="team-page-title">Our Team</h1>
-                        <p className="team-page-subtitle">
-                            Meet our dedicated team working to make technology accessible for everyone
-                        </p>
-                    </header>
+            {/* Re-use home-container to get the topographic pattern background */}
+            <main className="home-container" style={{ minHeight: '100vh', padding: '0 1rem 4rem' }}>
+                <section className="hero-section team-hero-section" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-                    {/* Team Grid */}
-                    <div className="team-grid">
-                        {teamMembers.map((member) => (
-                            <article key={member.id} className="team-card">
-                                <div className="team-card-inner">
-                                    {/* Front of card */}
-                                    <div className="team-card-front">
-                                        <div className="member-photo-wrapper">
-                                            <img
-                                                src={member.photo}
-                                                alt={member.name}
-                                                className="member-photo"
-                                            />
-                                        </div>
-                                        <div className="member-info">
-                                            <h3 className="member-name">{member.name}</h3>
-                                            <p className="member-role">{member.role}</p>
-                                        </div>
+                    {/* Hero Title Replacement */}
+                    <div className="team-hero-header" style={{ textAlign: 'center', marginBottom: '2rem', zIndex: 10 }}>
+                        <h1 className="hero-title team-solid-title" style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: '#00E5FF', textShadow: '0 0 25px rgba(0, 229, 255, 0.5)' }}>
+                            Meet the Visionaries Behind VoxVision
+                        </h1>
+                    </div>
+
+                    {/* Central Dashboard Card */}
+                    <article
+                        className="hero-app-card team-dashboard-card"
+                        style={{ maxWidth: '1000px', width: '100%', padding: '3rem 2rem' }}
+                    >
+                        {/* 2x3 Grid */}
+                        <div className="team-grid-2x3">
+                            {teamMembers.map((member) => (
+                                <div key={member.id} className="team-member-glass-card">
+                                    <div className="member-avatar-ring">
+                                        <img
+                                            src={member.photo}
+                                            alt={member.name}
+                                            className="member-avatar"
+                                            onError={(e) => { e.target.src = 'https://via.placeholder.com/150/111827/67e8f9?text=' + member.name.charAt(0); }}
+                                        />
                                     </div>
+                                    <h3 className="team-member-name">{member.name}</h3>
+                                    <p className="team-member-role">{member.role}</p>
 
-                                    {/* Back of card */}
-                                    <div className="team-card-back">
-                                        <p className="member-bio">{member.bio}</p>
-                                        <div className="member-actions">
-                                            <button
-                                                className="action-button linkedin-button"
-                                                onClick={() => handleLinkedInClick(member.linkedin)}
-                                                aria-label={`View ${member.name}'s LinkedIn profile`}
-                                            >
-                                                <span className="button-icon">🔗</span>
-                                                View LinkedIn
-                                            </button>
-                                            <button
-                                                className="action-button email-button"
-                                                onClick={() => handleEmailClick(member.email)}
-                                                aria-label={`Send an email to ${member.name}`}
-                                            >
-                                                <span className="button-icon">📧</span>
-                                                Send Email
-                                            </button>
-                                        </div>
+                                    <div className="team-member-actions">
+                                        <button
+                                            onClick={() => handleLinkClick(member.linkedin)}
+                                            className="btn mini-action-btn linkedin-btn"
+                                            aria-label={`${member.name} LinkedIn`}
+                                            title="LinkedIn"
+                                        >
+                                            <span className="btn-icon">🔗</span>
+                                        </button>
+                                        <button
+                                            onClick={() => handleLinkClick(member.github)}
+                                            className="btn mini-action-btn github-btn"
+                                            aria-label={`${member.name} GitHub`}
+                                            title="GitHub"
+                                        >
+                                            <span className="btn-icon">💻</span>
+                                        </button>
+                                        <button
+                                            onClick={() => window.location.href = `mailto:contact@smartreader.com?subject=Contact%20${member.name}`}
+                                            className="btn mini-action-btn email-btn"
+                                            aria-label={`Email ${member.name}`}
+                                            title="Gmail"
+                                        >
+                                            <span className="btn-icon">💬</span>
+                                        </button>
                                     </div>
                                 </div>
-                            </article>
-                        ))}
-                    </div>
-                </div>
+                            ))}
+                        </div>
+                    </article>
+                </section>
             </main>
 
             <Footer darkMode={darkMode} />
