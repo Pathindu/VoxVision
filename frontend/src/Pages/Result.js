@@ -183,7 +183,12 @@ export default function Result({ darkMode, toggleDarkMode }) {
 
   // ── Render ──────────────────────────────────────────────────────────────
   return (
+<<<<<<< HEAD
     <div className={`result-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+=======
+    <div className={`result-page-wrapper ${darkMode ? 'dark-mode' : 'light-theme'}`}>
+      {/* Navigation */}
+>>>>>>> sandun
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
       <div className="result-container">

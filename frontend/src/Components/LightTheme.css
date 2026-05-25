@@ -1,0 +1,847 @@
+/* ============================================================
+   VoxVision Light Theme — Professional Soft Glassmorphism
+   Bright, accessible, premium feel with frosted glass cards
+   ============================================================ */
+
+/* ── CSS Custom Properties for Light Theme ──────────────────── */
+.light-theme {
+    --lt-bg: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    --lt-text: #0f172a;
+    --lt-text-secondary: #475569;
+    --lt-accent: #0284c7;
+    --lt-accent-light: #0ea5e9;
+    --lt-accent-bg: rgba(2, 132, 199, 0.08);
+    --lt-card-bg: rgba(255, 255, 255, 0.7);
+    --lt-card-border: rgba(255, 255, 255, 0.9);
+    --lt-card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    --lt-glass-blur: blur(16px);
+}
+
+/* ── Global Body ────────────────────────────────────────────── */
+body.light-theme {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    color: #0f172a;
+}
+
+.App.light-theme {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   NAVBAR — Light Theme (Premium #67e8f9 Creative style)
+   ════════════════════════════════════════════════════════════════ */
+.light-theme .navbar,
+.light-theme .navbar.dark-mode {
+    background: linear-gradient(135deg, rgba(235, 250, 255, 0.9) 0%, rgba(103, 232, 249, 0.35) 100%) !important;
+    backdrop-filter: blur(24px) saturate(2) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(2) !important;
+    border-bottom: 2px solid rgba(103, 232, 249, 0.5) !important;
+    box-shadow: 0 6px 30px rgba(103, 232, 249, 0.25) !important;
+}
+
+/* Creative #67e8f9 beam scan */
+.light-theme .navbar::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            #67e8f9 30%,
+            #0ea5e9 50%,
+            #67e8f9 70%,
+            transparent 100%) !important;
+    opacity: 0.8 !important;
+}
+
+/* Logo and text */
+.light-theme .creative-logo {
+    background: linear-gradient(135deg, #0f172a 0%, #0891b2 50%, #67e8f9 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+.light-theme .navbar-logo-img {
+    box-shadow: 0 0 15px rgba(103, 232, 249, 0.3), 0 0 0 2px rgba(103, 232, 249, 0.2) !important;
+}
+
+/* Nav links pill */
+.light-theme .navbar-links {
+    background: rgba(255, 255, 255, 0.4) !important;
+    border: 1px solid rgba(103, 232, 249, 0.2) !important;
+    backdrop-filter: blur(12px) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 2px 10px rgba(103, 232, 249, 0.05) !important;
+}
+
+.light-theme .navbar-link {
+    color: #334155 !important;
+}
+
+.light-theme .navbar-link:hover,
+.light-theme .navbar-link.active {
+    color: #0891b2 !important;
+    background: rgba(103, 232, 249, 0.12) !important;
+    border-color: rgba(103, 232, 249, 0.3) !important;
+}
+
+.light-theme .navbar-link.active::after {
+    background: #67e8f9 !important;
+    box-shadow: 0 0 8px rgba(103, 232, 249, 0.8) !important;
+}
+
+/* Focus visible */
+.light-theme .navbar-link:focus-visible {
+    outline: 3px solid #0284c7 !important;
+    outline-offset: 3px;
+    color: #0284c7 !important;
+    box-shadow: 0 0 0 5px rgba(2, 132, 199, 0.12) !important;
+}
+
+/* Support Us button */
+.light-theme .navbar-donate-btn {
+    background: rgba(2, 132, 199, 0.08) !important;
+    border-color: rgba(2, 132, 199, 0.25) !important;
+    color: #0284c7 !important;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.06) !important;
+}
+
+.light-theme .navbar-donate-btn:hover {
+    background: rgba(2, 132, 199, 0.14) !important;
+    border-color: rgba(2, 132, 199, 0.5) !important;
+    box-shadow: 0 4px 16px rgba(2, 132, 199, 0.12) !important;
+    color: #0369a1 !important;
+    transform: translateY(-2px) scale(1.02);
+}
+
+/* Dark mode toggle circle */
+.light-theme .dark-mode-toggle {
+    background: rgba(0, 0, 0, 0.04) !important;
+    border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.light-theme .dark-mode-toggle:hover {
+    background: rgba(2, 132, 199, 0.08) !important;
+    border-color: rgba(2, 132, 199, 0.3) !important;
+    box-shadow: 0 2px 10px rgba(2, 132, 199, 0.1) !important;
+    transform: scale(1.1) rotate(10deg);
+}
+
+/* Mobile toggle button */
+.light-theme .navbar-mobile-toggle {
+    background: rgba(0, 0, 0, 0.04) !important;
+    border-color: rgba(2, 132, 199, 0.2) !important;
+    color: #0284c7 !important;
+}
+
+.light-theme .navbar-mobile-toggle:hover {
+    background: rgba(2, 132, 199, 0.08) !important;
+    border-color: rgba(2, 132, 199, 0.4) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MOBILE DRAWER — Light Theme
+════════════════════════════════════════════════════════════════ */
+.light-theme .mobile-drawer-overlay {
+    background: rgba(0, 0, 0, 0.25) !important;
+    backdrop-filter: blur(3px) !important;
+}
+
+.light-theme .mobile-drawer,
+.light-theme .mobile-drawer.dark-mode {
+    background: rgba(248, 250, 252, 0.96) !important;
+    backdrop-filter: blur(28px) saturate(1.8) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(1.8) !important;
+    border-right: 1px solid rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 4px 0 40px rgba(0, 0, 0, 0.08) !important;
+}
+
+.light-theme .mobile-drawer-close {
+    background: rgba(0, 0, 0, 0.04) !important;
+    border-color: rgba(0, 0, 0, 0.1) !important;
+    color: #0f172a !important;
+}
+
+.light-theme .mobile-drawer-close:hover {
+    background: rgba(0, 0, 0, 0.08) !important;
+    border-color: rgba(2, 132, 199, 0.3) !important;
+}
+
+.light-theme .mobile-drawer-links .navbar-link {
+    background: rgba(0, 0, 0, 0.02) !important;
+    color: #0f172a !important;
+    border-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-theme .mobile-drawer-links .navbar-link[data-page="home"],
+.light-theme .mobile-drawer-links .navbar-link[data-page="about"],
+.light-theme .mobile-drawer-links .navbar-link[data-page="team"],
+.light-theme .mobile-drawer-links .navbar-link[data-page="contact"],
+.light-theme .mobile-drawer-links .navbar-link[data-page="order"] {
+    color: #0f172a !important;
+    border-color: rgba(2, 132, 199, 0.1) !important;
+}
+
+.light-theme .mobile-drawer-links .navbar-link:hover {
+    background: rgba(2, 132, 199, 0.06) !important;
+    border-color: rgba(2, 132, 199, 0.2) !important;
+    color: #0284c7 !important;
+}
+
+.light-theme .mobile-drawer-links .navbar-link.active {
+    color: #0284c7 !important;
+    background: rgba(2, 132, 199, 0.1) !important;
+    border-color: rgba(2, 132, 199, 0.3) !important;
+    box-shadow: 0 2px 10px rgba(2, 132, 199, 0.08) !important;
+}
+
+.light-theme .mobile-support-btn {
+    border-color: rgba(2, 132, 199, 0.25) !important;
+    background: rgba(2, 132, 199, 0.06) !important;
+    color: #0284c7 !important;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.06) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   HOME PAGE — Light Theme
+════════════════════════════════════════════════════════════════ */
+
+/* Page background */
+.light-theme .home-container {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%) !important;
+}
+
+/* Hide ambient glow blobs in light mode */
+.light-theme .ambient-blob {
+    opacity: 0.15 !important;
+}
+
+.light-theme .ambient-blob-1 {
+    background: radial-gradient(circle, rgba(2, 132, 199, 0.12) 0%, transparent 70%) !important;
+}
+
+.light-theme .ambient-blob-2 {
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%) !important;
+}
+
+.light-theme .ambient-blob-3 {
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.06) 0%, transparent 70%) !important;
+}
+
+/* Left column heading */
+.light-theme .info-heading {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+.light-theme .info-heading::after {
+    background: linear-gradient(90deg, #0284c7, #6366f1) !important;
+}
+
+.light-theme .info-subheading {
+    color: #0284c7 !important;
+}
+
+/* Description block */
+.light-theme .info-description {
+    background: rgba(2, 132, 199, 0.04) !important;
+    border-left-color: #0284c7 !important;
+    backdrop-filter: blur(6px) !important;
+}
+
+.light-theme .info-description::before {
+    color: rgba(2, 132, 199, 0.15) !important;
+}
+
+.light-theme .info-description-highlight {
+    color: #0f172a !important;
+}
+
+.light-theme .info-description-body {
+    color: #475569 !important;
+}
+
+.light-theme .info-description strong {
+    color: #0f172a !important;
+}
+
+/* Decorative glow on left column */
+.light-theme .hero-info-card::after {
+    background: radial-gradient(circle, rgba(2, 132, 199, 0.06) 0%, transparent 70%) !important;
+}
+
+/* ── Right Column — Intricate Pastel Liquid Glass Card ───────── */
+@keyframes pastelLiquidFlow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.light-theme .hero-app-card {
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.95) 0%,
+            /* White */
+            rgba(103, 232, 249, 0.85) 35%,
+            /* Cyan #67e8f9 */
+            rgba(88, 28, 135, 0.85) 75%,
+            /* Dark Purple */
+            rgba(255, 255, 255, 0.9) 100%
+            /* White */
+        ) !important;
+    background-size: 300% 300% !important;
+    animation: pastelLiquidFlow 14s ease-in-out infinite alternate !important;
+    backdrop-filter: blur(20px) saturate(1.8) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(1.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.7) !important;
+    box-shadow:
+        0 20px 50px rgba(99, 102, 241, 0.15),
+        inset 0 2px 20px rgba(255, 255, 255, 0.6) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Remove neon beam on card */
+.light-theme .hero-app-card::before {
+    display: none !important;
+}
+
+/* Remove neon puddle glow */
+.light-theme .hero-app-card::after {
+    display: none !important;
+}
+
+.light-theme .hero-app-card:hover {
+    border-color: rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 25px 60px rgba(99, 102, 241, 0.25), inset 0 2px 20px rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Hero logo */
+.light-theme .hero-logo {
+    box-shadow:
+        0 0 0 3px rgba(255, 255, 255, 0.4),
+        0 0 0 8px rgba(255, 255, 255, 0.1),
+        0 8px 30px rgba(0, 0, 0, 0.1) !important;
+    background: #ffffff !important;
+    border-radius: 50% !important;
+}
+
+/* Crisp white text for hero contents against the pastel liquid wash */
+.light-theme .hero-title {
+    color: #ffffff !important;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+.light-theme .hero-subtitle {
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+    font-weight: 600 !important;
+}
+
+/* ── CTA Buttons — Light Theme ──────────────────────────────── */
+.light-theme .btn {
+    color: #0f172a !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+}
+
+.light-theme .btn::before {
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.04), transparent) !important;
+}
+
+.light-theme .btn::after {
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.5), transparent) !important;
+}
+
+/* Capture button */
+.light-theme .btn-capture {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(103, 232, 249, 0.25) 100%) !important;
+    border: 2px solid rgba(103, 232, 249, 0.7) !important;
+    box-shadow:
+        0 10px 30px rgba(103, 232, 249, 0.25),
+        inset 0 2px 5px rgba(255, 255, 255, 0.9),
+        inset 0 -2px 10px rgba(103, 232, 249, 0.2) !important;
+    color: #0284c7 !important;
+    font-weight: 700 !important;
+}
+
+.light-theme .btn-capture .btn-icon {
+    background: linear-gradient(135deg, #ffffff 0%, #cffafe 100%) !important;
+    box-shadow: 0 0 0 2px rgba(103, 232, 249, 0.6), 0 4px 12px rgba(103, 232, 249, 0.3) !important;
+}
+
+.light-theme .btn-capture:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(103, 232, 249, 0.4) 100%) !important;
+    border-color: #0ea5e9 !important;
+    box-shadow:
+        0 15px 40px rgba(103, 232, 249, 0.4),
+        inset 0 2px 5px rgba(255, 255, 255, 1) !important;
+    transform: none !important;
+}
+
+/* Upload button */
+.light-theme .btn-upload {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(167, 139, 250, 0.25) 100%) !important;
+    border: 2px solid rgba(167, 139, 250, 0.7) !important;
+    box-shadow:
+        0 8px 30px rgba(139, 92, 246, 0.2),
+        inset 0 2px 5px rgba(255, 255, 255, 0.9),
+        inset 0 -2px 10px rgba(139, 92, 246, 0.15) !important;
+    color: #4f46e5 !important;
+    font-weight: 700 !important;
+}
+
+.light-theme .btn-upload .btn-icon {
+    background: linear-gradient(135deg, #ffffff 0%, #ede9fe 100%) !important;
+    box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.6), 0 4px 12px rgba(139, 92, 246, 0.3) !important;
+}
+
+.light-theme .btn-upload:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(167, 139, 250, 0.4) 100%) !important;
+    border-color: #8b5cf6 !important;
+    box-shadow:
+        0 15px 40px rgba(139, 92, 246, 0.35),
+        inset 0 2px 5px rgba(255, 255, 255, 1) !important;
+    transform: none !important;
+}
+
+/* Focus visible buttons */
+.light-theme .btn:focus-visible {
+    outline: 3px solid #0284c7 !important;
+    outline-offset: 4px;
+    box-shadow: 0 0 0 5px rgba(2, 132, 199, 0.1) !important;
+}
+
+/* Secondary / slogan buttons */
+.light-theme .slogan-btn {
+    color: #0f172a !important;
+}
+
+.light-theme .primary-btn {
+    background: rgba(2, 132, 199, 0.08) !important;
+    border-color: rgba(2, 132, 199, 0.2) !important;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.06) !important;
+}
+
+.light-theme .primary-btn:hover {
+    background: rgba(2, 132, 199, 0.14) !important;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.12) !important;
+}
+
+.light-theme .outline-btn {
+    background: rgba(0, 0, 0, 0.02) !important;
+    border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.light-theme .outline-btn:hover {
+    background: rgba(0, 0, 0, 0.05) !important;
+    border-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FEATURES SECTION — same as dark-mode capture button (cyan glass)
+════════════════════════════════════════════════════════════════ */
+.light-theme .features-title {
+    color: #0f172a !important;
+    font-weight: 800;
+}
+
+/* Plush Rainbowly Feature Card Design */
+.light-theme .feature-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(103, 232, 249, 0.05) 100%) !important;
+    border: 2px solid rgba(103, 232, 249, 0.4) !important;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1) !important;
+
+    /* Neo-morphic Plush shadows */
+    box-shadow:
+        10px 10px 20px rgba(0, 0, 0, 0.02),
+        -10px -10px 20px rgba(255, 255, 255, 0.8),
+        0 15px 35px rgba(103, 232, 249, 0.08),
+        0 5px 15px rgba(168, 85, 247, 0.05) !important;
+}
+
+.light-theme .feature-card::before {
+    display: none !important;
+}
+
+.light-theme .feature-card:hover {
+    transform: translateY(-12px) scale(1.02) !important;
+    background: #ffffff !important;
+    border-color: rgba(103, 232, 249, 0.8) !important;
+
+    /* Rainbow Glow on hover */
+    box-shadow:
+        0 20px 45px rgba(103, 232, 249, 0.2),
+        0 10px 25px rgba(168, 85, 247, 0.15),
+        inset 0 0 0 2px rgba(103, 232, 249, 0.3) !important;
+}
+
+/* Focus state */
+.light-theme .feature-card:focus-visible {
+    outline: 3px solid #0891b2 !important;
+    outline-offset: 4px;
+    box-shadow: 0 0 0 6px rgba(103, 232, 249, 0.12) !important;
+}
+
+/* Feature icon ring – same as capture btn-icon ring */
+.light-theme .feature-icon {
+    background: linear-gradient(135deg, #ffffff 0%, #cffafe 100%) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Icon neo-morphic inset */
+    box-shadow:
+        inset 4px 4px 8px rgba(0, 0, 0, 0.02),
+        inset -4px -4px 8px rgba(255, 255, 255, 0.9),
+        0 8px 20px rgba(103, 232, 249, 0.2) !important;
+    border: 2px solid #67e8f9 !important;
+}
+
+/* Feature title – match capture button text style */
+.light-theme .feature-title,
+.light-theme .feature-card .feature-title {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+    text-shadow: none !important;
+}
+
+.light-theme .feature-description {
+    color: #475569 !important;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   ABOUT PAGE — Light Theme
+════════════════════════════════════════════════════════════════ */
+.light-theme .about-page-wrapper,
+.light-theme .about-page-wrapper.dark-mode {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    color: #0f172a !important;
+}
+
+.light-theme .about-main-title {
+    color: #0284c7 !important;
+}
+
+.light-theme .about-card {
+    background: rgba(255, 255, 255, 0.75) !important;
+    border-color: rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+}
+
+.light-theme .about-card h2 {
+    color: #0284c7 !important;
+    border-bottom-color: rgba(2, 132, 199, 0.12) !important;
+}
+
+.light-theme .about-card p,
+.light-theme .about-card li {
+    color: #334155 !important;
+}
+
+.light-theme .section-title {
+    color: #0284c7 !important;
+}
+
+/* Audio control bar */
+.light-theme .audio-control-bar {
+    background: rgba(255, 255, 255, 0.7) !important;
+    border-color: rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* About feature cards */
+.light-theme .about-feature-card {
+    background: rgba(255, 255, 255, 0.75) !important;
+    border-color: rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+}
+
+.light-theme .about-feature-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+}
+
+.light-theme .feature-text-wrapper h3 {
+    color: #0284c7 !important;
+}
+
+.light-theme .feature-text-wrapper p {
+    color: #475569 !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   CONTACT PAGE — Light Theme (Plush Rainbow Neo-morphic style)
+════════════════════════════════════════════════════════════════ */
+.light-theme .contact-page-wrapper {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    color: #0f172a !important;
+}
+
+/* Plush Rainbowly Contact Card Design */
+.light-theme .info-card {
+    background: #f8fafc !important;
+    border: 1px solid rgba(103, 232, 249, 0.15) !important;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1) !important;
+
+    /* Neo-morphic Plush shadows */
+    box-shadow:
+        10px 10px 20px rgba(0, 0, 0, 0.02),
+        -10px -10px 20px rgba(255, 255, 255, 0.8),
+        0 15px 35px rgba(103, 232, 249, 0.08),
+        0 5px 15px rgba(168, 85, 247, 0.05) !important;
+}
+
+.light-theme .info-card::before {
+    display: none !important;
+}
+
+.light-theme .info-card:hover {
+    transform: translateY(-8px) scale(1.02) !important;
+    background: #ffffff !important;
+    border-color: rgba(103, 232, 249, 0.4) !important;
+
+    /* Rainbow Glow on hover */
+    box-shadow:
+        0 20px 45px rgba(103, 232, 249, 0.2),
+        0 10px 25px rgba(168, 85, 247, 0.15),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
+}
+
+.light-theme .info-icon {
+    background: #ffffff !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Icon neo-morphic inset */
+    box-shadow:
+        inset 4px 4px 8px rgba(0, 0, 0, 0.02),
+        inset -4px -4px 8px rgba(255, 255, 255, 0.9),
+        0 8px 20px rgba(103, 232, 249, 0.12) !important;
+    border: 1px solid rgba(103, 232, 249, 0.1) !important;
+}
+
+.light-theme .info-card h3 {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+}
+
+.light-theme .info-card p,
+.light-theme .info-card a {
+    color: #475569 !important;
+}
+
+.light-theme .info-card:hover h3,
+.light-theme .info-card:hover p {
+    color: #0891b2 !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ORDER PAGE — Light Theme
+════════════════════════════════════════════════════════════════ */
+.light-theme .order-page-wrapper {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    color: #0f172a !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   OUR TEAM PAGE — Light Theme
+════════════════════════════════════════════════════════════════ */
+.light-theme .team-page-wrapper {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    color: #0f172a !important;
+}
+
+.light-theme .team-card {
+    background: rgba(255, 255, 255, 0.75) !important;
+    border-color: rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+}
+
+.light-theme .team-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+    transform: translateY(-4px);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   UPLOAD / CAPTURE / RESULT PAGES — Light Theme
+════════════════════════════════════════════════════════════════ */
+.light-theme .upload-page-wrapper,
+.light-theme .capture-page-wrapper,
+.light-theme .result-page-wrapper {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+}
+
+.light-theme .hero-section,
+.light-theme .upload-container,
+.light-theme .capture-container,
+.light-theme .result-container {
+    background: transparent !important;
+}
+
+.light-theme .hero-title,
+.light-theme .upload-title,
+.light-theme .capture-title,
+.light-theme .result-page-title,
+.light-theme .features-title,
+.light-theme .processing-title,
+.light-theme .audio-title {
+    color: #0284c7 !important;
+}
+
+.light-theme .description-box,
+.light-theme .upload-area,
+.light-theme .camera-section,
+.light-theme .result-box {
+    background: rgba(255, 255, 255, 0.7) !important;
+    border-color: rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+}
+
+.light-theme .description-text,
+.light-theme .hero-subtitle,
+.light-theme .result-text {
+    color: #475569 !important;
+}
+
+.light-theme .highlight {
+    color: #0284c7 !important;
+}
+
+.light-theme .features-section {
+    background: transparent !important;
+}
+
+.light-theme .camera-label,
+.light-theme .form-label,
+.light-theme .audio-label {
+    color: #0284c7 !important;
+}
+
+.light-theme .upload-text h2 {
+    color: #0284c7 !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SCROLLBAR — Light Theme
+════════════════════════════════════════════════════════════════ */
+.light-theme ::-webkit-scrollbar {
+    width: 8px;
+}
+
+.light-theme ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.light-theme ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.light-theme ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TRANSITIONS — Smooth theme switching
+════════════════════════════════════════════════════════════════ */
+body,
+.App,
+.home-container,
+.navbar,
+.hero-app-card,
+.feature-card,
+.footer,
+.btn,
+.info-description,
+.about-page-wrapper,
+.contact-page-wrapper,
+.about-card,
+.about-feature-card {
+    transition: background 0.4s ease,
+        color 0.4s ease,
+        border-color 0.4s ease,
+        box-shadow 0.4s ease;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FOOTER — Light Theme Creative style
+   ════════════════════════════════════════════════════════════════ */
+.light-theme .footer {
+    background: linear-gradient(135deg, rgba(235, 250, 255, 0.95) 0%, rgba(103, 232, 249, 0.45) 100%) !important;
+    backdrop-filter: blur(28px) !important;
+    -webkit-backdrop-filter: blur(28px) !important;
+    border-top: 2px solid rgba(103, 232, 249, 0.6) !important;
+    position: relative;
+    padding: 2.5rem 2rem 1.5rem !important;
+    /* Heavily reduced vertical height */
+    box-shadow: 0 -8px 40px rgba(103, 232, 249, 0.2) !important;
+}
+
+/* Creative #67e8f9 cyan glow beam on footer */
+.light-theme .footer::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 4px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            #0284c7 30%,
+            #67e8f9 50%,
+            #0284c7 70%,
+            transparent 100%) !important;
+    box-shadow: 0 0 25px rgba(103, 232, 249, 0.8) !important;
+}
+
+.light-theme .footer-logo,
+.light-theme .footer-heading {
+    color: #000000 !important;
+    font-weight: 800 !important;
+}
+
+.light-theme .quick-link,
+.light-theme .footer-tagline,
+.light-theme .contact-icon,
+.light-theme .legal-link,
+.light-theme .copyright-text {
+    color: #0f172a !important;
+    /* Blackly improved readability */
+    font-weight: 600 !important;
+}
+
+.light-theme .quick-link:hover,
+.light-theme .legal-link:hover {
+    color: #0284c7 !important;
+    transform: translateX(5px);
+}
+
+.light-theme .contact-icon:hover {
+    color: #0284c7 !important;
+}
+
+.light-theme .social-icon-btn {
+    background: rgba(103, 232, 249, 0.1) !important;
+    color: #0891b2 !important;
+    border-color: rgba(103, 232, 249, 0.2) !important;
+}
+
+.light-theme .social-icon-btn:hover {
+    background: #67e8f9 !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 20px rgba(103, 232, 249, 0.3) !important;
+}

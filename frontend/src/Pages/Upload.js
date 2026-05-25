@@ -154,7 +154,12 @@ export default function Upload({ darkMode, toggleDarkMode }) {
   };
 
   return (
+<<<<<<< HEAD
     <div className={`upload-page-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+=======
+    <div className={`upload-page-wrapper ${darkMode ? 'dark-mode' : 'light-theme'}`}>
+      {/* Navigation */}
+>>>>>>> sandun
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
       {/* Backend Status Banner */}
