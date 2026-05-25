@@ -59,28 +59,25 @@
 }
 
 /* ── Navbar Content Layout ──────────────────────────────────── */
+/* Content Layout */
 .navbar-content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0.9rem 3rem;
+  padding: 0.9rem 2.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
 }
 
 /* ── Logo ────────────────────────────────────────────────────── */
 .navbar-logo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.85rem;
   cursor: pointer;
   transition: transform 0.3s ease;
+  margin-right: auto;
+  /* Pushes everything else to the right */
 }
 
 .navbar-logo:hover {
@@ -88,34 +85,28 @@
 }
 
 .navbar-logo-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow:
-    0 0 0 2px rgba(0, 229, 255, 0.35),
-    0 0 18px rgba(0, 229, 255, 0.35),
-    0 0 40px rgba(0, 229, 255, 0.12);
+  width: 38px;
+  height: auto;
+  object-fit: contain;
   flex-shrink: 0;
-  transition: box-shadow 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .navbar-logo:hover .navbar-logo-img {
-  box-shadow:
-    0 0 0 2.5px rgba(0, 229, 255, 0.6),
-    0 0 28px rgba(0, 229, 255, 0.50),
-    0 0 55px rgba(0, 229, 255, 0.20);
+  transform: scale(1.1);
 }
 
 .creative-logo {
-  font-size: 1.65rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #ffffff 0%, #67e8f9 50%, #3b82f6 100%);
+  font-size: 1.75rem;
+  font-weight: 900;
+  /* Ultra bold */
+  background: linear-gradient(135deg, #ffffff 0%, #00E5FF 50%, #67e8f9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  letter-spacing: 0.5px;
+  letter-spacing: -0.02em;
   transition: all 0.3s ease;
+  text-transform: none;
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -123,11 +114,12 @@
 ════════════════════════════════════════════════════════════════ */
 .navbar-links {
   display: flex;
-  gap: 0.3rem;
+  gap: 0.35rem;
   list-style: none;
   align-items: center;
-  margin: 0;
-  padding: 0.3rem 0.5rem;
+  margin: 0 1.5rem 0 0;
+  /* Add margin to separate from actions */
+  padding: 0.35rem 0.6rem;
   /* Liquid glass pill wrapper */
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.09);
@@ -219,7 +211,7 @@
 .navbar-actions {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 /* ── Support Us Button ── */
@@ -407,6 +399,7 @@
     left: 1.25rem;
     /* Move logo back to left to make room for hamburger on right */
     transform: none;
+    flex: none !important;
   }
 
   .navbar-logo:hover {
@@ -421,8 +414,8 @@
     /* Permanently push hamburger menu to the right end */
   }
 
-  .navbar-right .navbar-links {
-    display: none;
+  .navbar-links {
+    display: none !important;
   }
 
   .navbar-actions {
