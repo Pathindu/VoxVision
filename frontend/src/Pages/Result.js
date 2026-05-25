@@ -178,7 +178,7 @@ export default function Result({ darkMode, toggleDarkMode }) {
     if (audioRef.current) audioRef.current.pause();
     setIsSpeaking(false);
     setIsPaused(false);
-    navigate('./Upload.js');
+    navigate('/Upload');
   };
 
   // ── Render ──────────────────────────────────────────────────────────────
