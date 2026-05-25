@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { storage } from '../Storage';
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8000','https://voxvision-backend-yv1n.onrender.com'
+  baseURL: process.env.REACT_APP_API_URL||'https://voxvision-backend-yv1n.onrender.com'
 });
 
 // Attach JWT to every request if present
