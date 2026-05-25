@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { storage } from '../Storage';
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8000',
+  baseURL: process.env.REACT_APP_API_URL||'https://voxvision-backend-yv1n.onrender.com'
 });
 
 // Attach JWT to every request if present
 api.interceptors.request.use((config) => {
-  const token = Storage.getItem('vv_token');
+  const token = storage.get('vv_token');
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
