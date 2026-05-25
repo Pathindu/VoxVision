@@ -69,12 +69,8 @@ export default function LoginRegister({ darkMode, toggleDarkMode }) {
   };
 
   return (
-<<<<<<< HEAD
-    <div className={`auth-wrapper ${darkMode ? 'dark-mode' : ''}`}>
-=======
     <div className={`auth-wrapper ${darkMode ? 'dark-mode' : 'light-theme'}`}>
       {/* Navigation */}
->>>>>>> sandun
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
       <div className="auth-container">

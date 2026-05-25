@@ -1,97 +1,36 @@
 import React, { useState } from 'react';
-<<<<<<< HEAD
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-=======
 import { useNavigate, useLocation } from 'react-router-dom';
->>>>>>> sandun
+import { useAuth } from '../context/AuthContext';
 import '../Components/Navbar.css';
 
 export default function Navbar({ darkMode, toggleDarkMode }) {
   const navigate = useNavigate();
-<<<<<<< HEAD
-  const { isLoggedIn, isCaregiver, user, logout } = useAuth();
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const go = (path) => { navigate(path); setMenuOpen(false); };
-
-  const handleLogout = () => { logout(); navigate('/'); setMenuOpen(false); };
-
-  return (
-    <nav className={`navbar ${darkMode ? 'dark-mode' : ''}`}>
-      <div className="navbar-content">
-
-        {/* Logo */}
-        <div className="navbar-logo" onClick={() => go('/')}>
-          <span className="navbar-logo-icon">👁️</span>
-          <span className="navbar-logo-text">VoxVision</span>
-        </div>
-
-        <div className="navbar-right">
-          <ul className="navbar-links">
-            <li><a href="/" onClick={(e) => { e.preventDefault(); go('/'); }} className="navbar-link">Home</a></li>
-            <li><a href="/store" onClick={(e) => { e.preventDefault(); go('/store'); }} className="navbar-link">Store</a></li>
-            {isCaregiver && (
-              <li><a href="/tags" onClick={(e) => { e.preventDefault(); go('/tags'); }} className="navbar-link">My Tags</a></li>
-            )}
-            <li><a href="/contact" onClick={(e) => { e.preventDefault(); go('/contact'); }} className="navbar-link">Contact</a></li>
-
-            {isLoggedIn ? (
-              <>
-                <li>
-                  <span className="navbar-link" style={{ color: '#6d28d9', fontWeight: '600', cursor: 'default' }}>
-                    👤 {user?.username}
-                  </span>
-                </li>
-                <li>
-                  <a href="/logout" onClick={(e) => { e.preventDefault(); handleLogout(); }} className="navbar-link">
-                    Logout
-                  </a>
-                </li>
-              </>
-            ) : (
-              <li>
-                <a href="/login" onClick={(e) => { e.preventDefault(); go('/login'); }} className="navbar-link">
-                  Login / Register
-                </a>
-              </li>
-            )}
-          </ul>
-
-          <button className="dark-mode-toggle" onClick={toggleDarkMode} aria-label="Toggle dark mode">
-            <span className="toggle-icon">{darkMode ? '☀️' : '🌙'}</span>
-=======
   const location = useLocation();
+  const { isLoggedIn, isCaregiver, user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
-  const handleNavigation = (path) => {
-    setIsMobileMenuOpen(false);
-    if (path === 'home') {
-      navigate('/');
-    } else if (path === 'login') {
-      navigate('/login');
-    } else if (path === 'contact') {
-      navigate('/contact');
-    } else if (path === 'order') {
-      navigate('/order');
-    } else if (path === 'about') {
-      navigate('/about');
-    } else if (path === 'team') {
-      navigate('/team');
-    } else {
-      alert(`Navigating to ${path}`);
-    }
+  const go = (path) => { 
+    navigate(path); 
+    setIsMobileMenuOpen(false); 
+  };
+
+  const handleLogout = () => { 
+    logout(); 
+    navigate('/'); 
+    setIsMobileMenuOpen(false); 
   };
 
   return (
     <>
       <nav className={`navbar ${darkMode ? 'dark-mode' : ''}`} role="navigation" aria-label="Main navigation">
         <div className="navbar-content">
-          <div className="navbar-logo" onClick={() => handleNavigation('home')} role="link" aria-label="Go to VoxVision home">
-            <img src="/voxvision-logo.png" alt="VoxVision Logo" className="navbar-logo-img" />
-            <span className="navbar-logo-text creative-logo">VoxVision</span>
+
+          {/* Logo */}
+          <div className="navbar-logo" onClick={() => go('/')} role="link" aria-label="Go to VoxVision home">
+            <span className="navbar-logo-icon">👁️</span>
+            <span className="navbar-logo-text">VoxVision</span>
           </div>
 
           <button
@@ -101,76 +40,54 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
             aria-expanded={isMobileMenuOpen}
           >
             &#9776;
->>>>>>> sandun
           </button>
 
           <div className="navbar-right">
             <ul className="navbar-links" role="menubar" aria-label="Site navigation">
               <li role="none">
-                <a
-                  href="#home"
-                  onClick={(e) => { e.preventDefault(); handleNavigation('home'); }}
-                  className={`navbar-link${isActive('/') ? ' active' : ''}`}
-                  data-page="home"
-                  role="menuitem"
-                  aria-label="Go to Home page"
-                  aria-current={isActive('/') ? 'page' : undefined}
-                >
-                  Home
-                </a>
+                <a href="/" onClick={(e) => { e.preventDefault(); go('/'); }} className={`navbar-link${isActive('/') ? ' active' : ''}`} role="menuitem">Home</a>
               </li>
               <li role="none">
-                <a
-                  href="#about"
-                  onClick={(e) => { e.preventDefault(); handleNavigation('about'); }}
-                  className={`navbar-link${isActive('/about') ? ' active' : ''}`}
-                  data-page="about"
-                  role="menuitem"
-                  aria-label="Go to About us page"
-                  aria-current={isActive('/about') ? 'page' : undefined}
-                >
-                  About us
-                </a>
+                <a href="/about" onClick={(e) => { e.preventDefault(); go('/about'); }} className={`navbar-link${isActive('/about') ? ' active' : ''}`} role="menuitem">About us</a>
               </li>
               <li role="none">
-                <a
-                  href="#team"
-                  onClick={(e) => { e.preventDefault(); handleNavigation('team'); }}
-                  className={`navbar-link${isActive('/team') ? ' active' : ''}`}
-                  data-page="team"
-                  role="menuitem"
-                  aria-label="Go to Our Team page"
-                  aria-current={isActive('/team') ? 'page' : undefined}
-                >
-                  Our Team
-                </a>
+                <a href="/team" onClick={(e) => { e.preventDefault(); go('/team'); }} className={`navbar-link${isActive('/team') ? ' active' : ''}`} role="menuitem">Our Team</a>
               </li>
               <li role="none">
-                <a
-                  href="#contact"
-                  onClick={(e) => { e.preventDefault(); handleNavigation('contact'); }}
-                  className={`navbar-link${isActive('/contact') ? ' active' : ''}`}
-                  data-page="contact"
-                  role="menuitem"
-                  aria-label="Go to Contact us page"
-                  aria-current={isActive('/contact') ? 'page' : undefined}
-                >
-                  Contact us
-                </a>
+                <a href="/store" onClick={(e) => { e.preventDefault(); go('/store'); }} className={`navbar-link${isActive('/store') ? ' active' : ''}`} role="menuitem">Store</a>
               </li>
               <li role="none">
-                <a
-                  href="#order"
-                  onClick={(e) => { e.preventDefault(); handleNavigation('order'); }}
-                  className={`navbar-link${isActive('/order') ? ' active' : ''}`}
-                  data-page="order"
-                  role="menuitem"
-                  aria-label="Go to Order page"
-                  aria-current={isActive('/order') ? 'page' : undefined}
-                >
-                  Order
-                </a>
+                <a href="/order" onClick={(e) => { e.preventDefault(); go('/order'); }} className={`navbar-link${isActive('/order') ? ' active' : ''}`} role="menuitem">Order</a>
               </li>
+              {isCaregiver && (
+                <li role="none">
+                  <a href="/tags" onClick={(e) => { e.preventDefault(); go('/tags'); }} className={`navbar-link${isActive('/tags') ? ' active' : ''}`} role="menuitem">My Tags</a>
+                </li>
+              )}
+              <li role="none">
+                <a href="/contact" onClick={(e) => { e.preventDefault(); go('/contact'); }} className={`navbar-link${isActive('/contact') ? ' active' : ''}`} role="menuitem">Contact</a>
+              </li>
+
+              {isLoggedIn ? (
+                <>
+                  <li role="none">
+                    <span className="navbar-link" style={{ color: '#6d28d9', fontWeight: '600', cursor: 'default' }} role="menuitem">
+                      👤 {user?.username}
+                    </span>
+                  </li>
+                  <li role="none">
+                    <a href="/logout" onClick={(e) => { e.preventDefault(); handleLogout(); }} className="navbar-link" role="menuitem">
+                      Logout
+                    </a>
+                  </li>
+                </>
+              ) : (
+                <li role="none">
+                  <a href="/login" onClick={(e) => { e.preventDefault(); go('/login'); }} className={`navbar-link${isActive('/login') ? ' active' : ''}`} role="menuitem">
+                    Login / Register
+                  </a>
+                </li>
+              )}
             </ul>
 
             {/* Action Buttons — Support Us first, dark mode toggle on the right */}
@@ -179,15 +96,12 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
                 href="/donate"
                 className="navbar-donate-btn"
                 aria-label="Support our mission by donating"
+                onClick={(e) => { e.preventDefault(); go('/donate'); }}
               >
                 <span className="support-text">Support Us</span>
               </a>
 
-              <button
-                className="dark-mode-toggle"
-                onClick={toggleDarkMode}
-                aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-              >
+              <button className="dark-mode-toggle" onClick={toggleDarkMode} aria-label="Toggle dark mode">
                 <span className="toggle-icon">{darkMode ? '☀️' : '🌙'}</span>
               </button>
             </div>
@@ -208,27 +122,43 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
               </button>
             </div>
             <ul className="mobile-drawer-links">
-              <li>
-                <a href="#home" role="button" data-page="home" onClick={(e) => { e.preventDefault(); handleNavigation('home'); }} className={`navbar-link${isActive('/') ? ' active' : ''}`} aria-label="Go to Home page" aria-current={isActive('/') ? 'page' : undefined}>Home</a>
-              </li>
-              <li>
-                <a href="#about" role="button" data-page="about" onClick={(e) => { e.preventDefault(); handleNavigation('about'); }} className={`navbar-link${isActive('/about') ? ' active' : ''}`} aria-label="Go to About us page" aria-current={isActive('/about') ? 'page' : undefined}>About us</a>
-              </li>
-              <li>
-                <a href="#team" role="button" data-page="team" onClick={(e) => { e.preventDefault(); handleNavigation('team'); }} className={`navbar-link${isActive('/team') ? ' active' : ''}`} aria-label="Go to Our Team page" aria-current={isActive('/team') ? 'page' : undefined}>Our Team</a>
-              </li>
-              <li>
-                <a href="#contact" role="button" data-page="contact" onClick={(e) => { e.preventDefault(); handleNavigation('contact'); }} className={`navbar-link${isActive('/contact') ? ' active' : ''}`} aria-label="Go to Contact us page" aria-current={isActive('/contact') ? 'page' : undefined}>Contact us</a>
-              </li>
-              <li>
-                <a href="#order" role="button" data-page="order" onClick={(e) => { e.preventDefault(); handleNavigation('order'); }} className={`navbar-link${isActive('/order') ? ' active' : ''}`} aria-label="Go to Order page" aria-current={isActive('/order') ? 'page' : undefined}>Order</a>
-              </li>
+              <li><a href="/" onClick={(e) => { e.preventDefault(); go('/'); }} className={`navbar-link${isActive('/') ? ' active' : ''}`}>Home</a></li>
+              <li><a href="/about" onClick={(e) => { e.preventDefault(); go('/about'); }} className={`navbar-link${isActive('/about') ? ' active' : ''}`}>About us</a></li>
+              <li><a href="/team" onClick={(e) => { e.preventDefault(); go('/team'); }} className={`navbar-link${isActive('/team') ? ' active' : ''}`}>Our Team</a></li>
+              <li><a href="/store" onClick={(e) => { e.preventDefault(); go('/store'); }} className={`navbar-link${isActive('/store') ? ' active' : ''}`}>Store</a></li>
+              <li><a href="/order" onClick={(e) => { e.preventDefault(); go('/order'); }} className={`navbar-link${isActive('/order') ? ' active' : ''}`}>Order</a></li>
+              {isCaregiver && (
+                <li><a href="/tags" onClick={(e) => { e.preventDefault(); go('/tags'); }} className={`navbar-link${isActive('/tags') ? ' active' : ''}`}>My Tags</a></li>
+              )}
+              <li><a href="/contact" onClick={(e) => { e.preventDefault(); go('/contact'); }} className={`navbar-link${isActive('/contact') ? ' active' : ''}`}>Contact</a></li>
+              
+              {isLoggedIn ? (
+                <>
+                  <li>
+                    <span className="navbar-link" style={{ color: '#6d28d9', fontWeight: '600', cursor: 'default' }}>
+                      👤 {user?.username}
+                    </span>
+                  </li>
+                  <li>
+                    <a href="/logout" onClick={(e) => { e.preventDefault(); handleLogout(); }} className="navbar-link">
+                      Logout
+                    </a>
+                  </li>
+                </>
+              ) : (
+                <li>
+                  <a href="/login" onClick={(e) => { e.preventDefault(); go('/login'); }} className={`navbar-link${isActive('/login') ? ' active' : ''}`}>
+                    Login / Register
+                  </a>
+                </li>
+              )}
+              
               <li>
                 <a
                   href="/donate"
                   className="navbar-link mobile-support-link"
                   aria-label="Support our mission by donating"
-                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate('/donate'); setIsMobileMenuOpen(false); }}
+                  onClick={(e) => { e.preventDefault(); go('/donate'); }}
                 >
                   Support Us
                 </a>
